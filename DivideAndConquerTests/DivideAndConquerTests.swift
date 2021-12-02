@@ -7,9 +7,9 @@
 //
 
 import XCTest
-@testable import Rectangle
+@testable import DivideAndConquer
 
-class RectangleTests: XCTestCase {
+class DivideAndConquer: XCTestCase {
 
     override func setUp() {
         // Put setup code here. This method is called before the invocation of each test method in the class.

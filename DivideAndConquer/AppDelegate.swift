@@ -49,7 +49,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         checkLaunchOnLogin()
         
         let alreadyTrusted = accessibilityAuthorization.checkAccessibility {
-            self.showWelcomeWindow()
             self.checkForConflictingApps()
             self.openPreferences(self)
             self.statusItem.statusMenu = self.mainStatusMenu
@@ -163,25 +162,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             AlertUtil.oneButtonAlert(question: "Known issues with installed applications", text: "\(displayNameString)\n\nThese applications have issues with the drag to screen edge to snap functionality in Rectangle.\n\nYou can either ignore the applications using the menu item in Rectangle, or disable drag to screen edge snapping in Rectangle preferences.")
             Defaults.notifiedOfProblemApps.enabled = true
         }
-    }
-    
-    private func showWelcomeWindow() {
-        let welcomeWindowController = NSStoryboard(name: "Main", bundle: nil)
-            .instantiateController(withIdentifier: "WelcomeWindowController") as? NSWindowController
-        guard let welcomeWindow = welcomeWindowController?.window else { return }
-        welcomeWindow.delegate = self
-        
-        NSApp.activate(ignoringOtherApps: true)
-        
-        let response = NSApp.runModal(for: welcomeWindow)
-        
-        let usingRecommended = response == .alertFirstButtonReturn || response == .abort
-        
-        Defaults.alternateDefaultShortcuts.enabled = usingRecommended
-        
-        Defaults.subsequentExecutionMode.value = usingRecommended ? .acrossMonitor : .resize
-        
-        welcomeWindowController?.close()
     }
     
     func applicationShouldHandleReopen(_ sender: NSApplication, hasVisibleWindows flag: Bool) -> Bool {

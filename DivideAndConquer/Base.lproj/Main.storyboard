@@ -319,7 +319,7 @@
         <scene sceneID="yOZ-qp-n9s">
             <objects>
                 <viewController id="5D9-0a-Mbi" customClass="AccessibilityViewController" customModule="DivideAndConquer" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" misplaced="YES" id="1ZR-Nv-NGc">
+                    <view key="view" id="1ZR-Nv-NGc">
                         <rect key="frame" x="0.0" y="0.0" width="324" height="386"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
@@ -427,7 +427,7 @@ DQ
         <!--Window Controller-->
         <scene sceneID="fP4-FO-Uvb">
             <objects>
-                <windowController id="dZB-jJ-J81" sceneMemberID="viewController">
+                <windowController storyboardIdentifier="PrefsWindowController" id="dZB-jJ-J81" sceneMemberID="viewController">
                     <window key="window" title="Window" allowsToolTipsWhenApplicationIsInactive="NO" autorecalculatesKeyViewLoop="NO" releasedWhenClosed="NO" visibleAtLaunch="NO" frameAutosaveName="" animationBehavior="default" id="msY-qe-4yb">
                         <windowStyleMask key="styleMask" titled="YES" closable="YES" miniaturizable="YES" resizable="YES"/>
                         <windowPositionMask key="initialPositionMask" leftStrut="YES" rightStrut="YES" topStrut="YES" bottomStrut="YES"/>

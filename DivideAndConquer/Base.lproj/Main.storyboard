@@ -514,6 +514,10 @@ DQ
                             <constraint firstItem="ZHU-xG-w7m" firstAttribute="leading" secondItem="GVe-W9-OSy" secondAttribute="leading" constant="20" symbolic="YES" id="xot-Km-2bj"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="xDimensionTextField" destination="IpE-Yy-Wff" id="aFJ-HU-RZX"/>
+                        <outlet property="yDimensionTextField" destination="jr7-pC-YVy" id="aCY-yi-eRi"/>
+                    </connections>
                 </viewController>
                 <customObject id="215-xA-aHt" userLabel="First Responder" customClass="NSResponder" sceneMemberID="firstResponder"/>
             </objects>

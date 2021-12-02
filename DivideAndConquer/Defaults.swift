@@ -12,6 +12,10 @@ class Defaults {
     static let launchOnLogin = BoolDefault(key: "launchOnLogin")
     static let disabledApps = StringDefault(key: "disabledApps")
     static let hideMenuBarIcon = BoolDefault(key: "hideMenubarIcon")
+    static let gridXDimensionMax = IntDefault(key: "gridXDimensionMax", defaultValue: 80)
+    static let gridXDimension = IntDefault(key: "gridXDimension", defaultValue: 12)
+    static let gridYDimensionMax = IntDefault(key: "gridYDimensionMax", defaultValue: 80)
+    static let gridYDimension = IntDefault(key: "gridYDimension", defaultValue: 10)
     static let alternateDefaultShortcuts = BoolDefault(key: "alternateDefaultShortcuts") // switch to magnet defaults
     static let subsequentExecutionMode = SubsequentExecutionDefault()
     static let allowAnyShortcut = BoolDefault(key: "allowAnyShortcut")
@@ -290,9 +294,12 @@ class IntDefault: Default {
         }
     }
     
-    init(key: String) {
+    init(key: String, defaultValue: Int = 0) {
         self.key = key
         value = UserDefaults.standard.integer(forKey: key)
+        if(defaultValue != 0 && value == 0) {
+            value = defaultValue
+        }
         initialized = true
     }
     

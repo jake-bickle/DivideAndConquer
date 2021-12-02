@@ -30,8 +30,8 @@ class PreferencesViewController: NSViewController {
     }
     
     override func viewWillAppear() {
-        xDimensionTextField.stringValue = String(AppSettings.shared.gridXDimension)
-        yDimensionTextField.stringValue = String(AppSettings.shared.gridYDimension)
+        xDimensionTextField.stringValue = String(Defaults.gridXDimension.value)
+        yDimensionTextField.stringValue = String(Defaults.gridYDimension.value)
     }
     
     /*
@@ -50,15 +50,15 @@ class PreferencesViewController: NSViewController {
 extension PreferencesViewController: NSTextFieldDelegate {
     func controlTextDidChange(_ obj: Notification) {
         // To make matters worse, Notification does not contain information on *which* text field has changed.
-        let gridXDimensionsMax = AppSettings.shared.gridXDimensionMax
-        let gridYDimensionsMax = AppSettings.shared.gridYDimensionMax
+        let gridXDimensionsMax = Defaults.gridXDimensionMax.value
+        let gridYDimensionsMax = Defaults.gridYDimensionMax.value
         if var xDimension = Int(xDimensionTextField.stringValue) {
             if (xDimension > 0) {
                 if (xDimension > gridXDimensionsMax){
                     xDimensionTextField.stringValue = String(gridXDimensionsMax)
                     xDimension = gridXDimensionsMax
                 }
-                AppSettings.shared.gridXDimension = xDimension
+                Defaults.gridXDimension.value = xDimension
             }
         }
         if var yDimension = Int(yDimensionTextField.stringValue) {
@@ -67,7 +67,7 @@ extension PreferencesViewController: NSTextFieldDelegate {
                     yDimensionTextField.stringValue = String(gridYDimensionsMax)
                     yDimension = gridYDimensionsMax
                 }
-                AppSettings.shared.gridYDimension = yDimension
+                Defaults.gridYDimension.value = yDimension
             }
         }
     }

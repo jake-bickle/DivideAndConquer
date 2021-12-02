@@ -1,4 +1,6 @@
-# Rectangle
+# Divide And Conquer (WIP)
+
+Below is Rectangle's unrelated README.
 
 ![Build status](https://github.com/rxhanson/Rectangle/workflows/Build/badge.svg)
 [![Monthly downloads](https://badgen.net/homebrew/cask/dm/rectangle)](https://formulae.brew.sh/cask/rectangle)

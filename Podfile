@@ -3,25 +3,25 @@ platform :osx, '10.12'
 
 inhibit_all_warnings!
 
-target 'Rectangle' do
+target 'DivideAndConquer' do
   # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
 
-  # Pods for Rectangle
+  # Pods for DivideAndConquer
   pod 'MASShortcut'
   pod 'Sparkle'
   
-  target 'RectangleTests' do
+  target 'DivideAndConquerTests' do
     inherit! :search_paths
     # Pods for testing
   end
 
 end
 
-target 'RectangleLauncher' do
+target 'DivideAndConquerLauncher' do
   # Comment the next line if you don't want to use dynamic frameworks
   use_frameworks!
 
-  # Pods for RectangleLauncher
+  # Pods for DivideAndConquerLauncher
 
 end

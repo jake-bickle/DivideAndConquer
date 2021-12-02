@@ -15,7 +15,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "9824700822AF9B7D0037B409"
-               BuildableName = "Rectangle.app"
+               BuildableName = "DivideAndConquer.app"
                BlueprintName = "DivideAndConquer"
                ReferencedContainer = "container:DivideAndConquer.xcodeproj">
             </BuildableReference>
@@ -31,7 +31,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "9824700822AF9B7D0037B409"
-            BuildableName = "Rectangle.app"
+            BuildableName = "DivideAndConquer.app"
             BlueprintName = "DivideAndConquer"
             ReferencedContainer = "container:DivideAndConquer.xcodeproj">
          </BuildableReference>
@@ -42,7 +42,7 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "9824701A22AF9B7E0037B409"
-               BuildableName = "RectangleTests.xctest"
+               BuildableName = "DivideAndConquerTests.xctest"
                BlueprintName = "DivideAndConquerTests"
                ReferencedContainer = "container:DivideAndConquer.xcodeproj">
             </BuildableReference>
@@ -64,7 +64,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "9824700822AF9B7D0037B409"
-            BuildableName = "Rectangle.app"
+            BuildableName = "DivideAndConquer.app"
             BlueprintName = "DivideAndConquer"
             ReferencedContainer = "container:DivideAndConquer.xcodeproj">
          </BuildableReference>
@@ -81,7 +81,7 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "9824700822AF9B7D0037B409"
-            BuildableName = "Rectangle.app"
+            BuildableName = "DivideAndConquer.app"
             BlueprintName = "DivideAndConquer"
             ReferencedContainer = "container:DivideAndConquer.xcodeproj">
          </BuildableReference>

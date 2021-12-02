@@ -7,9 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		12D896200936C0DE9FF41FB4 /* (null) in Frameworks */ = {isa = PBXBuildFile; };
+		1269BDFA0FD94A0DFDBF36C2 /* Pods_DivideAndConquerLauncher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F57DFDEFC8F7FADE37EA5AB0 /* Pods_DivideAndConquerLauncher.framework */; };
 		30166BD024F27D6A00A38608 /* SpecifiedCalculation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 30166BCF24F27D6A00A38608 /* SpecifiedCalculation.swift */; };
-		6327EAA4FEECF2AE087FCD30 /* Pods_RectangleTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 81D6E6EACB077B1A204F3A62 /* Pods_RectangleTests.framework */; };
 		866661F2257D248A00A9CD2D /* RepeatedExecutionsInThirdsCalculation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 866661F1257D248A00A9CD2D /* RepeatedExecutionsInThirdsCalculation.swift */; };
 		98192DDA270F606C00015E66 /* Debounce.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98192DD9270F606C00015E66 /* Debounce.swift */; };
 		98192DDE2717201100015E66 /* ReverseAllManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98192DDD2717201000015E66 /* ReverseAllManager.swift */; };
@@ -96,8 +95,8 @@
 		98FA9497235A2D7600F95C4F /* RepeatedExecutionsCalculation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98FA9496235A2D7600F95C4F /* RepeatedExecutionsCalculation.swift */; };
 		98FD7C5F2687BC14009E9DAF /* FirstThreeFourthsCalculation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98FD7C5E2687BC14009E9DAF /* FirstThreeFourthsCalculation.swift */; };
 		98FD7C612687BCB6009E9DAF /* LastThreeFourthsCalculation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98FD7C602687BCB6009E9DAF /* LastThreeFourthsCalculation.swift */; };
-		CC0B7937429AC28C21ABF5B4 /* Pods_RectangleLauncher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F2D8480CC730811C953FC1B6 /* Pods_RectangleLauncher.framework */; };
-		F0A0DFB36FCC3FCE6E184500 /* Pods_Rectangle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 20A533B9F2D3215AC7B85D1F /* Pods_Rectangle.framework */; };
+		A1EAB8D46AEAFD3D885BFBAD /* Pods_DivideAndConquer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA6B2E765AC65E7A93211660 /* Pods_DivideAndConquer.framework */; };
+		E7AD439665B6BDF2A9A41F5F /* Pods_DivideAndConquerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D2FE2355E1EB53B25C8D58C /* Pods_DivideAndConquerTests.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -124,15 +123,12 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		0796D218CC3C7CD563827A8D /* Pods-RectangleLauncher.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RectangleLauncher.release.xcconfig"; path = "Target Support Files/Pods-RectangleLauncher/Pods-RectangleLauncher.release.xcconfig"; sourceTree = "<group>"; };
-		20A533B9F2D3215AC7B85D1F /* Pods_Rectangle.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Rectangle.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		0BC9E4678FBAC58EC08C265C /* Pods-DivideAndConquerLauncher.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DivideAndConquerLauncher.release.xcconfig"; path = "Target Support Files/Pods-DivideAndConquerLauncher/Pods-DivideAndConquerLauncher.release.xcconfig"; sourceTree = "<group>"; };
+		1D2FE2355E1EB53B25C8D58C /* Pods_DivideAndConquerTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DivideAndConquerTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		30166BCF24F27D6A00A38608 /* SpecifiedCalculation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpecifiedCalculation.swift; sourceTree = "<group>"; };
-		3EE34B57BB10FDB0B4E8359F /* Pods-RectangleTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RectangleTests.release.xcconfig"; path = "Target Support Files/Pods-RectangleTests/Pods-RectangleTests.release.xcconfig"; sourceTree = "<group>"; };
-		534283F3C564C4526C67E459 /* Pods-RectangleTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RectangleTests.debug.xcconfig"; path = "Target Support Files/Pods-RectangleTests/Pods-RectangleTests.debug.xcconfig"; sourceTree = "<group>"; };
-		53A6B6ACF05CD88EB34E0D00 /* Pods-Rectangle.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Rectangle.debug.xcconfig"; path = "Target Support Files/Pods-Rectangle/Pods-Rectangle.debug.xcconfig"; sourceTree = "<group>"; };
-		80B094EEF6AE857D468B639A /* Pods-RectangleLauncher.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RectangleLauncher.debug.xcconfig"; path = "Target Support Files/Pods-RectangleLauncher/Pods-RectangleLauncher.debug.xcconfig"; sourceTree = "<group>"; };
-		81D6E6EACB077B1A204F3A62 /* Pods_RectangleTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RectangleTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		394D908E4D083639070C48D1 /* Pods-DivideAndConquerLauncher.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DivideAndConquerLauncher.debug.xcconfig"; path = "Target Support Files/Pods-DivideAndConquerLauncher/Pods-DivideAndConquerLauncher.debug.xcconfig"; sourceTree = "<group>"; };
 		866661F1257D248A00A9CD2D /* RepeatedExecutionsInThirdsCalculation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RepeatedExecutionsInThirdsCalculation.swift; sourceTree = "<group>"; };
+		86C8F9FE9466268BAC3636B5 /* Pods-DivideAndConquerTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DivideAndConquerTests.release.xcconfig"; path = "Target Support Files/Pods-DivideAndConquerTests/Pods-DivideAndConquerTests.release.xcconfig"; sourceTree = "<group>"; };
 		9808018523D05C0B0077774A /* RectangleRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = RectangleRelease.entitlements; sourceTree = "<group>"; };
 		9808018623D05C1F0077774A /* DivideAndConquerLauncherRelease.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = DivideAndConquerLauncherRelease.entitlements; sourceTree = "<group>"; };
 		98192DD9270F606C00015E66 /* Debounce.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Debounce.swift; sourceTree = "<group>"; };
@@ -259,11 +255,11 @@
 		98FE8975246E79A600871535 /* zh-Hant-TW */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant-TW"; path = "zh-Hant-TW.lproj/Main.strings"; sourceTree = "<group>"; };
 		98FE8976246E79C400871535 /* zh-Hant-HK */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant-HK"; path = "zh-Hant-HK.lproj/Main.strings"; sourceTree = "<group>"; };
 		98FE8977246E79C400871535 /* zh-Hant-HK */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant-HK"; path = "zh-Hant-HK.lproj/Main.strings"; sourceTree = "<group>"; };
-		BFFF93EBEA6E2FF7245A7CF5 /* Pods-Rectangle.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Rectangle.release.xcconfig"; path = "Target Support Files/Pods-Rectangle/Pods-Rectangle.release.xcconfig"; sourceTree = "<group>"; };
-		DE4AE568B8BDB98BF602D588 /* Pods-RectangleMAS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RectangleMAS.release.xcconfig"; path = "Target Support Files/Pods-RectangleMAS/Pods-RectangleMAS.release.xcconfig"; sourceTree = "<group>"; };
-		E2625F45B180F733E8508494 /* Pods-RectangleMAS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RectangleMAS.debug.xcconfig"; path = "Target Support Files/Pods-RectangleMAS/Pods-RectangleMAS.debug.xcconfig"; sourceTree = "<group>"; };
-		F2D8480CC730811C953FC1B6 /* Pods_RectangleLauncher.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RectangleLauncher.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		F4F1FB66CBFB958E8BB16DCD /* Pods_RectangleMAS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RectangleMAS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CA6B2E765AC65E7A93211660 /* Pods_DivideAndConquer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DivideAndConquer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E208C153105113FC1988B3A3 /* Pods-DivideAndConquerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DivideAndConquerTests.debug.xcconfig"; path = "Target Support Files/Pods-DivideAndConquerTests/Pods-DivideAndConquerTests.debug.xcconfig"; sourceTree = "<group>"; };
+		E6A39D15D3D095AEFF572BAB /* Pods-DivideAndConquer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DivideAndConquer.debug.xcconfig"; path = "Target Support Files/Pods-DivideAndConquer/Pods-DivideAndConquer.debug.xcconfig"; sourceTree = "<group>"; };
+		F57DFDEFC8F7FADE37EA5AB0 /* Pods_DivideAndConquerLauncher.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DivideAndConquerLauncher.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		FE9301EACAF42F35102E1F5E /* Pods-DivideAndConquer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DivideAndConquer.release.xcconfig"; path = "Target Support Files/Pods-DivideAndConquer/Pods-DivideAndConquer.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -271,7 +267,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				CC0B7937429AC28C21ABF5B4 /* Pods_RectangleLauncher.framework in Frameworks */,
+				1269BDFA0FD94A0DFDBF36C2 /* Pods_DivideAndConquerLauncher.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -280,8 +276,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				9821405E22B3ED3600ABFB3F /* ServiceManagement.framework in Frameworks */,
-				12D896200936C0DE9FF41FB4 /* (null) in Frameworks */,
-				F0A0DFB36FCC3FCE6E184500 /* Pods_Rectangle.framework in Frameworks */,
+				A1EAB8D46AEAFD3D885BFBAD /* Pods_DivideAndConquer.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -289,7 +284,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6327EAA4FEECF2AE087FCD30 /* Pods_RectangleTests.framework in Frameworks */,
+				E7AD439665B6BDF2A9A41F5F /* Pods_DivideAndConquerTests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -299,14 +294,12 @@
 		67F292BA10681FCA82000D3E /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				53A6B6ACF05CD88EB34E0D00 /* Pods-Rectangle.debug.xcconfig */,
-				BFFF93EBEA6E2FF7245A7CF5 /* Pods-Rectangle.release.xcconfig */,
-				80B094EEF6AE857D468B639A /* Pods-RectangleLauncher.debug.xcconfig */,
-				0796D218CC3C7CD563827A8D /* Pods-RectangleLauncher.release.xcconfig */,
-				534283F3C564C4526C67E459 /* Pods-RectangleTests.debug.xcconfig */,
-				3EE34B57BB10FDB0B4E8359F /* Pods-RectangleTests.release.xcconfig */,
-				E2625F45B180F733E8508494 /* Pods-RectangleMAS.debug.xcconfig */,
-				DE4AE568B8BDB98BF602D588 /* Pods-RectangleMAS.release.xcconfig */,
+				E6A39D15D3D095AEFF572BAB /* Pods-DivideAndConquer.debug.xcconfig */,
+				FE9301EACAF42F35102E1F5E /* Pods-DivideAndConquer.release.xcconfig */,
+				394D908E4D083639070C48D1 /* Pods-DivideAndConquerLauncher.debug.xcconfig */,
+				0BC9E4678FBAC58EC08C265C /* Pods-DivideAndConquerLauncher.release.xcconfig */,
+				E208C153105113FC1988B3A3 /* Pods-DivideAndConquerTests.debug.xcconfig */,
+				86C8F9FE9466268BAC3636B5 /* Pods-DivideAndConquerTests.release.xcconfig */,
 			);
 			path = Pods;
 			sourceTree = "<group>";
@@ -336,10 +329,9 @@
 			isa = PBXGroup;
 			children = (
 				9821405D22B3ED3600ABFB3F /* ServiceManagement.framework */,
-				F2D8480CC730811C953FC1B6 /* Pods_RectangleLauncher.framework */,
-				81D6E6EACB077B1A204F3A62 /* Pods_RectangleTests.framework */,
-				F4F1FB66CBFB958E8BB16DCD /* Pods_RectangleMAS.framework */,
-				20A533B9F2D3215AC7B85D1F /* Pods_Rectangle.framework */,
+				CA6B2E765AC65E7A93211660 /* Pods_DivideAndConquer.framework */,
+				F57DFDEFC8F7FADE37EA5AB0 /* Pods_DivideAndConquerLauncher.framework */,
+				1D2FE2355E1EB53B25C8D58C /* Pods_DivideAndConquerTests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -553,7 +545,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9821405422B3EBDA00ABFB3F /* Build configuration list for PBXNativeTarget "DivideAndConquerLauncher" */;
 			buildPhases = (
-				29FB3DDD8496454008602727 /* [CP] Check Pods Manifest.lock */,
+				C9801420FC208F52A8637D52 /* [CP] Check Pods Manifest.lock */,
 				9821403822B3EBD900ABFB3F /* Sources */,
 				9821403922B3EBD900ABFB3F /* Frameworks */,
 				9821403A22B3EBD900ABFB3F /* Resources */,
@@ -571,12 +563,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9824702422AF9B7E0037B409 /* Build configuration list for PBXNativeTarget "DivideAndConquer" */;
 			buildPhases = (
-				E6D791631A87C2748EF5183E /* [CP] Check Pods Manifest.lock */,
+				7E5C1E05AF162FC84E8EBF25 /* [CP] Check Pods Manifest.lock */,
 				9824700522AF9B7D0037B409 /* Sources */,
 				9824700622AF9B7D0037B409 /* Frameworks */,
 				9824700722AF9B7D0037B409 /* Resources */,
 				9821405A22B3EC9900ABFB3F /* CopyFiles */,
-				28805C67730FCF221CAEF5FA /* [CP] Embed Pods Frameworks */,
+				0795FB8DAA321B008395AA5B /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -591,7 +583,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 9824702722AF9B7E0037B409 /* Build configuration list for PBXNativeTarget "DivideAndConquerTests" */;
 			buildPhases = (
-				606B67C52D78680F8A89F465 /* [CP] Check Pods Manifest.lock */,
+				3CA5C06E7819B8B8A4F5CCD9 /* [CP] Check Pods Manifest.lock */,
 				9824701722AF9B7E0037B409 /* Sources */,
 				9824701822AF9B7E0037B409 /* Frameworks */,
 				9824701922AF9B7E0037B409 /* Resources */,
@@ -712,24 +704,24 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		28805C67730FCF221CAEF5FA /* [CP] Embed Pods Frameworks */ = {
+		0795FB8DAA321B008395AA5B /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Rectangle/Pods-Rectangle-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-DivideAndConquer/Pods-DivideAndConquer-frameworks-${CONFIGURATION}-input-files.xcfilelist",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputFileListPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-Rectangle/Pods-Rectangle-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+				"${PODS_ROOT}/Target Support Files/Pods-DivideAndConquer/Pods-DivideAndConquer-frameworks-${CONFIGURATION}-output-files.xcfilelist",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-Rectangle/Pods-Rectangle-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-DivideAndConquer/Pods-DivideAndConquer-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		29FB3DDD8496454008602727 /* [CP] Check Pods Manifest.lock */ = {
+		3CA5C06E7819B8B8A4F5CCD9 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -744,36 +736,14 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-RectangleLauncher-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
-		};
-		606B67C52D78680F8A89F465 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputFileListPaths = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputFileListPaths = (
-			);
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-RectangleTests-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-DivideAndConquerTests-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		E6D791631A87C2748EF5183E /* [CP] Check Pods Manifest.lock */ = {
+		7E5C1E05AF162FC84E8EBF25 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -788,7 +758,29 @@
 			outputFileListPaths = (
 			);
 			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-Rectangle-checkManifestLockResult.txt",
+				"$(DERIVED_FILE_DIR)/Pods-DivideAndConquer-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		C9801420FC208F52A8637D52 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-DivideAndConquerLauncher-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
@@ -961,7 +953,7 @@
 /* Begin XCBuildConfiguration section */
 		9821405522B3EBDA00ABFB3F /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 80B094EEF6AE857D468B639A /* Pods-RectangleLauncher.debug.xcconfig */;
+			baseConfigurationReference = 394D908E4D083639070C48D1 /* Pods-DivideAndConquerLauncher.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = RectangleLauncher/RectangleLauncher.entitlements;
@@ -986,7 +978,7 @@
 		};
 		9821405622B3EBDA00ABFB3F /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 0796D218CC3C7CD563827A8D /* Pods-RectangleLauncher.release.xcconfig */;
+			baseConfigurationReference = 0BC9E4678FBAC58EC08C265C /* Pods-DivideAndConquerLauncher.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = RectangleLauncher/RectangleLauncherRelease.entitlements;
@@ -1130,7 +1122,7 @@
 		};
 		9824702522AF9B7E0037B409 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 53A6B6ACF05CD88EB34E0D00 /* Pods-Rectangle.debug.xcconfig */;
+			baseConfigurationReference = E6A39D15D3D095AEFF572BAB /* Pods-DivideAndConquer.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Rectangle/Rectangle.entitlements;
@@ -1156,7 +1148,7 @@
 		};
 		9824702622AF9B7E0037B409 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = BFFF93EBEA6E2FF7245A7CF5 /* Pods-Rectangle.release.xcconfig */;
+			baseConfigurationReference = FE9301EACAF42F35102E1F5E /* Pods-DivideAndConquer.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_ENTITLEMENTS = Rectangle/RectangleRelease.entitlements;
@@ -1182,7 +1174,7 @@
 		};
 		9824702822AF9B7E0037B409 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 534283F3C564C4526C67E459 /* Pods-RectangleTests.debug.xcconfig */;
+			baseConfigurationReference = E208C153105113FC1988B3A3 /* Pods-DivideAndConquerTests.debug.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
@@ -1206,7 +1198,7 @@
 		};
 		9824702922AF9B7E0037B409 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3EE34B57BB10FDB0B4E8359F /* Pods-RectangleTests.release.xcconfig */;
+			baseConfigurationReference = 86C8F9FE9466268BAC3636B5 /* Pods-DivideAndConquerTests.release.xcconfig */;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";

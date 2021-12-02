@@ -452,7 +452,7 @@ DQ
         <!--Preferences-->
         <scene sceneID="WHN-54-0sv">
             <objects>
-                <viewController title="Preferences" id="0dl-sZ-z91" sceneMemberID="viewController">
+                <viewController title="Preferences" id="0dl-sZ-z91" customClass="PreferencesViewController" customModule="DivideAndConquer" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" id="GVe-W9-OSy">
                         <rect key="frame" x="0.0" y="0.0" width="158" height="82"/>
                         <autoresizingMask key="autoresizingMask"/>

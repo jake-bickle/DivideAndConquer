@@ -19,7 +19,7 @@ class SnappingManager {
     var initialWindowRect: CGRect?
     var currentSnapArea: SnapArea?
     
-    var box: FootprintWindow?
+    var box: GridWindow?
     
     let screenDetection = ScreenDetection()
     
@@ -75,7 +75,7 @@ class SnappingManager {
     
     private func enableSnapping() {
         if box == nil {
-            box = FootprintWindow()
+            box = GridWindow()
         }
         if eventMonitor == nil {
             eventMonitor = EventMonitor(mask: [.leftMouseDown, .leftMouseUp, .leftMouseDragged], handler: handle)
@@ -188,7 +188,7 @@ class SnappingManager {
                     
                     if let newBoxRect = getBoxRect(hotSpot: snapArea, currentWindow: currentWindow) {
                         if box == nil {
-                            box = FootprintWindow()
+                            box = GridWindow()
                         }
                         box?.setFrame(newBoxRect, display: true)
                         box?.makeKeyAndOrderFront(nil)

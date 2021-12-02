@@ -16,6 +16,9 @@ class Defaults {
     static let gridXDimension = IntDefault(key: "gridXDimension", defaultValue: 12)
     static let gridYDimensionMax = IntDefault(key: "gridYDimensionMax", defaultValue: 80)
     static let gridYDimension = IntDefault(key: "gridYDimension", defaultValue: 10)
+    static let cellPrimaryColor = JSONDefault<CodableColor>(key: "footprintColor")
+    static let cellBorderWidth = IntDefault(key: "cellBorderWidth", defaultValue: 1)
+    static let gridWindowAlpha = FloatDefault(key: "gridYDimension", defaultValue: 0.3)
     static let alternateDefaultShortcuts = BoolDefault(key: "alternateDefaultShortcuts") // switch to magnet defaults
     static let subsequentExecutionMode = SubsequentExecutionDefault()
     static let allowAnyShortcut = BoolDefault(key: "allowAnyShortcut")
@@ -359,6 +362,10 @@ struct CodableColor : Codable {
 
     var nsColor : NSColor {
         return NSColor(red: red, green: green, blue: blue, alpha: alpha ?? 1.0)
+    }
+    
+    var cgColor : CGColor {
+        return nsColor.cgColor
     }
 
     init(nsColor: NSColor) {

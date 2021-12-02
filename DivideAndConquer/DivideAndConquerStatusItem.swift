@@ -8,8 +8,8 @@
 
 import Cocoa
 
-class RectangleStatusItem {
-    static let instance = RectangleStatusItem()
+class DivideAndConquerStatusItem {
+    static let instance = DivideAndConquerStatusItem()
     
     private var nsStatusItem: NSStatusItem?
     private var added: Bool = false

@@ -50,7 +50,7 @@ class SettingsViewController: NSViewController {
     @IBAction func toggleHideMenuBarIcon(_ sender: NSButton) {
         let newSetting: Bool = sender.state == .on
         Defaults.hideMenuBarIcon.enabled = newSetting
-        RectangleStatusItem.instance.refreshVisibility()
+        DivideAndConquerStatusItem.instance.refreshVisibility()
     }
 
     @IBAction func setSubsequentExecutionBehavior(_ sender: NSPopUpButton) {

@@ -35,7 +35,7 @@
 		9824702022AF9B7E0037B409 /* DivideAndConquerTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9824701F22AF9B7E0037B409 /* DivideAndConquerTests.swift */; };
 		9824702C22AFA22E0037B409 /* AccessibilityWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9824702A22AFA22E0037B409 /* AccessibilityWindowController.swift */; };
 		9824702F22AFA2E50037B409 /* AccessibilityAuthorization.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9824702E22AFA2E50037B409 /* AccessibilityAuthorization.swift */; };
-		9824703122AFA8470037B409 /* RectangleStatusItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9824703022AFA8470037B409 /* RectangleStatusItem.swift */; };
+		9824703122AFA8470037B409 /* DivideAndConquerStatusItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9824703022AFA8470037B409 /* DivideAndConquerStatusItem.swift */; };
 		9824703722B0F3200037B409 /* WindowAction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9824703622B0F3200037B409 /* WindowAction.swift */; };
 		9824703922B0F37C0037B409 /* ShortcutManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9824703822B0F37C0037B409 /* ShortcutManager.swift */; };
 		9824703B22B139780037B409 /* CUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9824703A22B139780037B409 /* CUtil.swift */; };
@@ -163,7 +163,7 @@
 		9824702122AF9B7E0037B409 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		9824702A22AFA22E0037B409 /* AccessibilityWindowController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AccessibilityWindowController.swift; sourceTree = "<group>"; };
 		9824702E22AFA2E50037B409 /* AccessibilityAuthorization.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AccessibilityAuthorization.swift; sourceTree = "<group>"; };
-		9824703022AFA8470037B409 /* RectangleStatusItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RectangleStatusItem.swift; sourceTree = "<group>"; };
+		9824703022AFA8470037B409 /* DivideAndConquerStatusItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DivideAndConquerStatusItem.swift; sourceTree = "<group>"; };
 		9824703622B0F3200037B409 /* WindowAction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowAction.swift; sourceTree = "<group>"; };
 		9824703822B0F37C0037B409 /* ShortcutManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortcutManager.swift; sourceTree = "<group>"; };
 		9824703A22B139780037B409 /* CUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CUtil.swift; sourceTree = "<group>"; };
@@ -452,7 +452,7 @@
 				9821405F22B3EFB200ABFB3F /* Defaults.swift */,
 				98C1008B2305F1FA006E5344 /* SubsequentExecutionMode.swift */,
 				985B9BF422B93EEC00A2E8F0 /* ApplicationToggle.swift */,
-				9824703022AFA8470037B409 /* RectangleStatusItem.swift */,
+				9824703022AFA8470037B409 /* DivideAndConquerStatusItem.swift */,
 				9824703622B0F3200037B409 /* WindowAction.swift */,
 				98A6EDEB2528FFC100F74B10 /* WindowActionCategory.swift */,
 				9824703822B0F37C0037B409 /* ShortcutManager.swift */,
@@ -841,7 +841,7 @@
 				866661F2257D248A00A9CD2D /* RepeatedExecutionsInThirdsCalculation.swift in Sources */,
 				9824704D22B189250037B409 /* WindowCalculation.swift in Sources */,
 				98C1008E230B9EF6006E5344 /* NextPrevDisplayCalculation.swift in Sources */,
-				9824703122AFA8470037B409 /* RectangleStatusItem.swift in Sources */,
+				9824703122AFA8470037B409 /* DivideAndConquerStatusItem.swift in Sources */,
 				98A009B92512538D00CFBF0C /* TopRightSixthCalculation.swift in Sources */,
 				98C275672322E2DA009B9292 /* WindowHistory.swift in Sources */,
 				9821403722B3D16700ABFB3F /* MaximizeHeightCalculation.swift in Sources */,

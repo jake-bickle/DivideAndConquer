@@ -17,7 +17,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     static let launcherAppId = "com.knollsoft.RectangleLauncher"
 
     private let accessibilityAuthorization = AccessibilityAuthorization()
-    private let statusItem = RectangleStatusItem.instance
+    private let statusItem = DivideAndConquerStatusItem.instance
     static let windowHistory = WindowHistory()
     
     private var shortcutManager: ShortcutManager!

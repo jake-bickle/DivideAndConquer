@@ -105,7 +105,7 @@
 			containerPortal = 9824700122AF9B7D0037B409 /* Project object */;
 			proxyType = 1;
 			remoteGlobalIDString = 9824700822AF9B7D0037B409;
-			remoteInfo = Rectangle;
+			remoteInfo = DivideAndConquer;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -190,7 +190,7 @@
 		988D067E22EB4EDE004EABD7 /* MoveLeftRightCalculation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveLeftRightCalculation.swift; sourceTree = "<group>"; };
 		988D068222EB4EF3004EABD7 /* MoveUpDownCalculation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoveUpDownCalculation.swift; sourceTree = "<group>"; };
 		98910B3D231130AF0066EC23 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
-		98910B41231476B30066EC23 /* PrefsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PrefsViewController.swift; path = Rectangle/PrefsViewController.swift; sourceTree = SOURCE_ROOT; };
+		98910B41231476B30066EC23 /* PrefsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PrefsViewController.swift; path = DivideAndConquer/PrefsViewController.swift; sourceTree = SOURCE_ROOT; };
 		98910B5B231CF9520066EC23 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Main.strings; sourceTree = "<group>"; };
 		98910B5C231CF9520066EC23 /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/Main.strings; sourceTree = "<group>"; };
 		98910B5D231D164A0066EC23 /* fr */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = fr; path = fr.lproj/Main.strings; sourceTree = "<group>"; };
@@ -555,7 +555,7 @@
 			dependencies = (
 			);
 			name = DivideAndConquerLauncher;
-			productName = RectangleLauncher;
+			productName = DivideAndConquerLauncher;
 			productReference = 9821403C22B3EBD900ABFB3F /* DivideAndConquerLauncher.app */;
 			productType = "com.apple.product-type.application";
 		};
@@ -575,7 +575,7 @@
 			dependencies = (
 			);
 			name = DivideAndConquer;
-			productName = Rectangle;
+			productName = DivideAndConquer;
 			productReference = 9824700922AF9B7D0037B409 /* DivideAndConquer.app */;
 			productType = "com.apple.product-type.application";
 		};
@@ -594,7 +594,7 @@
 				9824701D22AF9B7E0037B409 /* PBXTargetDependency */,
 			);
 			name = DivideAndConquerTests;
-			productName = RectangleTests;
+			productName = DivideAndConquerTests;
 			productReference = 9824701B22AF9B7E0037B409 /* DivideAndConquerTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};

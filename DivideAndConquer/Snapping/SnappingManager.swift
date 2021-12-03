@@ -8,42 +8,32 @@
 
 import Cocoa
 
+enum SnapState {
+    case idle
+    case windowSelected
+    case halfActivated
+    case gridActivated
+    case firstCellPicked
+}
+
 class SnappingManager {
     
-    var eventMonitor: EventMonitor?
+    var snapState : SnapState = .idle
+    let eventMonitor: EventMonitor
     var windowElement: AccessibilityElement?
     var windowId: Int?
     var windowIdAttempt: Int = 0
     var lastWindowIdAttempt: TimeInterval?
     var windowMoving: Bool = false
     var initialWindowRect: CGRect?
-    var currentSnapArea: SnapArea?
     
-    var box: GridWindow?
+    var grid: GridWindow?
     
     let screenDetection = ScreenDetection()
     
-    private let marginTop = CGFloat(Defaults.snapEdgeMarginTop.value)
-    private let marginBottom = CGFloat(Defaults.snapEdgeMarginBottom.value)
-    private let marginLeft = CGFloat(Defaults.snapEdgeMarginLeft.value)
-    private let marginRight = CGFloat(Defaults.snapEdgeMarginRight.value)
-    private let ignoredSnapAreas = SnapAreaOption(rawValue: Defaults.ignoredSnapAreas.value)
-    
-    private let snapOptionToAction: [SnapAreaOption: WindowAction] = [
-        .top: .maximize,
-        .left: .leftHalf,
-        .right: .rightHalf,
-        .topLeft: .topLeft,
-        .topRight: .topRight,
-        .bottomLeft: .bottomLeft,
-        .bottomRight: .bottomRight,
-        .topLeftShort: .topHalf,
-        .topRightShort: .topHalf,
-        .bottomLeftShort: .bottomHalf,
-        .bottomRightShort: .bottomHalf
-    ]
-    
     init() {
+        eventMonitor = EventMonitor(mask: [.leftMouseDown, .leftMouseUp, .leftMouseDragged,
+                                           .rightMouseDown, .rightMouseUp, .rightMouseDragged], handler: handle)
         
         if Defaults.windowSnapping.enabled != false {
             enableSnapping()
@@ -63,45 +53,106 @@ class SnappingManager {
         
     public func reloadFromDefaults() {
         if Defaults.windowSnapping.userDisabled {
-            if eventMonitor?.running == true {
+            if eventMonitor.running {
                 disableSnapping()
             }
+            
         } else {
-            if eventMonitor?.running != true {
+            if !eventMonitor.running {
                 enableSnapping()
             }
         }
     }
     
     private func enableSnapping() {
-        if box == nil {
-            box = GridWindow()
-        }
-        if eventMonitor == nil {
-            eventMonitor = EventMonitor(mask: [.leftMouseDown, .leftMouseUp, .leftMouseDragged], handler: handle)
-            eventMonitor?.start()
-        }
+        eventMonitor.start()
     }
     
     private func disableSnapping() {
-        box = nil
-        eventMonitor?.stop()
-        eventMonitor = nil
+        eventMonitor.stop()
+        resetState()
     }
     
+    // TODO Get a better name
+    private func resetState() {
+        grid = nil
+        snapState = .idle
+        windowElement = nil
+        windowId = nil
+        windowMoving = false
+        initialWindowRect = nil
+        windowIdAttempt = 0
+        lastWindowIdAttempt = nil
+    }
+    
+    var windowSelected: Bool { get { return windowElement != nil } }
+    
     func handle(event: NSEvent?) {
-        
         guard let event = event else { return }
         switch event.type {
+            
+            
+        // TODO Check if all of the extra "else .idle" code is necessary
         case .leftMouseDown:
-            if !Defaults.obtainWindowOnClick.userDisabled {
-                windowElement = AccessibilityElement.windowUnderCursor()
-                windowId = windowElement?.getIdentifier()
-                initialWindowRect = windowElement?.rectOfElement()
+            windowElement = AccessibilityElement.windowUnderCursor()
+            windowId = windowElement?.getIdentifier()
+            initialWindowRect = windowElement?.rectOfElement()
+            snapState = .windowSelected
+
+        case .leftMouseDragged:
+            if (snapState == .windowSelected || snapState == .halfActivated ) {
+                guard let windowElement = windowElement else { return }
+                let currentRect = windowElement.rectOfElement()
+                let windowIsDragging = currentRect.size == initialWindowRect?.size && currentRect.origin != initialWindowRect?.origin
+                if (snapState == .windowSelected && windowIsDragging) {
+                    snapState = .halfActivated
+                }
+                else if (windowIsDragging){
+                    snapState = .gridActivated
+                    // TODO Activate the grid!
+                }
+                snapState = windowIsDragging ? .windowDragging : .idle
             }
+            else if (snapState == .firstCellPicked) {
+                
+            }
+            else {
+                snapState = .idle
+            }
+
+        case .rightMouseDown:
+            if (snapState == .windowSelected) {
+                snapState = .halfActivated
+            }
+            else if (snapState == .halfActivated) {
+                snapState = .gridActivated
+                // TODO Activate the grid! Snap the window to the current selected cell
+            }
+            else if (snapState == .firstCellPicked) {
+                snapState = .gridActivated
+                // TODO Unsnap the first cell. This helps with the grid feel, especially if the user accidentally snapped on the wrong cell.
+            }
+            else {
+                snapState = .idle
+            }
+
+        case .rightMouseDragged:
+            if (snapState == .gridActivated) {
+                // TODO If mf ouse hovers over another cell, resnap the window to said cell
+            }
+            else {
+                snapState = .idle
+            }
+    
         case .leftMouseUp:
+            if (snapState == .gridActivated || snapState == .firstCellPicked) {
+                // Turn off grid. Leave the window snapped where it is.
+            }
+            snapState = .idle
+        // TODO A lot of the code below is old. Repurpose it.
+        
             if let currentSnapArea = self.currentSnapArea {
-                box?.close()
+                grid?.close()
                 currentSnapArea.action.postSnap(windowElement: windowElement, windowId: windowId, screen: currentSnapArea.screen)
                 self.currentSnapArea = nil
             } else {
@@ -113,7 +164,7 @@ class SnappingManager {
                    currentRect.size == initialWindowRect?.size,
                    currentRect.origin != initialWindowRect?.origin,
                    let snapArea = snapAreaContainingCursor(priorSnapArea: currentSnapArea)  {
-                    box?.close()
+                    grid?.close()
                     if !(Defaults.snapModifiers.value > 0) ||
                        event.modifierFlags.intersection(.deviceIndependentFlagsMask).rawValue == Defaults.snapModifiers.value {
                         snapArea.action.postSnap(windowElement: windowElement, windowId: windowId, screen: snapArea.screen)
@@ -173,7 +224,7 @@ class SnappingManager {
                 if Defaults.snapModifiers.value > 0 {
                     if event.modifierFlags.intersection(.deviceIndependentFlagsMask).rawValue != Defaults.snapModifiers.value {
                         if currentSnapArea != nil {
-                            box?.close()
+                            grid?.close()
                             currentSnapArea = nil
                         }
                         return
@@ -187,17 +238,17 @@ class SnappingManager {
                     let currentWindow = Window(id: windowId, rect: currentRect)
                     
                     if let newBoxRect = getBoxRect(hotSpot: snapArea, currentWindow: currentWindow) {
-                        if box == nil {
+                        if grid == nil {
                             box = GridWindow()
                         }
                         box?.setFrame(newBoxRect, display: true)
-                        box?.makeKeyAndOrderFront(nil)
+                        grid?.makeKeyAndOrderFront(nil)
                     }
                     
                     currentSnapArea = snapArea
                 } else {
                     if currentSnapArea != nil {
-                        box?.close()
+                        grid?.close()
                         currentSnapArea = nil
                     }
                 }

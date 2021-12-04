@@ -8,6 +8,7 @@
 
 import Cocoa
 
+// TODO Could this be improved by using a tableview?
 class GridWindow: NSWindow {
     
     private var closeWorkItem: DispatchWorkItem?
@@ -24,6 +25,7 @@ class GridWindow: NSWindow {
         
         let initialSize = NSRect(x: x, y: y, width: screenWidth, height: screenHeight)
         super.init(contentRect: initialSize, styleMask: .borderless, backing: .buffered, defer: false)
+        isReleasedWhenClosed = false   // Fixes crash when super.close() is called. 
         
         contentView?.addSubview(view)
         alphaValue = CGFloat(Defaults.gridWindowAlpha.value)
@@ -31,14 +33,10 @@ class GridWindow: NSWindow {
     }
     
     override func makeKeyAndOrderFront(_ sender: Any?) {
-        if Defaults.footprintFade.userDisabled {
-            super.makeKeyAndOrderFront(sender)
-        } else {
-            closeWorkItem?.cancel()
-            closeWorkItem = nil
-            animator().alphaValue = CGFloat(Defaults.footprintAlpha.value)
-            super.makeKeyAndOrderFront(sender)
-        }
+        closeWorkItem?.cancel()
+        closeWorkItem = nil
+        animator().alphaValue = CGFloat(Defaults.footprintAlpha.value)
+        super.makeKeyAndOrderFront(sender)
     }
     
     private func fillWithCells() {
@@ -71,16 +69,12 @@ class GridWindow: NSWindow {
     }
     
     override func close() {
-        if Defaults.footprintFade.userDisabled {
+        animator().alphaValue = 0.0
+        let closeWorkItem = DispatchWorkItem {
             super.close()
-        } else {
-            animator().alphaValue = 0.0
-            let closeWorkItem = DispatchWorkItem {
-                super.close()
-            }
-            self.closeWorkItem = closeWorkItem
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: closeWorkItem)
         }
+        self.closeWorkItem = closeWorkItem
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: closeWorkItem)
     }
 }
 

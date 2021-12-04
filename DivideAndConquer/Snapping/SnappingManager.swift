@@ -90,94 +90,100 @@ class SnappingManager {
         guard let event = event else { return }
         switch event.type {
         case .leftMouseDown:
-            windowElement = AccessibilityElement.windowUnderCursor()
-            windowId = windowElement?.getIdentifier()
-            initialWindowRect = windowElement?.rectOfElement()
-            snapState = .windowSelected
-            print("(.leftMouseDown) snapState = .windowActivated")
-
+            handleLeftMouseDown()
         case .leftMouseDragged:
-            if (snapState == .windowSelected || snapState == .secondaryHit) {
-                guard let windowElement = windowElement else { return }
-                let currentRect = windowElement.rectOfElement()
-                
-                let windowIsDragging = currentRect.size == initialWindowRect?.size && currentRect.origin != initialWindowRect?.origin
-                if (windowIsDragging && snapState == .windowSelected) {
-                    snapState = .windowDragged
-                    print("(.leftMouseDragged) snapState = .windowDragged")
-                }
-                else if (windowIsDragging /* snapState == secondaryHit */ ) {
-                    snapState = .gridActivated
-                    print("(.leftMouseDragged) snapState = .gridActivated")
-                    activateGrid()
-                }
-                
-            }
-            else if (snapState == .firstCellPicked) {
-                // Resnap if necessary
-            }
-            else if (snapState == .gridActivated){
-                // Do nothing. The .gridActivated code is handled in .rightMouseDragged
-            }
-            
+            handleLeftMouseDragged()
         case .rightMouseDown:
-            if (snapState == .windowSelected) {
-                snapState = .secondaryHit
-                print("(.rightMouseDown) snapState = .secondaryHit")
-            }
-            else if (snapState == .windowDragged) {
-                snapState = .gridActivated
-                print ("(.rightMouseDown) snapState = .gridActivated")
-                activateGrid()
-            }
-            else if (snapState == .firstCellPicked) {
-                snapState = .gridActivated
-                print ("(.rightMouseDown) snapState = .firstCellPicked")
-                // TODO Unsnap the first cell. This helps with the grid feel, especially if the user accidentally snapped on the wrong cell.
-                activateGrid()  // TODO Is that all I need? If so, this can just be wrapped in the above "else if"
-            }
-            else {
-                snapState = .idle
-                print("(.rightMouseDown) snapState = .idle")
-            }
-
+            handleRightMouseDown()
         case .rightMouseDragged:
-            if (snapState == .gridActivated) {
-                // TODO If mouse hovers over another cell, resnap the window to said cell
-            }
-            
+            handleRightMouseDragged()
         case .rightMouseUp:
-            if (snapState == .gridActivated) {
-                snapState = .firstCellPicked
-                print("(.rightMouseUp) snapState = .firstCellPicked")
-            }
-    
+            handleRightMouseUp()
         case .leftMouseUp:
-            if (snapState == .gridActivated || snapState == .firstCellPicked) {
-                // Turn off grid. Leave the window snapped where it is.
-                print("closing grid")
-                grid!.close()
-                grid = nil
-            }
-            snapState = .idle
-            print("(.leftMouseUp) snapState = .idle")
-            
+            handleLeftMouseUp()
         default:
             Logger.log("Unexpected event handled in SnappingManager: \(event.type)")
             print("Unexpected event handled in SnappingManager: \(event.type)") // TODO This is only for debugging
         }
     }
         
-    private func activateGrid() {
-        guard let activeScreen = NSScreen.main else {
-            Logger.log("Failed to find the active screen, so grid was not activated.")
-            snapState = .idle
-            print("(activateGrarde) snapState = .idle (Grid failed to activate)")
-            return
+    private func handleLeftMouseDown() {
+        windowElement = AccessibilityElement.windowUnderCursor()
+        windowId = windowElement?.getIdentifier()
+        initialWindowRect = windowElement?.rectOfElement()
+        snapState = .windowSelected
+        print("(.leftMouseDown) snapState = .windowActivated")
+    }
+    
+    private func handleLeftMouseDragged() {
+        if (snapState == .windowSelected || snapState == .secondaryHit) {
+            guard let windowElement = windowElement else { return }
+            let currentRect = windowElement.rectOfElement()
+            
+            let windowIsDragging = currentRect.size == initialWindowRect?.size && currentRect.origin != initialWindowRect?.origin
+            if (windowIsDragging && snapState == .windowSelected) {
+                snapState = .windowDragged
+                print("(.leftMouseDragged) snapState = .windowDragged")
+            }
+            else if (windowIsDragging /* snapState == secondaryHit */ ) {
+                snapState = .gridActivated
+                print("(.leftMouseDragged) snapState = .gridActivated")
+                activateGrid()
+            }
+            
         }
-        grid = GridWindow(screen: activeScreen)
-        NSApp.activate(ignoringOtherApps: true)
-        grid!.makeKeyAndOrderFront(nil)
+        else if (snapState == .firstCellPicked) {
+            // Resnap if necessary
+        }
+        else if (snapState == .gridActivated){
+            // Do nothing. The .gridActivated code is handled in .rightMouseDragged
+        }
+    }
+    
+    private func handleRightMouseDown() {
+        if (snapState == .windowSelected) {
+            snapState = .secondaryHit
+            print("(.rightMouseDown) snapState = .secondaryHit")
+        }
+        else if (snapState == .windowDragged) {
+            snapState = .gridActivated
+            print ("(.rightMouseDown) snapState = .gridActivated")
+            activateGrid()
+        }
+        else if (snapState == .firstCellPicked) {
+            snapState = .gridActivated
+            print ("(.rightMouseDown) snapState = .firstCellPicked")
+            // TODO Unsnap the first cell. This helps with the grid feel, especially if the user accidentally snapped on the wrong cell.
+            activateGrid()  // TODO Is that all I need? If so, this can just be wrapped in the above "else if"
+        }
+        else {
+            snapState = .idle
+            print("(.rightMouseDown) snapState = .idle")
+        }
+    }
+    
+    private func handleRightMouseDragged() {
+        if (snapState == .gridActivated) {
+            // TODO If mouse hovers over another cell, resnap the window to said cell
+        }
+    }
+    
+    private func handleRightMouseUp() {
+        if (snapState == .gridActivated) {
+            snapState = .firstCellPicked
+            print("(.rightMouseUp) snapState = .firstCellPicked")
+        }
+    }
+    
+    private func handleLeftMouseUp() {
+        if (snapState == .gridActivated || snapState == .firstCellPicked) {
+            // Turn off grid. Leave the window snapped where it is.
+            print("closing grid")
+            grid!.close()
+            grid = nil
+        }
+        snapState = .idle
+        print("(.leftMouseUp) snapState = .idle")
     }
     
     func getBoxRect(hotSpot: SnapArea, currentWindow: Window) -> CGRect? {
@@ -197,6 +203,18 @@ class SnappingManager {
             return rectResult.rect
         }
         return nil
+    }
+    
+    private func activateGrid() {
+        guard let activeScreen = NSScreen.main else {
+            Logger.log("Failed to find the active screen, so grid was not activated.")
+            snapState = .idle
+            print("(activateGrarde) snapState = .idle (Grid failed to activate)")
+            return
+        }
+        grid = GridWindow(screen: activeScreen)
+        NSApp.activate(ignoringOtherApps: true)
+        grid!.makeKeyAndOrderFront(nil)
     }
     
     /*

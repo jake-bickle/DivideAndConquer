@@ -11,7 +11,8 @@ import Cocoa
 enum SnapState {
     case idle
     case windowSelected
-    case halfActivated
+    case windowDragged
+    case secondaryHit
     case gridActivated
     case firstCellPicked
 }
@@ -88,77 +89,90 @@ class SnappingManager {
     func handle(event: NSEvent?) {
         guard let event = event else { return }
         switch event.type {
-        // TODO Check if all of the extra "else .idle" code is necessary
         case .leftMouseDown:
             windowElement = AccessibilityElement.windowUnderCursor()
             windowId = windowElement?.getIdentifier()
             initialWindowRect = windowElement?.rectOfElement()
             snapState = .windowSelected
+            print("(.leftMouseDown) snapState = .windowActivated")
 
         case .leftMouseDragged:
-            if (snapState == .windowSelected || snapState == .halfActivated ) {
+            if (snapState == .windowSelected || snapState == .secondaryHit) {
                 guard let windowElement = windowElement else { return }
                 let currentRect = windowElement.rectOfElement()
+                
                 let windowIsDragging = currentRect.size == initialWindowRect?.size && currentRect.origin != initialWindowRect?.origin
-                if (snapState == .windowSelected && windowIsDragging) {
-                    snapState = .halfActivated
+                if (windowIsDragging && snapState == .windowSelected) {
+                    snapState = .windowDragged
+                    print("(.leftMouseDragged) snapState = .windowDragged")
                 }
-                else if (windowIsDragging){
+                else if (windowIsDragging /* snapState == secondaryHit */ ) {
                     snapState = .gridActivated
-                    // TODO Activate the grid!
+                    print("(.leftMouseDragged) snapState = .gridActivated")
+                    activateGrid()
                 }
-                else{
-                    snapState = .idle
-                }
+                
             }
             else if (snapState == .firstCellPicked) {
-                
+                // Resnap if necessary
             }
             else if (snapState == .gridActivated){
                 // Do nothing. The .gridActivated code is handled in .rightMouseDragged
             }
-            else {
-                snapState = .idle
-            }
-
+            
         case .rightMouseDown:
             if (snapState == .windowSelected) {
-                snapState = .halfActivated
+                snapState = .secondaryHit
+                print("(.rightMouseDown) snapState = .secondaryHit")
             }
-            else if (snapState == .halfActivated) {
+            else if (snapState == .windowDragged) {
                 snapState = .gridActivated
-                // TODO Activate the grid! Snap the window to the current selected cell
+                print ("(.rightMouseDown) snapState = .gridActivated")
+                activateGrid()
             }
             else if (snapState == .firstCellPicked) {
                 snapState = .gridActivated
+                print ("(.rightMouseDown) snapState = .firstCellPicked")
                 // TODO Unsnap the first cell. This helps with the grid feel, especially if the user accidentally snapped on the wrong cell.
+                activateGrid()  // TODO Is that all I need? If so, this can just be wrapped in the above "else if"
             }
             else {
                 snapState = .idle
+                print("(.rightMouseDown) snapState = .idle")
             }
 
         case .rightMouseDragged:
             if (snapState == .gridActivated) {
-                // TODO If mf ouse hovers over another cell, resnap the window to said cell
+                // TODO If mouse hovers over another cell, resnap the window to said cell
             }
-            else {
-                snapState = .idle
+            
+        case .rightMouseUp:
+            if (snapState == .gridActivated) {
+                snapState = .firstCellPicked
+                print("(.rightMouseUp) snapState = .firstCellPicked")
             }
     
         case .leftMouseUp:
             if (snapState == .gridActivated || snapState == .firstCellPicked) {
                 // Turn off grid. Leave the window snapped where it is.
+                print("closing grid")
+                grid!.close()
+                grid = nil
             }
             snapState = .idle
-        
+            print("(.leftMouseUp) snapState = .idle")
+            
         default:
             Logger.log("Unexpected event handled in SnappingManager: \(event.type)")
+            print("Unexpected event handled in SnappingManager: \(event.type)") // TODO This is only for debugging
         }
     }
         
     private func activateGrid() {
         guard let activeScreen = NSScreen.main else {
             Logger.log("Failed to find the active screen, so grid was not activated.")
+            snapState = .idle
+            print("(activateGrarde) snapState = .idle (Grid failed to activate)")
             return
         }
         grid = GridWindow(screen: activeScreen)

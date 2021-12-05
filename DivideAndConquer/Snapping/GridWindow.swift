@@ -84,7 +84,7 @@ class Cell: NSView {
         wantsLayer = true
         layer!.borderColor = Defaults.cellPrimaryColor.typedValue?.cgColor ?? NSColor.systemBlue.cgColor
         layer!.borderWidth = CGFloat(Defaults.cellBorderWidth.value)
-        let trackingArea = NSTrackingArea(rect: self.bounds, options: [.mouseEnteredAndExited, .activeInActiveApp], owner: self, userInfo: nil)
+        let trackingArea = NSTrackingArea(rect: self.bounds, options: [.mouseEnteredAndExited, .enabledDuringMouseDrag, .activeAlways], owner: self, userInfo: nil)
         addTrackingArea(trackingArea)
     }
     

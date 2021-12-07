@@ -85,22 +85,22 @@ class GridWindow: NSWindow {
         let unpaddedCellWidth = Int( Float(screenWidth) / Float(gridXDimension) )
         let unpaddedCellHeight = Int( Float(screenHeight) / Float(gridYDimension) )
         
-        // This is a guess, because it's impossible to mathematically ascertain how much padding the cells to the left have.
-        let columnGuess = Int(screenX / unpaddedCellWidth)
+        // This is a guess because it's impossible to mathematically ascertain how much padding the cells to the left have
+        // when only given screen coordinates.
+        // Guessing the row and column will either be correct or overshoot by 1 cell.
+                                                             // \/ Forbid guessing outside array dimensions.
+        let columnGuess = min(Int(screenX / unpaddedCellWidth), gridXDimension - 1)
         var guessedCellFrame = cells[columnGuess][0].frame
         let columnGuessIsCorrect = guessedCellFrame.contains(CGPoint(x: screenX, y: 0))
         let cellColumn = columnGuessIsCorrect ? columnGuess : columnGuess - 1
         
-        let rowGuess = Int(screenY / unpaddedCellHeight)
+        let rowGuess = min(Int(screenY / unpaddedCellHeight), gridYDimension - 1)
         guessedCellFrame = cells[0][rowGuess].frame
         let rowGuessIsCorrect = Int(guessedCellFrame.origin.y) <= screenY &&
                                    screenY <= Int((guessedCellFrame.origin.y + guessedCellFrame.height))
-        let cellRow = rowGuessIsCorrect ? rowGuess : rowGuess - 1  // Guess can only overshoot by 1
+        let cellRow = rowGuessIsCorrect ? rowGuess : rowGuess - 1
         
-//        return cells[cellRow][cellColumn]
-        let cell = cells[cellColumn][cellRow]
-        print("Cell at (\(cellColumn), \(cellRow)) has an origin of (\(cell.frame.origin.x), \(cell.frame.origin.y))")
-        return cell
+        return cells[cellColumn][cellRow]
     }
     
     override func close() {

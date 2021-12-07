@@ -13,6 +13,7 @@ class GridWindow: NSWindow {
     
     private var closeWorkItem: DispatchWorkItem?
     private var view: NSView
+    private var cells: [[Cell]] = []
     
     init(screen: NSScreen) {
         let x = screen.frame.origin.x
@@ -40,6 +41,7 @@ class GridWindow: NSWindow {
     }
     
     private func fillWithCells() {
+        cells = []
         let gridXDimension = Defaults.gridXDimension.value
         let gridYDimension = Defaults.gridYDimension.value
         let boundaries = frame.size
@@ -48,6 +50,7 @@ class GridWindow: NSWindow {
         let cellWidth = Int( Float(screenWidth) / Float(gridXDimension) )
         let cellHeight = Int( Float(screenHeight) / Float(gridYDimension) )
         for i in 0 ... gridXDimension - 1 {
+            cells.append( [] )
             for j in 0 ... gridYDimension - 1 {
                 // Grid dimensions aren't guaranteed to be divisible by screen dimensions, so some careful
                 // padding is necessary for the grid to fill the screen properly while also making each cell
@@ -64,8 +67,40 @@ class GridWindow: NSWindow {
                                   width: cellWidth + xPadding, height: cellHeight + yPadding)
                 let newCell = Cell(frame: rect)
                 view.addSubview(newCell)
+                cells[i].append(newCell)
             }
         }
+    }
+    
+    // Returns the cell located at the specified screen coordinates.
+    func cellAt(location: CGPoint) -> Cell? {
+        guard frame.contains(location) else { return nil }
+        let screenX = Int(location.x)
+        let screenY = Int(location.y)
+        let boundaries = frame.size
+        let screenHeight = Int(boundaries.height)
+        let screenWidth = Int(boundaries.width)
+        let gridXDimension = Defaults.gridXDimension.value
+        let gridYDimension = Defaults.gridYDimension.value
+        let unpaddedCellWidth = Int( Float(screenWidth) / Float(gridXDimension) )
+        let unpaddedCellHeight = Int( Float(screenHeight) / Float(gridYDimension) )
+        
+        // This is a guess, because it's impossible to mathematically ascertain how much padding the cells to the left have.
+        let columnGuess = Int(screenX / unpaddedCellWidth)
+        var guessedCellFrame = cells[0][columnGuess].frame
+        let columnGuessIsCorrect = guessedCellFrame.contains(CGPoint(x: screenX, y: 0))
+        let cellColumn = columnGuessIsCorrect ? columnGuess : columnGuess - 1
+        
+        let rowGuess = Int(screenY / unpaddedCellHeight)
+        guessedCellFrame = cells[rowGuess][0].frame
+        let rowGuessIsCorrect = Int(guessedCellFrame.origin.y) <= screenY &&
+                                   screenY <= Int((guessedCellFrame.origin.y + guessedCellFrame.height))
+        let cellRow = rowGuessIsCorrect ? rowGuess : rowGuess - 1  // Guess can only overshoot by 1
+        
+//        return cells[cellRow][cellColumn]
+        let cell = cells[cellRow][cellColumn]
+        print("Cell at (\(cellRow), \(cellColumn)) has an origin of (\(cell.frame.origin.x), \(cell.frame.origin.y))")
+        return cell
     }
     
     override func close() {

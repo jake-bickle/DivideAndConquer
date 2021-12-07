@@ -87,19 +87,19 @@ class GridWindow: NSWindow {
         
         // This is a guess, because it's impossible to mathematically ascertain how much padding the cells to the left have.
         let columnGuess = Int(screenX / unpaddedCellWidth)
-        var guessedCellFrame = cells[0][columnGuess].frame
+        var guessedCellFrame = cells[columnGuess][0].frame
         let columnGuessIsCorrect = guessedCellFrame.contains(CGPoint(x: screenX, y: 0))
         let cellColumn = columnGuessIsCorrect ? columnGuess : columnGuess - 1
         
         let rowGuess = Int(screenY / unpaddedCellHeight)
-        guessedCellFrame = cells[rowGuess][0].frame
+        guessedCellFrame = cells[0][rowGuess].frame
         let rowGuessIsCorrect = Int(guessedCellFrame.origin.y) <= screenY &&
                                    screenY <= Int((guessedCellFrame.origin.y + guessedCellFrame.height))
         let cellRow = rowGuessIsCorrect ? rowGuess : rowGuess - 1  // Guess can only overshoot by 1
         
 //        return cells[cellRow][cellColumn]
-        let cell = cells[cellRow][cellColumn]
-        print("Cell at (\(cellRow), \(cellColumn)) has an origin of (\(cell.frame.origin.x), \(cell.frame.origin.y))")
+        let cell = cells[cellColumn][cellRow]
+        print("Cell at (\(cellColumn), \(cellRow)) has an origin of (\(cell.frame.origin.x), \(cell.frame.origin.y))")
         return cell
     }
     

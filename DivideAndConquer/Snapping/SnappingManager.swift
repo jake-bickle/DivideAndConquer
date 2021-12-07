@@ -126,8 +126,7 @@ class SnappingManager {
                 print("(.leftMouseDragged) snapState = .windowDragged")
             }
             else if (windowIsDragging /* snapState == secondaryHit */ ) {
-                snapState = .gridActivated
-                print("(.leftMouseDragged) snapState = .gridActivated")
+                print("(.leftMouseDragged) Attempting to activate grid.")
                 activateGrid()
             }
             
@@ -146,8 +145,7 @@ class SnappingManager {
             print("(.rightMouseDown) snapState = .secondaryHit")
         }
         else if (snapState == .windowDragged) {
-            snapState = .gridActivated
-            print ("(.rightMouseDown) snapState = .gridActivated")
+            print ("(.rightMouseDown) Attempting to activate grid.")
             activateGrid()
         }
         else if (snapState == .firstCellPicked) {
@@ -178,7 +176,7 @@ class SnappingManager {
     private func handleLeftMouseUp() {
         if (snapState == .gridActivated || snapState == .firstCellPicked) {
             // Turn off grid. Leave the window snapped where it is.
-            print("closing grid")
+            print("Closing grid.")
             grid!.close()
             grid = nil
         }
@@ -205,13 +203,16 @@ class SnappingManager {
         return nil
     }
     
+    // Attempts to set grid and display grid window. Updates snapState to .gridActivated on success, or .idle on failure.
     private func activateGrid() {
         guard let activeScreen = NSScreen.main else {
             Logger.log("Failed to find the active screen, so grid was not activated.")
             snapState = .idle
-            print("(activateGrarde) snapState = .idle (Grid failed to activate)")
+            print("(activateGrid) snapState = .idle (Grid failed to activate)")
             return
         }
+        snapState = .gridActivated
+        print("(activateGrid) snapState = .gridActivated")
         grid = GridWindow(screen: activeScreen)
         NSApp.activate(ignoringOtherApps: true)
         grid!.makeKeyAndOrderFront(nil)

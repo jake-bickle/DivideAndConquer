@@ -56,6 +56,11 @@ class AccessibilityElement {
         return nil
     }
     
+    func resizableLimits() {   // TODO We can' tassume AccessibilityElement is a window
+        let something = rawValue(for: .proxy)
+        print("h")
+    }
+    
     func withAttribute(_ attribute: CFString) -> AccessibilityElement? {
         var copiedUnderlyingElement: AnyObject?
         let result: AXError = AXUIElementCopyAttributeValue(underlyingElement, attribute, &copiedUnderlyingElement)
@@ -251,7 +256,7 @@ class AccessibilityElement {
     }
 
     private func role() -> String? {
-        return self.value(for: .role)
+        return self.value(for: .role) 
     }
     
     func bringToFront(force: Bool = false) {

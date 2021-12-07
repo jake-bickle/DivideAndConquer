@@ -11,8 +11,8 @@ import Cocoa
 class WindowManager {
 
     private let screenDetection = ScreenDetection()
-    private let standardWindowMoverChain: [WindowMover]
-    private let fixedSizeWindowMoverChain: [WindowMover]
+    private let standardWindowMoverChain: [WindowMoverOLD]
+    private let fixedSizeWindowMoverChain: [WindowMoverOLD]
 
     init() {
         standardWindowMoverChain = [

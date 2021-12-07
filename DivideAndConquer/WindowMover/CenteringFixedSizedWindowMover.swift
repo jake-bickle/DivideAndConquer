@@ -12,7 +12,7 @@ import Foundation
     If the window is fixed size, center it in the proposed window area
  */
 
-class CenteringFixedSizedWindowMover: WindowMover {
+class CenteringFixedSizedWindowMover: WindowMoverOLD {
     
     func moveWindowRect(_ windowRect: CGRect, frameOfScreen: CGRect, visibleFrameOfScreen: CGRect, frontmostWindowElement: AccessibilityElement?, action: WindowAction?) {
         guard let currentWindowRect: CGRect = frontmostWindowElement?.rectOfElement() else { return }

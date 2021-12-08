@@ -21,6 +21,7 @@ class SnappingManager {
     
     var snapState : SnapState = .idle
     var eventMonitor: EventMonitor? = nil
+    var firstPickedCell: Cell? = nil
     var windowElement: AccessibilityElement? = nil
     var windowId: Int? = nil
     var windowIdAttempt: Int = 0
@@ -63,7 +64,7 @@ class SnappingManager {
     
     private func enableSnapping() {
         eventMonitor = EventMonitor(mask: [.leftMouseDown, .leftMouseUp, .leftMouseDragged,
-                                           .rightMouseDown, .rightMouseUp, .rightMouseDragged], handler: handle)
+                                           .rightMouseDown, .rightMouseUp], handler: handle)
         eventMonitor!.start()
     }
     
@@ -72,8 +73,8 @@ class SnappingManager {
         resetState()
     }
     
-    // TODO Get a better name
     private func resetState() {
+        grid?.close()
         grid = nil
         snapState = .idle
         windowElement = nil
@@ -90,20 +91,23 @@ class SnappingManager {
         guard let event = event else { return }
         switch event.type {
         case .leftMouseDown:
+            print("left mouse down")
             handleLeftMouseDown()
         case .leftMouseDragged:
+            print("left drag")
             handleLeftMouseDragged()
         case .rightMouseDown:
+            print("right mouse down")
             handleRightMouseDown()
-        case .rightMouseDragged:
-            handleRightMouseDragged()
         case .rightMouseUp:
+            print("right mouse up")
             handleRightMouseUp()
         case .leftMouseUp:
+            print("left mouse up")
             handleLeftMouseUp()
         default:
             Logger.log("Unexpected event handled in SnappingManager: \(event.type)")
-            print("Unexpected event handled in SnappingManager: \(event.type)") // TODO This is only for debugging
+            print("Unexpected event handled in SnappingManager: \(event.type)")
         }
     }
         
@@ -136,6 +140,13 @@ class SnappingManager {
         }
         else if (snapState == .gridActivated){
             // Do nothing. The .gridActivated code is handled in .rightMouseDragged
+            let location = NSEvent.mouseLocation
+            if let cell = grid!.cellAt(location: location) {
+                WindowMover.moveWindowRect(cell1: cell, cell2: nil, windowElement: windowElement!)
+            }
+            else {
+                // TODO Outside screen coordinates. Could be in status bar or another screen.
+            }
         }
     }
     
@@ -152,17 +163,10 @@ class SnappingManager {
             snapState = .gridActivated
             print ("(.rightMouseDown) snapState = .firstCellPicked")
             // TODO Unsnap the first cell. This helps with the grid feel, especially if the user accidentally snapped on the wrong cell.
-            activateGrid()  // TODO Is that all I need? If so, this can just be wrapped in the above "else if"
         }
         else {
             snapState = .idle
             print("(.rightMouseDown) snapState = .idle")
-        }
-    }
-    
-    private func handleRightMouseDragged() {
-        if (snapState == .gridActivated) {
-            // TODO If mouse hovers over another cell, resnap the window to said cell
         }
     }
     
@@ -174,14 +178,8 @@ class SnappingManager {
     }
     
     private func handleLeftMouseUp() {
-        if (snapState == .gridActivated || snapState == .firstCellPicked) {
-            // Turn off grid. Leave the window snapped where it is.
-            print("Closing grid.")
-            grid!.close()
-            grid = nil
-        }
-        snapState = .idle
-        print("(.leftMouseUp) snapState = .idle")
+        print("(.leftMouseUp) Reseting state.")
+        resetState()
     }
     
     func getBoxRect(hotSpot: SnapArea, currentWindow: Window) -> CGRect? {
@@ -212,10 +210,26 @@ class SnappingManager {
             return
         }
         snapState = .gridActivated
+        simulateLeftMouseUp()
         print("(activateGrid) snapState = .gridActivated")
         grid = GridWindow(screen: activeScreen)
         NSApp.activate(ignoringOtherApps: true)
         grid!.makeKeyAndOrderFront(nil)
+    }
+    
+    private func simulateLeftMouseUp() {
+        let mouseLocation = NSEvent.mouseLocation
+        let source = CGEventSource.init(stateID: .hidSystemState)
+        let mouseUp = CGEvent(mouseEventSource: source, mouseType: .leftMouseUp, mouseCursorPosition: mouseLocation, mouseButton: .left)
+        mouseUp?.post(tap: .cghidEventTap)
+    }
+    
+    // TODO Not necessary?
+    private func mouseDown() {
+        let mouseLocation = NSEvent.mouseLocation
+        let source = CGEventSource.init(stateID: .hidSystemState)
+        let mouseDown = CGEvent(mouseEventSource: source, mouseType: .leftMouseDown, mouseCursorPosition: mouseLocation, mouseButton: .left)
+        mouseDown?.post(tap: .cghidEventTap)
     }
     
     /*

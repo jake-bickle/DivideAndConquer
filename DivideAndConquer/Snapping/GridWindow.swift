@@ -26,12 +26,14 @@ class GridWindow: NSWindow {
         
         let initialSize = NSRect(x: x, y: y, width: screenWidth, height: screenHeight)
         super.init(contentRect: initialSize, styleMask: .borderless, backing: .buffered, defer: false)
-        isReleasedWhenClosed = false   // Fixes crash when super.close() is called. 
+        isReleasedWhenClosed = false   // Fixes crash when super.close() is called.
         
         contentView?.addSubview(view)
         alphaValue = CGFloat(Defaults.gridWindowAlpha.value)
         fillWithCells()
     }
+    
+    override var canBecomeKey: Bool { get {true} }
     
     override func makeKeyAndOrderFront(_ sender: Any?) {
         closeWorkItem?.cancel()
@@ -127,9 +129,18 @@ class Cell: NSView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func mouseUp(with event: NSEvent) {
+        NotificationCenter.default.post(name: Notification.Name.leftMouseUp, object: nil)
+    }
+    
+    override func mouseDown(with event: NSEvent) {
+        NotificationCenter.default.post(name: Notification.Name.leftMouseDown, object: nil)
+    }
+    
     override func mouseEntered(with event: NSEvent){
         super.mouseEntered(with: event)
         layer!.backgroundColor = Defaults.cellPrimaryColor.typedValue?.cgColor ?? NSColor.systemBlue.cgColor
+        NotificationCenter.default.post(name: Notification.Name.mouseDrag, object: nil)
     }
     
     override func mouseExited(with event: NSEvent){

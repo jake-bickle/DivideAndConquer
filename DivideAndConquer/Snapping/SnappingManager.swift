@@ -13,7 +13,6 @@ enum SnapState {
     case windowSelected
     case windowDragged
     case secondaryHit
-    case ignoringMouseInput
     case gridActivated
     case firstCellPicked
 }
@@ -29,6 +28,8 @@ class SnappingManager {
     var lastWindowIdAttempt: TimeInterval? = nil
     var windowMoving: Bool = false
     var initialWindowRect: CGRect? = nil
+    var mouseUpsToIgnore: Int = 0
+    var mouseDownsToIgnore: Int = 0
     
     var grid: GridWindow?
     
@@ -40,6 +41,7 @@ class SnappingManager {
         }
     }
         
+    // TODO Double check this is working as expected
     public func reloadFromDefaults() {
         if Defaults.windowSnapping.userDisabled {
             if mouseEventNotifier.running {
@@ -105,8 +107,8 @@ class SnappingManager {
     
     
     @objc private func handleLeftMouseDown() {
-        if (snapState == .ignoringMouseInput) {
-            return
+        if (mouseDownsToIgnore > 0) {
+            mouseDownsToIgnore -= 1
         }
         else {
             windowElement = AccessibilityElement.windowUnderCursor()
@@ -118,10 +120,7 @@ class SnappingManager {
     }
     
     @objc private func handleLeftMouseDragged() {
-        if (snapState == .ignoringMouseInput) {
-            return
-        }
-        else if (snapState == .windowSelected || snapState == .secondaryHit) {
+        if (snapState == .windowSelected || snapState == .secondaryHit) {
             guard let windowElement = windowElement else { return }
             let currentRect = windowElement.rectOfElement()
             
@@ -152,10 +151,7 @@ class SnappingManager {
     }
     
     @objc private func handleRightMouseDown() {
-        if (snapState == .ignoringMouseInput) {
-            return
-        }
-        else if (snapState == .windowSelected) {
+        if (snapState == .windowSelected) {
             snapState = .secondaryHit
             print("(.rightMouseDown) snapState = .secondaryHit")
         }
@@ -175,18 +171,15 @@ class SnappingManager {
     }
     
     @objc private func handleRightMouseUp() {
-        if (snapState == .ignoringMouseInput) {
-            return
-        }
-        else if (snapState == .gridActivated) {
+        if (snapState == .gridActivated) {
             snapState = .firstCellPicked
             print("(.rightMouseUp) snapState = .firstCellPicked")
         }
     }
     
     @objc private func handleLeftMouseUp() {
-        if (snapState == .ignoringMouseInput) {
-            return
+        if (mouseUpsToIgnore > 0) {
+            mouseUpsToIgnore -= 1
         }
         else {
             print("(.leftMouseUp) Reseting state.")
@@ -213,44 +206,69 @@ class SnappingManager {
         return nil
     }
     
-    // Attempts to set grid and display grid window. Updates snapState to .gridActivated on success, or .idle on failure.
+    /// Attempts to set grid and display grid window. Updates snapState to .gridActivated on success, or .idle on failure.
     private func activateGrid() {
         guard let activeScreen = NSScreen.main else {
             Logger.log("Failed to find the active screen, so grid was not activated.")
             snapState = .idle
             print("(activateGrid) snapState = .idle (Grid failed to activate)")
+            resetState()
             return
         }
         grid = GridWindow(screen: activeScreen)
         NSApp.activate(ignoringOtherApps: true)
         grid!.makeKeyAndOrderFront(nil)
-        while (!grid!.isVisible) {
-            sleep(10)
+        // grid.isVisible really means "I plan to be visible in the future". However, the Grid remains
+        // invisible until sometime after this function returns, so focusing mouse on grid must be called asynchronously.
+        // Yes, this means there is no way to focus the mouse on the grid in this function in this thread.
+        // This also means there is no way to determine if the grid is either genuinely visible, or plans to be.
+        // This creates a race condition. We have to hope the window becomes visible between now and the time
+        // the async call below is made. Perhaps SwiftUI may have been a better choice...
+        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.2) {
+            if (self.focusMouseOnGrid()){
+                self.snapState = .gridActivated
+                print("(activateGrid) snapState = .gridActivated")
+            }
+            else {
+                Logger.log("Failed to focus mouse on grid window, so grid was deactivated.")
+                self.snapState = .idle
+                self.resetState()
+                print("(activateGrid) snapState = .idle (Grid failed to activate)")
+            }
         }
-        focusMouseOnGrid()
-        snapState = .gridActivated
-        print("(activateGrid) snapState = .gridActivated")
     }
     
-    private func focusMouseOnGrid() {
-        guard grid != nil else {
-            Logger.log("Attempted to focus mouse on grid, but no grid is present.")
-            return
+    // The user activates the grid by dragging a window. Once activated, mouseDrag events call the WindowMover
+    // and the window is resized. Unfortunately, the user is still technically dragging the window, and thus
+    // WindowMover fights with the dragging mouse over who gets to resize and move the window.
+    // There is no way to programatically tell the window to stop being dragged. Instead, we must
+    // synthesize a MouseUp event. Additionally, we must MouseDown on top of the grid, to both reflect the fact
+    // that the user is still physically holding the mouse button down, and enabling the GridWindow to receive mouse
+    // events.
+    // The goal of focusMouseOnGrid is to perform this seamlessly.
+    /// Attempts to focus mouse cursor on grid window. Returns true if successful, false otherwise.
+    private func focusMouseOnGrid() -> Bool {
+        guard grid != nil && grid!.isVisible else {
+            Logger.log("Attempted to focus mouse on grid, but the grid isn't present or is invisible.")
+            return false
         }
-        let previousSnapState = snapState
-        snapState = .ignoringMouseInput
-        print("(focusMouseOnGrid) snapState = .ignoringMouseInput")
         let mouseLocation = NSEvent.mouseLocation
-        let mouseUp = CGEvent(mouseEventSource: nil, mouseType: .leftMouseUp, mouseCursorPosition: mouseLocation, mouseButton: .left)
-        mouseUp!.timestamp = 0
-        let mouseDown = CGEvent(mouseEventSource: nil, mouseType: .leftMouseDown, mouseCursorPosition: mouseLocation, mouseButton: .left)
+        guard let mouseUp = CGEvent(mouseEventSource: nil, mouseType: .leftMouseUp, mouseCursorPosition: mouseLocation, mouseButton: .left)
+        else {
+            Logger.log("Attempted to synthesize a MouseUp event, but failed for some unexpected reason.")
+            return false
+        }
+        guard let mouseDown = CGEvent(mouseEventSource: nil, mouseType: .leftMouseDown, mouseCursorPosition: mouseLocation, mouseButton: .left)
+        else {
+            Logger.log("Attempted to synthesize a MouseDown event, but failed for some unexpected reason.")
+            return false
+        }
         
-        // while grid window is not focused? Is there a built in method for that? Or do we have to wait for gridwindow to tell us
-        // that it's received input?
-        mouseUp!.post(tap: .cghidEventTap)
-//        mouseDown!.post(tap: .cghidEventTap)
-        snapState = previousSnapState
-        print("(focusMouseOnGrid) snapState restored")
+        mouseUpsToIgnore = 2  // For some reason, mouseUp.post is sent twice to the MouseMonitor.
+        mouseDownsToIgnore = 1
+        mouseUp.post(tap: .cghidEventTap)
+        mouseDown.post(tap: .cghidEventTap)
+        return true
     }
     
     /*

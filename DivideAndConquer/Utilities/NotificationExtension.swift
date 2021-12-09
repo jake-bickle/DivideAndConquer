@@ -41,3 +41,10 @@ extension Notification.Name {
 
 }
 
+extension Notification.Name {
+    static let leftMouseDown = Notification.Name("leftMouseDown")
+    static let leftMouseUp = Notification.Name("leftMouseUp")
+    static let mouseDrag = Notification.Name("mouseDrag")
+    static let rightMouseDown = Notification.Name("rightMouseDown")
+    static let rightMouseUp = Notification.Name("rightMouseUp")
+}

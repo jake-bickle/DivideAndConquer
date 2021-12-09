@@ -13,6 +13,7 @@ enum SnapState {
     case windowSelected
     case windowDragged
     case secondaryHit
+    case ignoringMouseInput
     case gridActivated
     case firstCellPicked
 }
@@ -20,7 +21,7 @@ enum SnapState {
 class SnappingManager {
     
     var snapState : SnapState = .idle
-    var eventMonitor: EventMonitor? = nil
+    var mouseEventNotifier = MouseMonitor()
     var firstPickedCell: Cell? = nil
     var windowElement: AccessibilityElement? = nil
     var windowId: Int? = nil
@@ -37,39 +38,29 @@ class SnappingManager {
         if Defaults.windowSnapping.enabled != false {
             enableSnapping()
         }
-        Notification.Name.windowSnapping.onPost { notification in
-            guard let enabled = notification.object as? Bool else { return }
-            if enabled {
-                if !Defaults.windowSnapping.userDisabled {
-                    self.enableSnapping()
-                }
-            } else {
-                self.disableSnapping()
-            }
-        }
     }
         
     public func reloadFromDefaults() {
-        if Defaults.windowSnapping.userDisabled && eventMonitor != nil{
-            if eventMonitor!.running {
+        if Defaults.windowSnapping.userDisabled {
+            if mouseEventNotifier.running {
                 disableSnapping()
             }
             
         } else {
-            if !eventMonitor!.running {
+            if !mouseEventNotifier.running {
                 enableSnapping()
             }
         }
     }
     
     private func enableSnapping() {
-        eventMonitor = EventMonitor(mask: [.leftMouseDown, .leftMouseUp, .leftMouseDragged,
-                                           .rightMouseDown, .rightMouseUp], handler: handle)
-        eventMonitor!.start()
+        subscribeToMouseNotifications()
+        mouseEventNotifier.start()
     }
     
     private func disableSnapping() {
-        eventMonitor?.stop()
+        unsubscribeFromMouseNotifications()
+        mouseEventNotifier.stop()
         resetState()
     }
     
@@ -85,42 +76,52 @@ class SnappingManager {
         lastWindowIdAttempt = nil
     }
     
-    var windowSelected: Bool { get { return windowElement != nil } }
+    private func subscribeToMouseNotifications() {
+        NotificationCenter.default.addObserver(self,
+                                               selector:#selector(handleLeftMouseDown),
+                                               name: Notification.Name.leftMouseDown,
+                                               object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector:#selector(handleLeftMouseDragged),
+                                               name: Notification.Name.mouseDrag,
+                                               object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector:#selector(handleRightMouseDown),
+                                               name: Notification.Name.rightMouseDown,
+                                               object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector:#selector(handleRightMouseUp),
+                                               name: Notification.Name.rightMouseUp,
+                                               object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector:#selector(handleLeftMouseUp),
+                                               name: Notification.Name.leftMouseUp,
+                                               object: nil)
+    }
     
-    func handle(event: NSEvent?) {
-        guard let event = event else { return }
-        switch event.type {
-        case .leftMouseDown:
-            print("left mouse down")
-            handleLeftMouseDown()
-        case .leftMouseDragged:
-            print("left drag")
-            handleLeftMouseDragged()
-        case .rightMouseDown:
-            print("right mouse down")
-            handleRightMouseDown()
-        case .rightMouseUp:
-            print("right mouse up")
-            handleRightMouseUp()
-        case .leftMouseUp:
-            print("left mouse up")
-            handleLeftMouseUp()
-        default:
-            Logger.log("Unexpected event handled in SnappingManager: \(event.type)")
-            print("Unexpected event handled in SnappingManager: \(event.type)")
+    private func unsubscribeFromMouseNotifications() {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    
+    @objc private func handleLeftMouseDown() {
+        if (snapState == .ignoringMouseInput) {
+            return
+        }
+        else {
+            windowElement = AccessibilityElement.windowUnderCursor()
+            windowId = windowElement?.getIdentifier()
+            initialWindowRect = windowElement?.rectOfElement()
+            snapState = .windowSelected
+            print("(.leftMouseDown) snapState = .windowActivated")
         }
     }
-        
-    private func handleLeftMouseDown() {
-        windowElement = AccessibilityElement.windowUnderCursor()
-        windowId = windowElement?.getIdentifier()
-        initialWindowRect = windowElement?.rectOfElement()
-        snapState = .windowSelected
-        print("(.leftMouseDown) snapState = .windowActivated")
-    }
     
-    private func handleLeftMouseDragged() {
-        if (snapState == .windowSelected || snapState == .secondaryHit) {
+    @objc private func handleLeftMouseDragged() {
+        if (snapState == .ignoringMouseInput) {
+            return
+        }
+        else if (snapState == .windowSelected || snapState == .secondaryHit) {
             guard let windowElement = windowElement else { return }
             let currentRect = windowElement.rectOfElement()
             
@@ -150,8 +151,11 @@ class SnappingManager {
         }
     }
     
-    private func handleRightMouseDown() {
-        if (snapState == .windowSelected) {
+    @objc private func handleRightMouseDown() {
+        if (snapState == .ignoringMouseInput) {
+            return
+        }
+        else if (snapState == .windowSelected) {
             snapState = .secondaryHit
             print("(.rightMouseDown) snapState = .secondaryHit")
         }
@@ -170,16 +174,24 @@ class SnappingManager {
         }
     }
     
-    private func handleRightMouseUp() {
-        if (snapState == .gridActivated) {
+    @objc private func handleRightMouseUp() {
+        if (snapState == .ignoringMouseInput) {
+            return
+        }
+        else if (snapState == .gridActivated) {
             snapState = .firstCellPicked
             print("(.rightMouseUp) snapState = .firstCellPicked")
         }
     }
     
-    private func handleLeftMouseUp() {
-        print("(.leftMouseUp) Reseting state.")
-        resetState()
+    @objc private func handleLeftMouseUp() {
+        if (snapState == .ignoringMouseInput) {
+            return
+        }
+        else {
+            print("(.leftMouseUp) Reseting state.")
+            resetState()
+        }
     }
     
     func getBoxRect(hotSpot: SnapArea, currentWindow: Window) -> CGRect? {
@@ -209,27 +221,36 @@ class SnappingManager {
             print("(activateGrid) snapState = .idle (Grid failed to activate)")
             return
         }
-        snapState = .gridActivated
-        simulateLeftMouseUp()
-        print("(activateGrid) snapState = .gridActivated")
         grid = GridWindow(screen: activeScreen)
         NSApp.activate(ignoringOtherApps: true)
         grid!.makeKeyAndOrderFront(nil)
+        while (!grid!.isVisible) {
+            sleep(10)
+        }
+        focusMouseOnGrid()
+        snapState = .gridActivated
+        print("(activateGrid) snapState = .gridActivated")
     }
     
-    private func simulateLeftMouseUp() {
+    private func focusMouseOnGrid() {
+        guard grid != nil else {
+            Logger.log("Attempted to focus mouse on grid, but no grid is present.")
+            return
+        }
+        let previousSnapState = snapState
+        snapState = .ignoringMouseInput
+        print("(focusMouseOnGrid) snapState = .ignoringMouseInput")
         let mouseLocation = NSEvent.mouseLocation
-        let source = CGEventSource.init(stateID: .hidSystemState)
-        let mouseUp = CGEvent(mouseEventSource: source, mouseType: .leftMouseUp, mouseCursorPosition: mouseLocation, mouseButton: .left)
-        mouseUp?.post(tap: .cghidEventTap)
-    }
-    
-    // TODO Not necessary?
-    private func mouseDown() {
-        let mouseLocation = NSEvent.mouseLocation
-        let source = CGEventSource.init(stateID: .hidSystemState)
-        let mouseDown = CGEvent(mouseEventSource: source, mouseType: .leftMouseDown, mouseCursorPosition: mouseLocation, mouseButton: .left)
-        mouseDown?.post(tap: .cghidEventTap)
+        let mouseUp = CGEvent(mouseEventSource: nil, mouseType: .leftMouseUp, mouseCursorPosition: mouseLocation, mouseButton: .left)
+        mouseUp!.timestamp = 0
+        let mouseDown = CGEvent(mouseEventSource: nil, mouseType: .leftMouseDown, mouseCursorPosition: mouseLocation, mouseButton: .left)
+        
+        // while grid window is not focused? Is there a built in method for that? Or do we have to wait for gridwindow to tell us
+        // that it's received input?
+        mouseUp!.post(tap: .cghidEventTap)
+//        mouseDown!.post(tap: .cghidEventTap)
+        snapState = previousSnapState
+        print("(focusMouseOnGrid) snapState restored")
     }
     
     /*

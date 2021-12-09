@@ -8,7 +8,7 @@
 
 import Cocoa
 
-public class MouseEventNotifier {
+public class MouseMonitor {
     private var monitor: Any?
 
     var running: Bool { monitor != nil }

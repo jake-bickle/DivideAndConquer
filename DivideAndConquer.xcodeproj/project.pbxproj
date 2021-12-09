@@ -82,7 +82,7 @@
 		98BEFA482620DEDD00D9D54F /* NSImageExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98BEFA472620DEDC00D9D54F /* NSImageExtension.swift */; };
 		98C1008C2305F1FA006E5344 /* SubsequentExecutionMode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98C1008B2305F1FA006E5344 /* SubsequentExecutionMode.swift */; };
 		98C1008E230B9EF6006E5344 /* NextPrevDisplayCalculation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98C1008D230B9EF6006E5344 /* NextPrevDisplayCalculation.swift */; };
-		98C2755E231FF6A9009B9292 /* MouseEventNotifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98C2755D231FF6A9009B9292 /* MouseEventNotifier.swift */; };
+		98C2755E231FF6A9009B9292 /* MouseMonitor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98C2755D231FF6A9009B9292 /* MouseMonitor.swift */; };
 		98C27561231FFA5F009B9292 /* SnappingManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98C27560231FFA5F009B9292 /* SnappingManager.swift */; };
 		98C275672322E2DA009B9292 /* WindowHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98C275662322E2DA009B9292 /* WindowHistory.swift */; };
 		98C6DEF023CE191700CC0C1E /* GapCalculation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98C6DEEF23CE191700CC0C1E /* GapCalculation.swift */; };
@@ -230,7 +230,7 @@
 		98BEFA472620DEDC00D9D54F /* NSImageExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSImageExtension.swift; sourceTree = "<group>"; };
 		98C1008B2305F1FA006E5344 /* SubsequentExecutionMode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubsequentExecutionMode.swift; sourceTree = "<group>"; };
 		98C1008D230B9EF6006E5344 /* NextPrevDisplayCalculation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NextPrevDisplayCalculation.swift; sourceTree = "<group>"; };
-		98C2755D231FF6A9009B9292 /* MouseEventNotifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MouseEventNotifier.swift; sourceTree = "<group>"; };
+		98C2755D231FF6A9009B9292 /* MouseMonitor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MouseMonitor.swift; sourceTree = "<group>"; };
 		98C27560231FFA5F009B9292 /* SnappingManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SnappingManager.swift; sourceTree = "<group>"; };
 		98C275662322E2DA009B9292 /* WindowHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowHistory.swift; sourceTree = "<group>"; };
 		98C6DEEF23CE191700CC0C1E /* GapCalculation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GapCalculation.swift; sourceTree = "<group>"; };
@@ -522,7 +522,7 @@
 		98C2755F231FF6AE009B9292 /* Snapping */ = {
 			isa = PBXGroup;
 			children = (
-				98C2755D231FF6A9009B9292 /* MouseEventNotifier.swift */,
+				98C2755D231FF6A9009B9292 /* MouseMonitor.swift */,
 				98C27560231FFA5F009B9292 /* SnappingManager.swift */,
 				983BBD6E253B609D000D223E /* GridWindow.swift */,
 				BF8E5A39275FDD8F00FADD31 /* WindowMover.swift */,
@@ -818,7 +818,7 @@
 				98D16A442592AD55005228CB /* MASShortcutMigration.swift in Sources */,
 				988D066522EB4CB6004EABD7 /* CenterThirdCalculation.swift in Sources */,
 				98A009BD251253A000CFBF0C /* BottomCenterSixthCalculation.swift in Sources */,
-				98C2755E231FF6A9009B9292 /* MouseEventNotifier.swift in Sources */,
+				98C2755E231FF6A9009B9292 /* MouseMonitor.swift in Sources */,
 				98A009AF2512517900CFBF0C /* SecondFourthCalculation.swift in Sources */,
 				9821406022B3EFB200ABFB3F /* Defaults.swift in Sources */,
 				98192DDA270F606C00015E66 /* Debounce.swift in Sources */,

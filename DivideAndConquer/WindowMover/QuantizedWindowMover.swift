@@ -8,7 +8,7 @@
 
 import Foundation
 
-class QuantizedWindowMover: WindowMoverOLD {
+class QuantizedWindowMover: WindowMover {
     func moveWindowRect(_ windowRect: CGRect, frameOfScreen: CGRect, visibleFrameOfScreen: CGRect, frontmostWindowElement: AccessibilityElement?, action: WindowAction?) {
         guard var movedWindowRect: CGRect = frontmostWindowElement?.rectOfElement() else { return }
         if !movedWindowRect.equalTo(windowRect) {

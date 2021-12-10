@@ -43,7 +43,7 @@
 		9824703F22B13FBC0037B409 /* ScreenDetection.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9824703E22B13FBC0037B409 /* ScreenDetection.swift */; };
 		9824704122B186D00037B409 /* WindowManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9824704022B186D00037B409 /* WindowManager.swift */; };
 		9824704B22B189250037B409 /* StandardWindowMover.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9824704622B189240037B409 /* StandardWindowMover.swift */; };
-		9824704C22B189250037B409 /* WindowMoverOLD.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9824704722B189240037B409 /* WindowMoverOLD.swift */; };
+		9824704C22B189250037B409 /* WindowMover.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9824704722B189240037B409 /* WindowMover.swift */; };
 		9824704D22B189250037B409 /* WindowCalculation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9824704822B189250037B409 /* WindowCalculation.swift */; };
 		9824704E22B189250037B409 /* QuantizedWindowMover.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9824704922B189250037B409 /* QuantizedWindowMover.swift */; };
 		9824704F22B189250037B409 /* BestEffortWindowMover.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9824704A22B189250037B409 /* BestEffortWindowMover.swift */; };
@@ -94,7 +94,7 @@
 		98FD7C5F2687BC14009E9DAF /* FirstThreeFourthsCalculation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98FD7C5E2687BC14009E9DAF /* FirstThreeFourthsCalculation.swift */; };
 		98FD7C612687BCB6009E9DAF /* LastThreeFourthsCalculation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98FD7C602687BCB6009E9DAF /* LastThreeFourthsCalculation.swift */; };
 		A1EAB8D46AEAFD3D885BFBAD /* Pods_DivideAndConquer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA6B2E765AC65E7A93211660 /* Pods_DivideAndConquer.framework */; };
-		BF8E5A3A275FDD8F00FADD31 /* WindowMover.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8E5A39275FDD8F00FADD31 /* WindowMover.swift */; };
+		BF8E5A3A275FDD8F00FADD31 /* OutdatedWindowMover.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8E5A39275FDD8F00FADD31 /* OutdatedWindowMover.swift */; };
 		E7AD439665B6BDF2A9A41F5F /* Pods_DivideAndConquerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D2FE2355E1EB53B25C8D58C /* Pods_DivideAndConquerTests.framework */; };
 /* End PBXBuildFile section */
 
@@ -170,7 +170,7 @@
 		9824703E22B13FBC0037B409 /* ScreenDetection.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScreenDetection.swift; sourceTree = "<group>"; };
 		9824704022B186D00037B409 /* WindowManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowManager.swift; sourceTree = "<group>"; };
 		9824704622B189240037B409 /* StandardWindowMover.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StandardWindowMover.swift; sourceTree = "<group>"; };
-		9824704722B189240037B409 /* WindowMoverOLD.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WindowMoverOLD.swift; sourceTree = "<group>"; };
+		9824704722B189240037B409 /* WindowMover.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WindowMover.swift; sourceTree = "<group>"; };
 		9824704822B189250037B409 /* WindowCalculation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WindowCalculation.swift; sourceTree = "<group>"; };
 		9824704922B189250037B409 /* QuantizedWindowMover.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuantizedWindowMover.swift; sourceTree = "<group>"; };
 		9824704A22B189250037B409 /* BestEffortWindowMover.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BestEffortWindowMover.swift; sourceTree = "<group>"; };
@@ -252,7 +252,7 @@
 		98FE8975246E79A600871535 /* zh-Hant-TW */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant-TW"; path = "zh-Hant-TW.lproj/Main.strings"; sourceTree = "<group>"; };
 		98FE8976246E79C400871535 /* zh-Hant-HK */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant-HK"; path = "zh-Hant-HK.lproj/Main.strings"; sourceTree = "<group>"; };
 		98FE8977246E79C400871535 /* zh-Hant-HK */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant-HK"; path = "zh-Hant-HK.lproj/Main.strings"; sourceTree = "<group>"; };
-		BF8E5A39275FDD8F00FADD31 /* WindowMover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowMover.swift; sourceTree = "<group>"; };
+		BF8E5A39275FDD8F00FADD31 /* OutdatedWindowMover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutdatedWindowMover.swift; sourceTree = "<group>"; };
 		CA6B2E765AC65E7A93211660 /* Pods_DivideAndConquer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DivideAndConquer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		E208C153105113FC1988B3A3 /* Pods-DivideAndConquerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DivideAndConquerTests.debug.xcconfig"; path = "Target Support Files/Pods-DivideAndConquerTests/Pods-DivideAndConquerTests.debug.xcconfig"; sourceTree = "<group>"; };
 		E6A39D15D3D095AEFF572BAB /* Pods-DivideAndConquer.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-DivideAndConquer.debug.xcconfig"; path = "Target Support Files/Pods-DivideAndConquer/Pods-DivideAndConquer.debug.xcconfig"; sourceTree = "<group>"; };
@@ -387,7 +387,7 @@
 				9824704A22B189250037B409 /* BestEffortWindowMover.swift */,
 				9824704922B189250037B409 /* QuantizedWindowMover.swift */,
 				9824704622B189240037B409 /* StandardWindowMover.swift */,
-				9824704722B189240037B409 /* WindowMoverOLD.swift */,
+				9824704722B189240037B409 /* WindowMover.swift */,
 				98B3559723CE025700E410E0 /* CenteringFixedSizedWindowMover.swift */,
 			);
 			path = WindowMover;
@@ -522,7 +522,7 @@
 				98C2755D231FF6A9009B9292 /* MouseMonitor.swift */,
 				98C27560231FFA5F009B9292 /* SnappingManager.swift */,
 				983BBD6E253B609D000D223E /* GridWindow.swift */,
-				BF8E5A39275FDD8F00FADD31 /* WindowMover.swift */,
+				BF8E5A39275FDD8F00FADD31 /* OutdatedWindowMover.swift */,
 			);
 			path = Snapping;
 			sourceTree = "<group>";
@@ -859,7 +859,7 @@
 				98A009AD2512498000CFBF0C /* FirstFourthCalculation.swift in Sources */,
 				98D4B6C525B6256C009C7BF6 /* TodoManager.swift in Sources */,
 				9824700D22AF9B7D0037B409 /* AppDelegate.swift in Sources */,
-				BF8E5A3A275FDD8F00FADD31 /* WindowMover.swift in Sources */,
+				BF8E5A3A275FDD8F00FADD31 /* OutdatedWindowMover.swift in Sources */,
 				98A009BF251253AB00CFBF0C /* BottomRightSixthCalculation.swift in Sources */,
 				98A009B52512537800CFBF0C /* TopLeftSixthCalculation.swift in Sources */,
 				9824704F22B189250037B409 /* BestEffortWindowMover.swift in Sources */,
@@ -870,7 +870,7 @@
 				98A009B72512538200CFBF0C /* TopCenterSixthCalculation.swift in Sources */,
 				9821403322B38A1B00ABFB3F /* UpperLeftCalculation.swift in Sources */,
 				98987AA52391890400BE72C4 /* LogViewer.swift in Sources */,
-				9824704C22B189250037B409 /* WindowMoverOLD.swift in Sources */,
+				9824704C22B189250037B409 /* WindowMover.swift in Sources */,
 				988D066922EB4CCB004EABD7 /* LastThirdCalculation.swift in Sources */,
 				98A6EDEC2528FFC100F74B10 /* WindowActionCategory.swift in Sources */,
 				988D068322EB4EF3004EABD7 /* MoveUpDownCalculation.swift in Sources */,

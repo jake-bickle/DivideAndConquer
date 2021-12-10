@@ -8,7 +8,7 @@
 
 import Foundation
 
-class WindowMover {
+class OutdatedWindowMover {
     // TODO Update arguments where necessary
     static func moveWindowRect(cell1: Cell, cell2: Cell?, windowElement: AccessibilityElement) {
         // TODO windowElement.isresizable()
@@ -24,15 +24,17 @@ class WindowMover {
             let higherCell = cell1.frame.origin.y > cell2.frame.origin.y ? cell1 : cell2
             let rightMostCell = cell1.frame.origin.x > cell2.frame.origin.x ? cell1 : cell2
             x = min(cell1.frame.origin.x, cell2.frame.origin.x)
-            y = min(cell1.frame.origin.y, cell2.frame.origin.y)
+//            y = min(cell1.frame.origin.y, cell2.frame.origin.y)
+            y = min(cell1.originFlippedY()!, cell2.originFlippedY()!)
             width = rightMostCell.frame.origin.x + rightMostCell.frame.width - x
             height = higherCell.frame.origin.y + higherCell.frame.height - y
         }
         else {
             x = cell1.frame.origin.x
             y = cell1.frame.origin.y
+//            y = cell1.originFlippedY()!
             width = cell1.frame.width
-            height = cell1.frame.width
+            height = cell1.frame.height
         }
         
         let newFrame = CGRect(x: x, y: y, width: width, height: height)

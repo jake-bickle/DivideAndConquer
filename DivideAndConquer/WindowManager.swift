@@ -11,8 +11,8 @@ import Cocoa
 class WindowManager {
 
     private let screenDetection = ScreenDetection()
-    private let standardWindowMoverChain: [WindowMoverOLD]
-    private let fixedSizeWindowMoverChain: [WindowMoverOLD]
+    private let standardWindowMoverChain: [WindowMover]
+    private let fixedSizeWindowMoverChain: [WindowMover]
 
     init() {
         standardWindowMoverChain = [
@@ -114,7 +114,7 @@ class WindowManager {
             : standardWindowMoverChain
 
         for windowMover in windowMoverChain {
-            windowMover.moveWindowRect(newRect, frameOfScreen: usableScreens.frameOfCurrentScreen, visibleFrameOfScreen: visibleFrameOfDestinationScreen, frontmostWindowElement: frontmostWindowElement, action: action)
+            windowMover.moveWindowRect(newRect, frameOfScreen: usableScreens.frameOfCurrentScreen, visibleFrameOfScreen: visibleFrameOfDestinationScreen, frontmostWindowElement: frontmostWindowElement)
         }
         
         let resultingRect = frontmostWindowElement.rectOfElement()

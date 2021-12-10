@@ -142,7 +142,7 @@ class SnappingManager {
             // Do nothing. The .gridActivated code is handled in .rightMouseDragged
             let location = NSEvent.mouseLocation
             if let cell = grid!.cellAt(location: location) {
-                WindowMover.moveWindowRect(cell1: cell, cell2: nil, windowElement: windowElement!)
+                OutdatedWindowMover.moveWindowRect(cell1: cell, cell2: nil, windowElement: windowElement!)
             }
             else {
                 // TODO Outside screen coordinates. Could be in status bar or another screen.

@@ -18,7 +18,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     private let accessibilityAuthorization = AccessibilityAuthorization()
     private let statusItem = DivideAndConquerStatusItem.instance
-    static let windowHistory = WindowHistory()
     
     private var shortcutManager: ShortcutManager!
     private var windowManager: WindowManager!
@@ -82,6 +81,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
                 TodoManager.registerReflowShortcut()
             }
         })
+        Logger.showLogging(sender: self)
     }
     
     func checkAutoCheckForUpdates() {

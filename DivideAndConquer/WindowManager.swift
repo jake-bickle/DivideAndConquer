@@ -78,6 +78,7 @@ class WindowManager {
         let currentNormalizedRect = AccessibilityElement.normalizeCoordinatesOf(currentWindowRect, frameOfScreen: usableScreens.frameOfCurrentScreen)
         let currentWindow = Window(id: windowId, rect: currentNormalizedRect)
         
+        // TODO Calculate frame based on given cell or cells. Windowmover will do its best to fit it in.
         let windowCalculation = WindowCalculationFactory.calculationsByAction[action]
         
         let calculationParams = WindowCalculationParameters(window: currentWindow, usableScreens: usableScreens, action: action, lastAction: lastRectangleAction)
@@ -107,7 +108,7 @@ class WindowManager {
 
         let visibleFrameOfDestinationScreen = calcResult.screen.adjustedVisibleFrame
 
-        let useFixedSizeMover = !frontmostWindowElement.isResizable() && action.resizes
+        let useFixedSizeMover = !frontmostWindowElement.isResizable()
         let windowMoverChain = useFixedSizeMover
             ? fixedSizeWindowMoverChain
             : standardWindowMoverChain
@@ -117,11 +118,6 @@ class WindowManager {
         }
         
         let resultingRect = frontmostWindowElement.rectOfElement()
-        
-        if Defaults.moveCursor.userEnabled, parameters.source == .keyboardShortcut {
-            let windowCenter = NSMakePoint(NSMidX(resultingRect), NSMidY(resultingRect))
-            CGWarpMouseCursorPosition(windowCenter)
-        }
         
         if usableScreens.currentScreen != calcResult.screen {
             frontmostWindowElement.bringToFront(force: true)
@@ -144,7 +140,7 @@ class WindowManager {
                 }
             }
             
-            Logger.log("\(action.name) | display: \(visibleFrameOfDestinationScreen.debugDescription), calculatedRect: \(newRect.debugDescription), resultRect: \(resultingRect.debugDescription)\(srcDestScreens)")
+            Logger.log("Completed move | display: \(visibleFrameOfDestinationScreen.debugDescription), calculatedRect: \(newRect.debugDescription), resultRect: \(resultingRect.debugDescription)\(srcDestScreens)")
         }
     }
 }

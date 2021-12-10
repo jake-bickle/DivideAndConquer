@@ -50,16 +50,6 @@ class WindowManager {
             return
         }
 
-        let action = parameters.action
-
-        if action == .restore {
-            if let restoreRect = AppDelegate.windowHistory.restoreRects[windowId] {
-                frontmostWindowElement.setRectOf(restoreRect)
-            }
-            AppDelegate.windowHistory.lastRectangleActions.removeValue(forKey: windowId)
-            return
-        }
-        
         var screens: UsableScreens?
         if let screen = parameters.screen {
             screens = UsableScreens(currentScreen: screen, numScreens: 1)
@@ -82,13 +72,6 @@ class WindowManager {
         if windowMovedExternally {
             lastRectangleAction = nil
             AppDelegate.windowHistory.lastRectangleActions.removeValue(forKey: windowId)
-        }
-        
-        if parameters.updateRestoreRect {
-            if AppDelegate.windowHistory.restoreRects[windowId] == nil
-                || windowMovedExternally {
-                AppDelegate.windowHistory.restoreRects[windowId] = currentWindowRect
-            }
         }
         
         if frontmostWindowElement.isSheet()
@@ -183,20 +166,14 @@ struct RectangleAction {
 }
 
 struct ExecutionParameters {
-    let action: WindowAction
-    let updateRestoreRect: Bool
     let screen: NSScreen?
     let windowElement: AccessibilityElement?
     let windowId: Int?
-    let source: ExecutionSource
 
     init(_ action: WindowAction, updateRestoreRect: Bool = true, screen: NSScreen? = nil, windowElement: AccessibilityElement? = nil, windowId: Int? = nil, source: ExecutionSource = .keyboardShortcut) {
-        self.action = action
-        self.updateRestoreRect = updateRestoreRect
         self.screen = screen
         self.windowElement = windowElement
         self.windowId = windowId
-        self.source = source
     }
 }
 

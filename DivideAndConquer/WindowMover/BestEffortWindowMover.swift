@@ -13,7 +13,7 @@ import Foundation
  */
 
 class BestEffortWindowMover: WindowMover {
-    func moveWindowRect(_ windowRect: CGRect, frameOfScreen: CGRect, visibleFrameOfScreen: CGRect, frontmostWindowElement: AccessibilityElement?, action: WindowAction?) {
+    func moveWindowRect(_ windowRect: CGRect, frameOfScreen: CGRect, visibleFrameOfScreen: CGRect, frontmostWindowElement: AccessibilityElement?) {
         guard let currentWindowRect: CGRect = frontmostWindowElement?.rectOfElement() else { return }
         
         var adjustedWindowRect: CGRect = currentWindowRect

@@ -71,39 +71,17 @@ class ShortcutManager {
     }
     
     @objc func windowActionTriggered(notification: NSNotification) {
-        guard var parameters = notification.object as? ExecutionParameters else { return }
+        guard let parameters = notification.object as? ExecutionParameters else { return }
         
         if Defaults.subsequentExecutionMode.value == .cycleMonitor {
-            guard let windowElement = parameters.windowElement ?? AccessibilityElement.frontmostWindow(),
-                  let windowId = parameters.windowId ?? windowElement.getIdentifier()
+            guard let windowElement = parameters.windowElement ?? AccessibilityElement.frontmostWindow()
             else {
                 NSSound.beep()
                 return
             }
-            
-            if isRepeatAction(parameters: parameters, windowElement: windowElement, windowId: windowId) {
-                if let screen = ScreenDetection().detectScreens(using: windowElement)?.adjacentScreens?.next{
-                    parameters = ExecutionParameters(parameters.action, updateRestoreRect: parameters.updateRestoreRect, screen: screen, windowElement: windowElement, windowId: windowId)
-                    // Bypass any other subsequent action by removing the last action
-                    AppDelegate.windowHistory.lastRectangleActions.removeValue(forKey: windowId)
-                }
-            }
         }
         
         windowManager.execute(parameters)
-    }
-    
-    private func isRepeatAction(parameters: ExecutionParameters, windowElement: AccessibilityElement, windowId: Int) -> Bool {
-        
-        if parameters.action == .maximize {
-            if ScreenDetection().detectScreens(using: windowElement)?.currentScreen.visibleFrame.size == windowElement.rectOfElement().size {
-                return true
-            }
-        }
-        if parameters.action == AppDelegate.windowHistory.lastRectangleActions[windowId]?.action {
-            return true
-        }
-        return false
     }
     
     private func subscribe(notification: WindowAction, selector: Selector) {

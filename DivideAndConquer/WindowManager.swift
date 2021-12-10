@@ -65,15 +65,6 @@ class WindowManager {
         
         let currentWindowRect: CGRect = frontmostWindowElement.rectOfElement()
         
-        var lastRectangleAction = AppDelegate.windowHistory.lastRectangleActions[windowId]
-        
-        let windowMovedExternally = currentWindowRect != lastRectangleAction?.rect
-        
-        if windowMovedExternally {
-            lastRectangleAction = nil
-            AppDelegate.windowHistory.lastRectangleActions.removeValue(forKey: windowId)
-        }
-        
         if frontmostWindowElement.isSheet()
             || frontmostWindowElement.isSystemDialog()
             || currentWindowRect.isNull

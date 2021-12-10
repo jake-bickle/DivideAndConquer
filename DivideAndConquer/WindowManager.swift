@@ -82,9 +82,6 @@ class WindowManager {
 
         if currentNormalizedRect.equalTo(calcResult.rect) {
             Logger.log("Current frame is equal to new frame")
-            
-            recordAction(windowId: windowId, resultingRect: currentWindowRect, action: calcResult.resultingAction, subAction: calcResult.resultingSubAction)
-            
             return
         }
         
@@ -111,8 +108,6 @@ class WindowManager {
                 CGWarpMouseCursorPosition(windowCenter)
             }
         }
-        
-        recordAction(windowId: windowId, resultingRect: resultingRect, action: calcResult.resultingAction, subAction: calcResult.resultingSubAction)
         
         if Logger.logging {
             var srcDestScreens: String = ""
@@ -141,7 +136,7 @@ struct ExecutionParameters {
     let windowElement: AccessibilityElement?
     let windowId: Int?
 
-    init(_ action: WindowAction, updateRestoreRect: Bool = true, screen: NSScreen? = nil, windowElement: AccessibilityElement? = nil, windowId: Int? = nil, source: ExecutionSource = .keyboardShortcut) {
+    init(_ action: WindowAction, screen: NSScreen? = nil, windowElement: AccessibilityElement? = nil, windowId: Int? = nil) {
         self.screen = screen
         self.windowElement = windowElement
         self.windowId = windowId

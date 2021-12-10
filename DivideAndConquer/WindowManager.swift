@@ -26,22 +26,6 @@ class WindowManager {
         ]
     }
 
-    private func recordAction(windowId: Int, resultingRect: CGRect, action: WindowAction, subAction: SubWindowAction?) {
-        let newCount: Int
-        if let lastRectangleAction = AppDelegate.windowHistory.lastRectangleActions[windowId], lastRectangleAction.action == action {
-            newCount = lastRectangleAction.count + 1
-        } else {
-            newCount = 1
-        }
-
-        AppDelegate.windowHistory.lastRectangleActions[windowId] = RectangleAction(
-            action: action,
-            subAction: subAction,
-            rect: resultingRect,
-            count: newCount
-        )
-    }
-
     func execute(_ parameters: ExecutionParameters) {
         guard let frontmostWindowElement = parameters.windowElement ?? AccessibilityElement.frontmostWindow(),
               let windowId = parameters.windowId ?? frontmostWindowElement.getIdentifier()

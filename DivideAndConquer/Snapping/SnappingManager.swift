@@ -263,6 +263,8 @@ class SnappingManager {
             Logger.log("Attempted to synthesize a MouseDown event, but failed for some unexpected reason.")
             return false
         }
+        mouseUp.location = mouseUp.unflippedLocation
+        mouseDown.location = mouseDown.unflippedLocation
         
         mouseUpsToIgnore = 2  // For some reason, mouseUp.post is sent twice to the MouseMonitor.
         mouseDownsToIgnore = 1

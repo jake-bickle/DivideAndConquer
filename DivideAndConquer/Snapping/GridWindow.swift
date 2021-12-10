@@ -135,17 +135,41 @@ class Cell: NSView {
     
     override func mouseDown(with event: NSEvent) {
         NotificationCenter.default.post(name: Notification.Name.leftMouseDown, object: nil)
+        // Tecehnically not a drag, but aids in feel as this allows SnappingManager to snap right away.
+        mouseDragged(with: event)
+    }
+    
+    override func mouseDragged(with event: NSEvent) {
+        NotificationCenter.default.post(name: Notification.Name.mouseDrag, object: nil)
     }
     
     override func mouseEntered(with event: NSEvent){
         super.mouseEntered(with: event)
         layer!.backgroundColor = Defaults.cellPrimaryColor.typedValue?.cgColor ?? NSColor.systemBlue.cgColor
-        NotificationCenter.default.post(name: Notification.Name.mouseDrag, object: nil)
     }
     
     override func mouseExited(with event: NSEvent){
-        super.mouseEntered(with: event)
+        super.mouseExited(with: event)
         layer!.backgroundColor = NSColor.clear.cgColor
     }
     
+}
+
+extension NSView {
+    
+    /// Attempts to flip origin.frame.y based on the container the view is in. If the view is not in a container, returns nil.
+    func originFlippedY() -> CGFloat? {
+        let y = frame.origin.y
+        var parentContainerHeight: CGFloat
+        if let superview = superview {
+            parentContainerHeight = superview.frame.height
+        }
+        else if let window = window {
+            parentContainerHeight = window.frame.height
+        }
+        else {
+            return nil
+        }
+        return parentContainerHeight - y
+    }
 }

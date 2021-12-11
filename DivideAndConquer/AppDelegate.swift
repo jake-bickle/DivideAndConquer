@@ -211,7 +211,6 @@ extension AppDelegate: NSMenuDelegate {
     
     func menuWillOpen(_ menu: NSMenu) {
         if menu != mainStatusMenu {
-            updateWindowActionMenuItems(menu: menu)
             return
         }
         
@@ -224,47 +223,9 @@ extension AppDelegate: NSMenuDelegate {
             ignoreMenuItem.isHidden = true
         }
         
-        updateWindowActionMenuItems(menu: menu)
-
         viewLoggingMenuItem.keyEquivalentModifierMask = .option
         quitMenuItem.keyEquivalent = "q"
         quitMenuItem.keyEquivalentModifierMask = .command
-    }
-    
-    private func updateWindowActionMenuItems(menu: NSMenu) {
-        // TODO Check out what this is doing
-        /*
-        let frontmostWindow = AccessibilityElement.frontmostWindow()
-        let screenCount = NSScreen.screens.count
-        let isPortrait = NSScreen.main?.frame.isLandscape == false
-
-        for menuItem in menu.items {
-            guard let windowAction = menuItem.representedObject as? WindowAction else { continue }
-
-            menuItem.image = windowAction.image.copy() as? NSImage
-            menuItem.image?.size = NSSize(width: 18, height: 12)
-            
-            if isPortrait && windowAction.classification == .thirds {
-                menuItem.image = menuItem.image?.rotated(by: 270)
-                menuItem.image?.isTemplate = true
-            }
-
-            if !applicationToggle.shortcutsDisabled {
-                if let fullKeyEquivalent = shortcutManager.getKeyEquivalent(action: windowAction),
-                    let keyEquivalent = fullKeyEquivalent.0?.lowercased() {
-                    menuItem.keyEquivalent = keyEquivalent
-                    menuItem.keyEquivalentModifierMask = fullKeyEquivalent.1
-                }
-            }
-            if frontmostWindow == nil {
-                menuItem.isEnabled = false
-            }
-            if screenCount == 1
-                && (windowAction == .nextDisplay || windowAction == .previousDisplay) {
-                menuItem.isEnabled = false
-            }
-        }
-         */
     }
     
     func menuDidClose(_ menu: NSMenu) {

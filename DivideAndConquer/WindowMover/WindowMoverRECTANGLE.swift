@@ -8,6 +8,6 @@
 
 import Foundation
 
-protocol WindowMover {
+protocol WindowMoverRECTANGLE {
     func moveWindowRect(_ windowRect: CGRect, frameOfScreen: CGRect, visibleFrameOfScreen: CGRect, frontmostWindowElement: AccessibilityElement?)
 }

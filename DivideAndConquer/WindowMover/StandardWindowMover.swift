@@ -8,7 +8,7 @@
 
 import Foundation
 
-class StandardWindowMover: WindowMover {
+class StandardWindowMover: WindowMoverRECTANGLE {
     func moveWindowRect(_ windowRect: CGRect, frameOfScreen: CGRect, visibleFrameOfScreen: CGRect, frontmostWindowElement: AccessibilityElement?) {
         let previousWindowRect: CGRect? = frontmostWindowElement?.rectOfElement()
         if previousWindowRect?.isNull == true {

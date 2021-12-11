@@ -30,8 +30,6 @@ class SnappingManager {
     var mouseUpsToIgnore: Int = 0
     var mouseDownsToIgnore: Int = 0
     
-    var grid: GridWindow?
-    
     let screenDetection = ScreenDetection()
     
     init() {
@@ -66,8 +64,7 @@ class SnappingManager {
     }
     
     private func resetState() {
-        grid?.close()
-        grid = nil
+        GridManager.shared.close()
         snapState = .idle
         windowElement = nil
         windowId = nil
@@ -192,17 +189,7 @@ class SnappingManager {
     
     /// Attempts to set grid and display grid window. Updates snapState to .gridActivated on success, or .idle on failure.
     private func activateGrid() {
-        guard let activeScreen = NSScreen.main else {
-            Logger.log("Failed to find the active screen, so grid was not activated.")
-            snapState = .idle
-            print("(activateGrid) snapState = .idle (Grid failed to activate)")
-            resetState()
-            return
-        }
-        grid?.close()  // Grid shouldn't exist, let alone have a window open, but this is just to be safe.
-        grid = GridWindow(screen: activeScreen)
-        NSApp.activate(ignoringOtherApps: true)
-        grid!.makeKeyAndOrderFront(nil)
+        GridManager.shared.show()
         // grid.isVisible really means "I plan to be visible in the future". However, the Grid remains
         // invisible until sometime after this function returns, so focusing mouse on grid must be called asynchronously.
         // Yes, this means there is no way to focus the mouse on the grid in this function in this thread.
@@ -233,8 +220,8 @@ class SnappingManager {
     // The goal of focusMouseOnGrid is to perform this seamlessly.
     /// Attempts to focus mouse cursor on grid window. Returns true if successful, false otherwise.
     private func focusMouseOnGrid() -> Bool {
-        guard grid != nil && grid!.isVisible else {
-            Logger.log("Attempted to focus mouse on grid, but the grid isn't present or is invisible.")
+        guard GridManager.shared.setToShow else {
+            Logger.log("Attempted to focus mouse on grid, but the grid hasn't been revealed.")
             return false
         }
         let mouseLocation = NSEvent.mouseLocation

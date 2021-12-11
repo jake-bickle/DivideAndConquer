@@ -40,7 +40,6 @@
 		98C97FFD25893B040061F01F /* Config.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98C97FFC25893B040061F01F /* Config.swift */; };
 		98D1441324560B1E0090C603 /* AlertUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98D1441224560B1E0090C603 /* AlertUtil.swift */; };
 		98D16A492592B460005228CB /* NotificationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98D16A482592B460005228CB /* NotificationExtension.swift */; };
-		98D4B6C525B6256C009C7BF6 /* TodoManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98D4B6C425B6256C009C7BF6 /* TodoManager.swift */; };
 		A1EAB8D46AEAFD3D885BFBAD /* Pods_DivideAndConquer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA6B2E765AC65E7A93211660 /* Pods_DivideAndConquer.framework */; };
 		BF8E5A4027641ED100FADD31 /* GridManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8E5A3F27641ED100FADD31 /* GridManager.swift */; };
 		BF8E5A422765344600FADD31 /* WindowMover.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8E5A412765344600FADD31 /* WindowMover.swift */; };
@@ -136,7 +135,6 @@
 		98C97FFC25893B040061F01F /* Config.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Config.swift; sourceTree = "<group>"; };
 		98D1441224560B1E0090C603 /* AlertUtil.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertUtil.swift; sourceTree = "<group>"; };
 		98D16A482592B460005228CB /* NotificationExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationExtension.swift; sourceTree = "<group>"; };
-		98D4B6C425B6256C009C7BF6 /* TodoManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodoManager.swift; sourceTree = "<group>"; };
 		98ED1C722393DEE600CD0955 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Main.strings; sourceTree = "<group>"; };
 		98ED1C732393DEE600CD0955 /* ja */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ja; path = ja.lproj/Main.strings; sourceTree = "<group>"; };
 		98ED1C742393DEF200CD0955 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/Main.strings"; sourceTree = "<group>"; };
@@ -286,7 +284,6 @@
 				98910B3C2311304D0066EC23 /* PrefsWindow */,
 				989DA30C243FC0C3008C7AA4 /* WelcomeWindow */,
 				98C2755F231FF6AE009B9292 /* Snapping */,
-				98D4B6C925B625B6009C7BF6 /* TodoMode */,
 				985B9BFA22BE218C00A2E8F0 /* Popover */,
 				982140EB22B7DB1A00ABFB3F /* AccessibilityAuthorization */,
 				982140EC22B7DB5700ABFB3F /* Utilities */,
@@ -348,14 +345,6 @@
 				BF8E5A412765344600FADD31 /* WindowMover.swift */,
 			);
 			path = Snapping;
-			sourceTree = "<group>";
-		};
-		98D4B6C925B625B6009C7BF6 /* TodoMode */ = {
-			isa = PBXGroup;
-			children = (
-				98D4B6C425B6256C009C7BF6 /* TodoManager.swift */,
-			);
-			path = TodoMode;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -641,7 +630,6 @@
 				98910B42231476B30066EC23 /* PreferencesViewController.swift in Sources */,
 				9824702C22AFA22E0037B409 /* AccessibilityWindowController.swift in Sources */,
 				983BBD6F253B609D000D223E /* GridWindow.swift in Sources */,
-				98D4B6C525B6256C009C7BF6 /* TodoManager.swift in Sources */,
 				9824700D22AF9B7D0037B409 /* AppDelegate.swift in Sources */,
 				BF8E5A422765344600FADD31 /* WindowMover.swift in Sources */,
 				98D16A492592B460005228CB /* NotificationExtension.swift in Sources */,

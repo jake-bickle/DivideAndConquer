@@ -134,10 +134,6 @@ extension NSScreen {
             let leftGap = CGFloat(Defaults.screenEdgeGapLeft.value)
             var rightGap = CGFloat(Defaults.screenEdgeGapRight.value)
 
-            if Defaults.todo.userEnabled, Defaults.todoMode.enabled, TodoManager.todoScreen == self {
-                rightGap += CGFloat(Defaults.todoSidebarWidth.value)
-            }
-            
             let origin = CGPoint(
                 x: visibleFrame.origin.x + leftGap,
                 y: visibleFrame.origin.y + bottomGap

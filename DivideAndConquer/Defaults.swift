@@ -20,7 +20,6 @@ class Defaults {
     static let cellBorderWidth = IntDefault(key: "cellBorderWidth", defaultValue: 1)
     static let gridWindowAlpha = FloatDefault(key: "gridYDimension", defaultValue: 0.3)
     static let alternateDefaultShortcuts = BoolDefault(key: "alternateDefaultShortcuts") // switch to magnet defaults
-    static let subsequentExecutionMode = SubsequentExecutionDefault()
     static let allowAnyShortcut = BoolDefault(key: "allowAnyShortcut")
     static let windowSnapping = OptionalBoolDefault(key: "windowSnapping")
     static let almostMaximizeHeight = FloatDefault(key: "almostMaximizeHeight")
@@ -76,7 +75,6 @@ class Defaults {
         disabledApps,
         hideMenuBarIcon,
         alternateDefaultShortcuts,
-        subsequentExecutionMode,
         allowAnyShortcut,
         windowSnapping,
         almostMaximizeHeight,

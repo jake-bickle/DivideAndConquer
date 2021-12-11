@@ -70,6 +70,8 @@ class GridWindow: NSWindow {
                 let rect = NSRect(x: xCoord, y: yCoord,
                                   width: cellWidth + xPadding, height: cellHeight + yPadding)
                 let newCell = Cell(frame: rect, row: j, column: i, screen: screen)
+                newCell.rowMax = gridYDimension - 1
+                newCell.columnMax = gridXDimension - 1
                 view.addSubview(newCell)
                 cells[i].append(newCell)
             }
@@ -105,6 +107,10 @@ class GridWindow: NSWindow {
         let cellRow = rowGuessIsCorrect ? rowGuess : rowGuess - 1
         
         return cells[cellColumn][cellRow]
+    }
+    
+    func cellAt(row: Int, column: Int) -> Cell {
+        return cells[column][row]
     }
     
     override func close() {
@@ -159,7 +165,9 @@ class CellView: NSView {
 
 class Cell: CellView {
     var row: Int
+    var rowMax: Int
     var column: Int
+    var columnMax: Int
     var screen: NSScreen
     var originX: Int { Int(screen.frame.origin.x + frame.origin.x) }
     var originY: Int { Int(screen.frame.origin.y + frame.origin.y) }

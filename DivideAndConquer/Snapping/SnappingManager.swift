@@ -11,8 +11,7 @@ import Cocoa
 enum SnapState {
     case idle
     case windowSelected
-    case windowDragged
-    case secondaryHit
+    case windowDragged; case secondaryHit
     case gridActivated
     case firstCellPicked
 }

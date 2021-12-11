@@ -13,13 +13,6 @@ extension Defaults {
     static func encoded() -> String? {
         guard let version = Bundle.main.infoDictionary?["CFBundleVersion"] as? String else { return nil }
         
-        var shortcuts = [String: Shortcut]()
-        for action in WindowAction.active {
-            if let masShortcut =  MASShortcutBinder.shared()?.value(forKey: action.name) as? MASShortcut {
-                shortcuts[action.name] = Shortcut(masShortcut: masShortcut)
-            }
-        }
-        
         var codableDefaults = [String: CodableDefault]()
         for exportableDefault in Defaults.array {
             codableDefaults[exportableDefault.key] = exportableDefault.toCodable()
@@ -27,7 +20,6 @@ extension Defaults {
                 
         let config = Config(bundleId: "com.knollsoft.Rectangle",
                             version: version,
-                            shortcuts: shortcuts,
                             defaults: codableDefaults)
         
         let encoder = JSONEncoder()
@@ -48,21 +40,12 @@ extension Defaults {
     }
     
     static func load(fileUrl: URL) {
-        guard let dictTransformer = ValueTransformer(forName: NSValueTransformerName(rawValue: MASDictionaryTransformerName)) else { return }
-        
         guard let jsonString = try? String(contentsOf: fileUrl, encoding: .utf8),
               let config = convert(jsonString: jsonString) else { return }
 
         for availableDefault in Defaults.array {
             if let codedDefault = config.defaults[availableDefault.key] {
                 availableDefault.load(from: codedDefault)
-            }
-        }
-        
-        for action in WindowAction.active {
-            if let shortcut = config.shortcuts[action.name]?.toMASSHortcut() {
-                let dictValue = dictTransformer.reverseTransformedValue(shortcut)
-                UserDefaults.standard.setValue(dictValue, forKey: action.name)
             }
         }
         
@@ -73,6 +56,5 @@ extension Defaults {
 struct Config: Codable {
     let bundleId: String
     let version: String
-    let shortcuts: [String: Shortcut]
     let defaults: [String: CodableDefault]
 }

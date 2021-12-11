@@ -51,25 +51,10 @@ class ApplicationToggle: NSObject {
         return disabledApps
     }
 
-    private func disableShortcuts() {
-        if !self.shortcutsDisabled {
-            self.shortcutsDisabled = true
-            self.shortcutManager.unbindShortcuts()
-        }
-    }
-    
-    private func enableShortcuts() {
-        if self.shortcutsDisabled {
-            self.shortcutsDisabled = false
-            self.shortcutManager.bindShortcuts()
-        }
-    }
-
     public func disableFrontApp() {
         if let frontAppId = self.frontAppId {
             disabledApps.insert(frontAppId)
             saveDisabledApps()
-            disableShortcuts()
         }
     }
     
@@ -77,7 +62,6 @@ class ApplicationToggle: NSObject {
         if let frontAppId = self.frontAppId {
             disabledApps.remove(frontAppId)
             saveDisabledApps()
-            enableShortcuts()
         }
     }
     
@@ -95,7 +79,6 @@ class ApplicationToggle: NSObject {
             self.frontAppName = application.localizedName
             if let frontAppId = application.bundleIdentifier {
                 if isDisabled(bundleId: frontAppId) {
-                    disableShortcuts()
                     DispatchQueue.main.async {
                         for id in self.fullIgnoreIds {
                             if frontAppId.starts(with: id) {
@@ -104,11 +87,8 @@ class ApplicationToggle: NSObject {
                         }
                     }
                 } else {
-                    enableShortcuts()
                     Notification.Name.windowSnapping.post(object: true)
                 }
-            } else {
-                enableShortcuts()
             }
         }
     }

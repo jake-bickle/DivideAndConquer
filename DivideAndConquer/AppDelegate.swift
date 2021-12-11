@@ -19,7 +19,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private let accessibilityAuthorization = AccessibilityAuthorization()
     private let statusItem = DivideAndConquerStatusItem.instance
     
-    private var shortcutManager: ShortcutManager!
     private var windowManager: WindowManager!
     private var applicationToggle: ApplicationToggle!
     private var windowCalculationFactory: WindowCalculationFactory!
@@ -34,13 +33,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     @IBOutlet weak var quitMenuItem: NSMenuItem!
     
     func applicationDidFinishLaunching(_ aNotification: Notification) {
-        if let lastVersion = Defaults.lastVersion.value,
-           let intLastVersion = Int(lastVersion) {
-            if intLastVersion < 46 {
-                MASShortcutMigration.migrate()
-            }
-        }
-        
         Defaults.lastVersion.value = Bundle.main.infoDictionary?["CFBundleVersion"] as? String
 
         mainStatusMenu.delegate = self

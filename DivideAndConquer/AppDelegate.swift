@@ -19,9 +19,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     private let accessibilityAuthorization = AccessibilityAuthorization()
     private let statusItem = DivideAndConquerStatusItem.instance
     
-    private var windowManager: WindowManager!
     private var applicationToggle: ApplicationToggle!
-    private var windowCalculationFactory: WindowCalculationFactory!
     private var snappingManager: SnappingManager!
     
     private var prefsWindowController: NSWindowController?

@@ -36,6 +36,9 @@ class GridManager {
     
     /// Generates and displays the grid on all screens.
     func show() {
+        if (setToShow){
+            close()
+        }
         NSApp.activate(ignoringOtherApps: true)
         for screen in NSScreen.screens {
             let newGrid = GridWindow(screen: screen)

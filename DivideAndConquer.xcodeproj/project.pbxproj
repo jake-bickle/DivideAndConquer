@@ -43,7 +43,6 @@
 		98D16A492592B460005228CB /* NotificationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98D16A482592B460005228CB /* NotificationExtension.swift */; };
 		98D4B6C525B6256C009C7BF6 /* TodoManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98D4B6C425B6256C009C7BF6 /* TodoManager.swift */; };
 		A1EAB8D46AEAFD3D885BFBAD /* Pods_DivideAndConquer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA6B2E765AC65E7A93211660 /* Pods_DivideAndConquer.framework */; };
-		BF8E5A3A275FDD8F00FADD31 /* OutdatedWindowMover.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8E5A39275FDD8F00FADD31 /* OutdatedWindowMover.swift */; };
 		BF8E5A4027641ED100FADD31 /* GridManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8E5A3F27641ED100FADD31 /* GridManager.swift */; };
 		BF8E5A422765344600FADD31 /* WindowMover.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8E5A412765344600FADD31 /* WindowMover.swift */; };
 		E7AD439665B6BDF2A9A41F5F /* Pods_DivideAndConquerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D2FE2355E1EB53B25C8D58C /* Pods_DivideAndConquerTests.framework */; };
@@ -152,7 +151,6 @@
 		98FE8975246E79A600871535 /* zh-Hant-TW */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant-TW"; path = "zh-Hant-TW.lproj/Main.strings"; sourceTree = "<group>"; };
 		98FE8976246E79C400871535 /* zh-Hant-HK */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant-HK"; path = "zh-Hant-HK.lproj/Main.strings"; sourceTree = "<group>"; };
 		98FE8977246E79C400871535 /* zh-Hant-HK */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant-HK"; path = "zh-Hant-HK.lproj/Main.strings"; sourceTree = "<group>"; };
-		BF8E5A39275FDD8F00FADD31 /* OutdatedWindowMover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OutdatedWindowMover.swift; sourceTree = "<group>"; };
 		BF8E5A3F27641ED100FADD31 /* GridManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridManager.swift; sourceTree = "<group>"; };
 		BF8E5A412765344600FADD31 /* WindowMover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowMover.swift; sourceTree = "<group>"; };
 		CA6B2E765AC65E7A93211660 /* Pods_DivideAndConquer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DivideAndConquer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -349,7 +347,6 @@
 				98C2755D231FF6A9009B9292 /* MouseMonitor.swift */,
 				98C27560231FFA5F009B9292 /* SnappingManager.swift */,
 				983BBD6E253B609D000D223E /* GridWindow.swift */,
-				BF8E5A39275FDD8F00FADD31 /* OutdatedWindowMover.swift */,
 				BF8E5A3F27641ED100FADD31 /* GridManager.swift */,
 				BF8E5A412765344600FADD31 /* WindowMover.swift */,
 			);
@@ -650,7 +647,6 @@
 				983BBD6F253B609D000D223E /* GridWindow.swift in Sources */,
 				98D4B6C525B6256C009C7BF6 /* TodoManager.swift in Sources */,
 				9824700D22AF9B7D0037B409 /* AppDelegate.swift in Sources */,
-				BF8E5A3A275FDD8F00FADD31 /* OutdatedWindowMover.swift in Sources */,
 				BF8E5A422765344600FADD31 /* WindowMover.swift in Sources */,
 				98D16A492592B460005228CB /* NotificationExtension.swift in Sources */,
 				98987AA52391890400BE72C4 /* LogViewer.swift in Sources */,

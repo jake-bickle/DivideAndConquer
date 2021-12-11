@@ -52,7 +52,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             : unauthorizedMenu
         
         mainStatusMenu.autoenablesItems = false
-        addWindowActionMenuItems()
  
         checkAutoCheckForUpdates()
         
@@ -60,7 +59,6 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             self.checkAutoCheckForUpdates()
             self.statusItem.refreshVisibility()
             self.applicationToggle.reloadFromDefaults()
-            self.shortcutManager.reloadFromDefaults()
             self.snappingManager.reloadFromDefaults()
             self.initializeTodo()
         })
@@ -79,10 +77,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     }
     
     func accessibilityTrusted() {
-        self.windowCalculationFactory = WindowCalculationFactory()
-        self.windowManager = WindowManager()
-        self.shortcutManager = ShortcutManager(windowManager: windowManager)
-        self.applicationToggle = ApplicationToggle(shortcutManager: shortcutManager)
+        self.applicationToggle = ApplicationToggle()
         self.snappingManager = SnappingManager()
         self.initializeTodo()
         checkForProblematicApps()
@@ -247,6 +242,8 @@ extension AppDelegate: NSMenuDelegate {
     }
     
     private func updateWindowActionMenuItems(menu: NSMenu) {
+        // TODO Check out what this is doing
+        /*
         let frontmostWindow = AccessibilityElement.frontmostWindow()
         let screenCount = NSScreen.screens.count
         let isPortrait = NSScreen.main?.frame.isLandscape == false
@@ -277,6 +274,7 @@ extension AppDelegate: NSMenuDelegate {
                 menuItem.isEnabled = false
             }
         }
+         */
     }
     
     func menuDidClose(_ menu: NSMenu) {
@@ -288,62 +286,6 @@ extension AppDelegate: NSMenuDelegate {
             menuItem.isEnabled = true
         }
     }
-    
-    @objc func executeMenuWindowAction(sender: NSMenuItem) {
-        guard let windowAction = sender.representedObject as? WindowAction else { return }
-        windowAction.postMenu()
-    }
-    
-    func addWindowActionMenuItems() {
-        var menuIndex = 0
-        var categoryMenus: [CategoryMenu] = []
-        for action in WindowAction.active {
-            guard let displayName = action.displayName else { continue }
-            let newMenuItem = NSMenuItem(title: displayName, action: #selector(executeMenuWindowAction), keyEquivalent: "")
-            newMenuItem.representedObject = action
-
-            if !Defaults.showAllActionsInMenu.userEnabled, let category = action.category {
-                if menuIndex != 0 && action.firstInGroup {
-                    let menu = NSMenu(title: category.displayName)
-                    menu.autoenablesItems = false
-                    categoryMenus.append(CategoryMenu(menu: menu, category: category))
-                }
-                categoryMenus.last?.menu.addItem(newMenuItem)
-                continue
-            }
-            
-            if menuIndex != 0 && action.firstInGroup {
-                mainStatusMenu.insertItem(NSMenuItem.separator(), at: menuIndex)
-                menuIndex += 1
-            }
-            mainStatusMenu.insertItem(newMenuItem, at: menuIndex)
-            menuIndex += 1
-        }
-
-        if !categoryMenus.isEmpty {
-            mainStatusMenu.insertItem(NSMenuItem.separator(), at: menuIndex)
-            menuIndex += 1
-            
-            for categoryMenu in categoryMenus {
-                categoryMenu.menu.delegate = self
-                let menuMenuItem = NSMenuItem(title: categoryMenu.category.displayName, action: nil, keyEquivalent: "")
-                mainStatusMenu.insertItem(menuMenuItem, at: menuIndex)
-                mainStatusMenu.setSubmenu(categoryMenu.menu, for: menuMenuItem)
-                menuIndex += 1
-            }
-        }
-        
-        mainStatusMenu.insertItem(NSMenuItem.separator(), at: menuIndex)
-
-        menuIndex += 1
-        addTodoModeMenuItems(startingIndex: menuIndex)
-    }
-    
-    struct CategoryMenu {
-        let menu: NSMenu
-        let category: WindowActionCategory
-    }
-    
 }
 
 // todo mode

@@ -124,20 +124,15 @@ class SnappingManager {
             if (windowIsDragging && snapState == .windowSelected) {
                 snapState = .windowDragged
                 print("(.leftMouseDragged) snapState = .windowDragged")
-                lock.unlock()
             }
             else if (windowIsDragging /* snapState == secondaryHit */ ) {
                 print("(.leftMouseDragged) Attempting to activate grid.")
-                activateGrid(unlockAfterActivated: true)
-            }
-            else {
-                lock.unlock()
+                activateGrid()
             }
             
         }
         else if (snapState == .firstCellPicked) {
             // Resnap if necessary
-            lock.unlock()
         }
         else if (snapState == .gridActivated){
             // TODO send parameters to WindowManager
@@ -152,11 +147,8 @@ class SnappingManager {
                 // TODO Outside screen coordinates. Could be in status bar or another screen.
             }
              */
-            lock.unlock()
         }
-        else {
-            lock.unlock()
-        }
+        lock.unlock()
     }
     
     @objc private func handleRightMouseDown() {
@@ -164,21 +156,17 @@ class SnappingManager {
         if (snapState == .windowSelected) {
             snapState = .secondaryHit
             print("(.rightMouseDown) snapState = .secondaryHit")
-            lock.unlock()
         }
         else if (snapState == .windowDragged) {
             print("(.rightMouseDown) Attempting to activate grid.")
-            activateGrid(unlockAfterActivated: true)
+            activateGrid()
         }
         else if (snapState == .firstCellPicked) {
             snapState = .gridActivated
             print ("(.rightMouseDown) snapState = .firstCellPicked")
             // TODO Unsnap the first cell. This helps with the grid feel, especially if the user accidentally snapped on the wrong cell.
-            lock.unlock()
         }
-        else {
-            lock.unlock()
-        }
+        lock.unlock()
     }
     
     @objc private func handleRightMouseUp() {
@@ -206,29 +194,22 @@ class SnappingManager {
         lock.unlock()
     }
     
-    /// Attempts to set grid and display grid window. Updates snapState to .gridActivated on success, or .idle on failure.
-    private func activateGrid(unlockAfterActivated: Bool) {
+    /// Attempts to display grid window then focus on it. Updates snapState to .gridActivated on success, or .idle on failure.
+    private func activateGrid() {
         GridManager.shared.show()
-        // grid.isVisible really means "I plan to be visible in the future". However, the Grid remains
-        // invisible until sometime after this function returns, so focusing mouse on grid must be called asynchronously.
-        // Yes, this means there is no way to focus the mouse on the grid in this function in this thread.
-        // This also means there is no way to determine if the grid is either genuinely visible, or plans to be.
-        // This creates a race condition. We have to hope the window becomes visible between now and the time
-        // the async call below is made. Perhaps SwiftUI may have been a better choice...
-        DispatchQueue.main.asyncAfter(deadline: DispatchTime.now() + 0.2) {
-            if (self.focusMouseOnGrid()){
-                self.snapState = .gridActivated
-                print("(activateGrid) snapState = .gridActivated")
-            }
-            else {
-                Logger.log("Failed to focus mouse on grid window, so grid was deactivated.")
-                self.snapState = .idle
-                self.resetState()
-                print("(activateGrid) snapState = .idle (Grid failed to activate)")
-            }
-            if (unlockAfterActivated){
-                self.lock.unlock()
-            }
+        // Run the event loop so the window becomes visible immediately. This allows the subsequent code to focus
+        // the cursor on the window.
+        CFRunLoopRun()
+        
+        if (self.focusMouseOnGrid()){
+            self.snapState = .gridActivated
+            print("(activateGrid) snapState = .gridActivated")
+        }
+        else {
+            Logger.log("Failed to focus mouse on grid window, so grid was deactivated.")
+            self.snapState = .idle
+            self.resetState()
+            print("(activateGrid) snapState = .idle (Grid failed to activate)")
         }
     }
     

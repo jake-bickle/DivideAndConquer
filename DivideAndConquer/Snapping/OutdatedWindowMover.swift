@@ -10,14 +10,14 @@ import Foundation
 
 class OutdatedWindowMover {
     // TODO Update arguments where necessary
-    static func moveWindowRect(cell1: Cell, cell2: Cell?, windowElement: AccessibilityElement) {
+    static func moveWindowRect(cell1: CellView, cell2: CellView?, windowElement: AccessibilityElement) {
         // TODO windowElement.isresizable()
         standardMove(cell1, cell2, windowElement)
 //        bestEffortMove()
     }
     
     // TODO What does standardMove always get right? Does it always get origin right?
-    static private func standardMove(_ cell1: Cell, _ cell2: Cell?, _ windowElement : AccessibilityElement) {
+    static private func standardMove(_ cell1: CellView, _ cell2: CellView?, _ windowElement : AccessibilityElement) {
         var x, y, width, height : Double
         if let cell2 = cell2 {
             // Find the rectangle that contains the two cells.

@@ -13,7 +13,7 @@ class GridWindow: NSWindow {
     
     private var closeWorkItem: DispatchWorkItem?
     private var view: NSView
-    private var cells: [[Cell]] = []
+    private var cells: [[CellView]] = []
     
     init(screen: NSScreen) {
         let x = screen.frame.origin.x
@@ -67,7 +67,7 @@ class GridWindow: NSWindow {
                 let yCoord = j * cellHeight + previousYPadding
                 let rect = NSRect(x: xCoord, y: yCoord,
                                   width: cellWidth + xPadding, height: cellHeight + yPadding)
-                let newCell = Cell(frame: rect)
+                let newCell = CellView(frame: rect)
                 view.addSubview(newCell)
                 cells[i].append(newCell)
             }
@@ -75,7 +75,7 @@ class GridWindow: NSWindow {
     }
     
     // Returns the cell located at the specified screen coordinates.
-    func cellAt(location: CGPoint) -> Cell? {
+    func cellAt(location: CGPoint) -> CellView? {
         guard frame.contains(location) else { return nil }
         let screenX = Int(location.x)
         let screenY = Int(location.y)
@@ -115,7 +115,7 @@ class GridWindow: NSWindow {
     }
 }
 
-class Cell: NSView {
+class CellView: NSView {
     override init(frame: NSRect){
         super.init(frame: frame)
         wantsLayer = true
@@ -153,23 +153,4 @@ class Cell: NSView {
         layer!.backgroundColor = NSColor.clear.cgColor
     }
     
-}
-
-extension NSView {
-    
-    /// Attempts to flip origin.frame.y based on the container the view is in. If the view is not in a container, returns nil.
-    func originFlippedY() -> CGFloat? {
-        let y = frame.origin.y
-        var parentContainerHeight: CGFloat
-        if let superview = superview {
-            parentContainerHeight = superview.frame.height
-        }
-        else if let window = window {
-            parentContainerHeight = window.frame.height
-        }
-        else {
-            return nil
-        }
-        return parentContainerHeight - y
-    }
 }

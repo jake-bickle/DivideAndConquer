@@ -199,7 +199,7 @@ class SnappingManager {
         GridManager.shared.show()
         // Run the event loop so the window becomes visible immediately. This allows the subsequent code to focus
         // the cursor on the window.
-        CFRunLoopRun()
+        CFRunLoopRunInMode(.defaultMode?, 0, false)
         
         if (self.focusMouseOnGrid()){
             self.snapState = .gridActivated

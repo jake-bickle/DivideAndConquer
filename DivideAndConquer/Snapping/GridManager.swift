@@ -9,7 +9,11 @@
 import Cocoa
 
 class GridManager {
+    static var shared: GridManager = GridManager()
+    
     var grids: [NSScreen : GridWindow] = [:]
+    
+    private init() {}
     
     func cellAt(mouseLocation: CGPoint) -> Cell? {
         for (screen, gridWindow) in grids {

@@ -19,12 +19,9 @@ enum SnapState {
 class SnappingManager {
     var snapState : SnapState = .idle
     var mouseEventNotifier = MouseMonitor()
+    var lock = NSLock()
     var firstPickedCell: CellView? = nil
     var windowElement: AccessibilityElement? = nil
-    var windowId: Int? = nil
-    var windowIdAttempt: Int = 0
-    var lastWindowIdAttempt: TimeInterval? = nil
-    var windowMoving: Bool = false
     var initialWindowRect: CGRect? = nil
     var mouseUpsToIgnore: Int = 0
     var mouseDownsToIgnore: Int = 0
@@ -66,11 +63,7 @@ class SnappingManager {
         GridManager.shared.close()
         snapState = .idle
         windowElement = nil
-        windowId = nil
-        windowMoving = false
         initialWindowRect = nil
-        windowIdAttempt = 0
-        lastWindowIdAttempt = nil
     }
     
     private func subscribeToMouseNotifications() {
@@ -102,36 +95,49 @@ class SnappingManager {
     
     
     @objc private func handleLeftMouseDown() {
+        lock.lock()
         if (mouseDownsToIgnore > 0) {
             mouseDownsToIgnore -= 1
         }
         else {
             windowElement = AccessibilityElement.windowUnderCursor()
-            windowId = windowElement?.getIdentifier()
             initialWindowRect = windowElement?.rectOfElement()
             snapState = .windowSelected
             print("(.leftMouseDown) snapState = .windowActivated")
         }
+        lock.unlock()
     }
     
     @objc private func handleLeftMouseDragged() {
+        lock.lock()
         if (snapState == .windowSelected || snapState == .secondaryHit) {
-            guard let windowElement = windowElement else { return }
+            guard let windowElement = windowElement else {
+                resetState()
+                Logger.log("SnapState was either windowSelected or secondaryHit, but no window element was selected.")
+                print("(.leftMouseDragged) snapState = .idle (Error: Window element isn't set)")
+                lock.unlock()
+                return
+            }
             let currentRect = windowElement.rectOfElement()
             
             let windowIsDragging = currentRect.size == initialWindowRect?.size && currentRect.origin != initialWindowRect?.origin
             if (windowIsDragging && snapState == .windowSelected) {
                 snapState = .windowDragged
                 print("(.leftMouseDragged) snapState = .windowDragged")
+                lock.unlock()
             }
             else if (windowIsDragging /* snapState == secondaryHit */ ) {
                 print("(.leftMouseDragged) Attempting to activate grid.")
-                activateGrid()
+                activateGrid(unlockAfterActivated: true)
+            }
+            else {
+                lock.unlock()
             }
             
         }
         else if (snapState == .firstCellPicked) {
             // Resnap if necessary
+            lock.unlock()
         }
         else if (snapState == .gridActivated){
             // TODO send parameters to WindowManager
@@ -146,37 +152,50 @@ class SnappingManager {
                 // TODO Outside screen coordinates. Could be in status bar or another screen.
             }
              */
+            lock.unlock()
+        }
+        else {
+            lock.unlock()
         }
     }
     
     @objc private func handleRightMouseDown() {
+        lock.lock()
         if (snapState == .windowSelected) {
             snapState = .secondaryHit
             print("(.rightMouseDown) snapState = .secondaryHit")
+            lock.unlock()
         }
         else if (snapState == .windowDragged) {
-            print ("(.rightMouseDown) Attempting to activate grid.")
-            activateGrid()
+            print("(.rightMouseDown) Attempting to activate grid.")
+            activateGrid(unlockAfterActivated: true)
         }
         else if (snapState == .firstCellPicked) {
             snapState = .gridActivated
             print ("(.rightMouseDown) snapState = .firstCellPicked")
             // TODO Unsnap the first cell. This helps with the grid feel, especially if the user accidentally snapped on the wrong cell.
+            lock.unlock()
         }
         else {
-            snapState = .idle
-            print("(.rightMouseDown) snapState = .idle")
+            lock.unlock()
         }
     }
     
     @objc private func handleRightMouseUp() {
-        if (snapState == .gridActivated) {
+        lock.lock()
+        if (snapState == .secondaryHit) {
+            snapState = .windowSelected
+            print("(.rightMouseUp) snapState = .windowSelected")
+        }
+        else if (snapState == .gridActivated) {
             snapState = .firstCellPicked
             print("(.rightMouseUp) snapState = .firstCellPicked")
         }
+        lock.unlock()
     }
     
     @objc private func handleLeftMouseUp() {
+        lock.lock()
         if (mouseUpsToIgnore > 0) {
             mouseUpsToIgnore -= 1
         }
@@ -184,10 +203,11 @@ class SnappingManager {
             print("(.leftMouseUp) Reseting state.")
             resetState()
         }
+        lock.unlock()
     }
     
     /// Attempts to set grid and display grid window. Updates snapState to .gridActivated on success, or .idle on failure.
-    private func activateGrid() {
+    private func activateGrid(unlockAfterActivated: Bool) {
         GridManager.shared.show()
         // grid.isVisible really means "I plan to be visible in the future". However, the Grid remains
         // invisible until sometime after this function returns, so focusing mouse on grid must be called asynchronously.
@@ -205,6 +225,9 @@ class SnappingManager {
                 self.snapState = .idle
                 self.resetState()
                 print("(activateGrid) snapState = .idle (Grid failed to activate)")
+            }
+            if (unlockAfterActivated){
+                self.lock.unlock()
             }
         }
     }

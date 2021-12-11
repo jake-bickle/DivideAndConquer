@@ -16,7 +16,7 @@ class ApplicationToggle: NSObject {
     public private(set) var shortcutsDisabled: Bool = false
     private let fullIgnoreIds: [String] = Defaults.fullIgnoreBundleIds.typedValue ?? ["com.install4j", "com.mathworks.matlab"]
 
-    init() {
+    override init() {
         super.init()
         registerFrontAppChangeNote()
         if let disabledApps = getDisabledApps() {

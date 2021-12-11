@@ -13,9 +13,11 @@ class GridWindow: NSWindow {
     
     private var closeWorkItem: DispatchWorkItem?
     private var view: NSView
-    private var cells: [[CellView]] = []
+    private var cells: [[Cell]] = []
+    private var screen: NSScreen
     
-    init(screen: NSScreen) {
+    init(screen s: NSScreen) {
+        screen = s
         let x = screen.frame.origin.x
         let y = screen.frame.origin.y
         let boundaries = screen.visibleFrame.size
@@ -67,7 +69,7 @@ class GridWindow: NSWindow {
                 let yCoord = j * cellHeight + previousYPadding
                 let rect = NSRect(x: xCoord, y: yCoord,
                                   width: cellWidth + xPadding, height: cellHeight + yPadding)
-                let newCell = CellView(frame: rect)
+                let newCell = Cell(frame: rect, row: j, column: i, screen: screen)
                 view.addSubview(newCell)
                 cells[i].append(newCell)
             }
@@ -75,7 +77,7 @@ class GridWindow: NSWindow {
     }
     
     // Returns the cell located at the specified screen coordinates.
-    func cellAt(location: CGPoint) -> CellView? {
+    func cellAt(location: CGPoint) -> Cell? {
         guard frame.contains(location) else { return nil }
         let screenX = Int(location.x)
         let screenY = Int(location.y)
@@ -153,4 +155,27 @@ class CellView: NSView {
         layer!.backgroundColor = NSColor.clear.cgColor
     }
     
+}
+
+class Cell: CellView {
+    var row: Int
+    var column: Int
+    var screen: NSScreen
+    var originX: Int { Int(screen.frame.origin.x + frame.origin.x) }
+    var originY: Int { Int(screen.frame.origin.y + frame.origin.y) }
+    var height: Int { Int(screen.frame.height) }
+    var width: Int { Int(screen.frame.width) }
+    var originRasterX: Int { originX }
+    var originRasterY: Int { Int(screen.visibleFrame.height) - height }
+    
+    init(frame: NSRect, row r: Int, column c: Int, screen s: NSScreen) {
+        super.init(frame: frame)
+        row = r
+        column = c
+        screen = s
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 }

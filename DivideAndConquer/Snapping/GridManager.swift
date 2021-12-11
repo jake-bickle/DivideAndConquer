@@ -31,19 +31,3 @@ class GridManager {
     
 }
 
-struct Cell {
-    var row: Int
-    var column: Int
-    var screen: NSScreen
-    var view: CellView
-    var originX: Int { Int(screen.frame.origin.x + view.frame.origin.x) }
-    var originY: Int { Int(screen.frame.origin.y + view.frame.origin.y) }
-    var height: Int { Int(screen.frame.height) }
-    var width: Int { Int(screen.frame.width) }
-    var originRasterX: Int {
-        get { originX }
-    }
-    var originRasterY: Int {
-        get { Int(screen.visibleFrame.height) - height }
-    }
-}

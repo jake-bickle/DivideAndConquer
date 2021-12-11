@@ -8,16 +8,15 @@
 
 import Cocoa
 
-// TODO Could this be improved by using a tableview?
 class GridWindow: NSWindow {
     
-    private var closeWorkItem: DispatchWorkItem?
-    private var view: NSView
-    private var cells: [[Cell]] = []
-    private var screen: NSScreen
+    var closeWorkItem: DispatchWorkItem?
+    var view: NSView
+    var cells: [[Cell]] = []
+    var _screen: NSScreen  // Non-optional equivalent of NSWindow.screen
     
-    init(screen s: NSScreen) {
-        screen = s
+    init(screen: NSScreen) {
+        _screen = screen
         let x = screen.frame.origin.x
         let y = screen.frame.origin.y
         let boundaries = screen.visibleFrame.size
@@ -69,7 +68,9 @@ class GridWindow: NSWindow {
                 let yCoord = j * cellHeight + previousYPadding
                 let rect = NSRect(x: xCoord, y: yCoord,
                                   width: cellWidth + xPadding, height: cellHeight + yPadding)
-                let newCell = Cell(frame: rect, row: j, column: i, screen: screen)
+                let newCell = Cell(frame: rect, screen: _screen,
+                                   row: j, rowMax: gridYDimension - 1,
+                                   column: i, columnMax: gridXDimension - 1)
                 newCell.rowMax = gridYDimension - 1
                 newCell.columnMax = gridXDimension - 1
                 view.addSubview(newCell)
@@ -176,11 +177,13 @@ class Cell: CellView {
     var originRasterX: Int { originX }
     var originRasterY: Int { Int(screen.visibleFrame.height) - height }
     
-    init(frame: NSRect, row r: Int, column c: Int, screen s: NSScreen) {
-        super.init(frame: frame)
+    init(frame: NSRect, screen s: NSScreen, row r: Int, rowMax rm: Int, column c: Int, columnMax cm: Int) {
         row = r
+        rowMax = rm
         column = c
+        columnMax = cm
         screen = s
+        super.init(frame: frame)
     }
     
     required init?(coder: NSCoder) {

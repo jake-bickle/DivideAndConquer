@@ -178,12 +178,18 @@ class Cell: CellView {
     var column: Int
     var columnMax: Int
     var screen: NSScreen
-    var originX: Int { Int(screen.frame.origin.x + frame.origin.x) }
-    var originY: Int { Int(screen.frame.origin.y + frame.origin.y) }
-    var height: Int { Int(screen.frame.height) }
-    var width: Int { Int(screen.frame.width) }
+    var originX: Int { Int(screen.visibleFrame.origin.x + frame.origin.x) }
+    var originY: Int { Int(screen.visibleFrame.origin.y + frame.origin.y) }
+    var height: Int { Int(frame.height) }
+    var width: Int { Int(frame.width) }
     var originRasterX: Int { originX }
-    var originRasterY: Int { Int(screen.visibleFrame.height) - height }
+    var originRasterY: Int {
+        let frameOfScreenWithMenuBar = NSScreen.screens[0].frame as CGRect
+        let screenHeight = Int(screen.visibleFrame.size.height)
+        let menuBarHeight = Int(frameOfScreenWithMenuBar.size.height) - screenHeight
+        let topOfCell = originY + height - menuBarHeight
+        return screenHeight - topOfCell
+    }
     
     init(frame: NSRect, screen s: NSScreen, row r: Int, rowMax rm: Int, column c: Int, columnMax cm: Int) {
         row = r

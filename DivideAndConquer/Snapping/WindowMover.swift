@@ -12,7 +12,7 @@ class WindowMover {
         var x, y, width, height : Double
         if let cell2 = cell2 {
             if (cell1.screen != cell2.screen) {
-                // Throw a fit somehow somewhere
+                // TODO Throw a fit somehow somewhere
             }
             // Find the rectangle that contains the two cells.
             let higherCell = cell1.frame.origin.y > cell2.frame.origin.y ? cell1 : cell2
@@ -23,10 +23,10 @@ class WindowMover {
             height = higherCell.frame.origin.y + higherCell.frame.height - y
         }
         else {
+            width = cell1.frame.width
+            height = cell1.frame.height
             x = Double(cell1.originRasterX)
             y = Double(cell1.originRasterY)
-            width = cell1.frame.width
-            height = cell1.frame.width
         }
         
         

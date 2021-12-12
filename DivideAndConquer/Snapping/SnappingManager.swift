@@ -20,7 +20,7 @@ class SnappingManager {
     var snapState : SnapState = .idle
     var mouseEventNotifier = MouseMonitor()
     var lock = NSLock()
-    var firstPickedCell: CellView? = nil
+    var firstPickedCell: Cell? = nil
     var windowElement: AccessibilityElement? = nil
     var initialWindowRect: CGRect? = nil
     var mouseUpsToIgnore: Int = 0
@@ -128,22 +128,25 @@ class SnappingManager {
             }
             
         }
-        else if (snapState == .firstCellPicked) {
-            // Resnap if necessary
-        }
-        else if (snapState == .gridActivated){
-            // TODO send parameters to WindowManager
-            /*
+        else if (snapState == .gridActivated ||  snapState == .firstCellPicked) {
             let location = NSEvent.mouseLocation
-            if let cell = grid!.cellAt(location: location) {
-//                let parameters = ExecutionParameters(self, updateRestoreRect: false, screen: screen, windowElement: windowElement, windowId: windowId)
-//                windowManager.execute(cell1: cell, cell2: nil, screen)
-//                OutdatedWindowMover.moveWindowRect(cell1: cell, cell2: nil, windowElement: windowElement!)
+            guard let windowElement = getWindowElementElseResetState(),
+                  let cellAtMouse = GridManager.shared.cellAt(mouseLocation: location)
+            else {
+                lock.unlock()
+                return
+            }
+            var cell1: Cell
+            var cell2: Cell?
+            if let firstPickedCell = firstPickedCell {
+                cell1 = firstPickedCell
+                cell2 = cellAtMouse
             }
             else {
-                // TODO Outside screen coordinates. Could be in status bar or another screen.
+                cell1 = cellAtMouse
+                cell2 = nil
             }
-             */
+            WindowMover.tryToMove(window: windowElement, to: cell1, and: cell2)
         }
         lock.unlock()
     }

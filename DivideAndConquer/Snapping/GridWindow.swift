@@ -79,11 +79,11 @@ class GridWindow: NSWindow {
         }
     }
     
-    // Returns the cell located at the specified screen coordinates.
-    func cellAt(location: CGPoint) -> Cell? {
-        guard frame.contains(location) else { return nil }
-        let screenX = Int(location.x - _screen.frame.origin.x)  // Translate to relative screen coordinates
-        let screenY = Int(location.y - _screen.frame.origin.y)
+    /// Returns the cell located at the specified screen coordinates (origin at bottom left of main screen).
+    func cellAt(point: CGPoint) -> Cell? {
+        guard frame.contains(point) else { return nil }
+        let screenX = Int(point.x - _screen.frame.origin.x)  // Translate to relative screen coordinates
+        let screenY = Int(point.y - _screen.frame.origin.y)
         let boundaries = frame.size
         let screenHeight = Int(boundaries.height)
         let screenWidth = Int(boundaries.width)
@@ -112,6 +112,15 @@ class GridWindow: NSWindow {
     
     func cellAt(row: Int, column: Int) -> Cell {
         return cells[column][row]
+    }
+    
+    func cellsIn(rectangle: CGRect) -> (Cell, Cell)? {
+        let upperLeft = CGPoint(x: rectangle.minX, y: rectangle.maxY)
+        let lowerRight = CGPoint(x: rectangle.maxX, y: rectangle.minY)
+        guard let upperLeftCell = cellAt(point: upperLeft),
+              let lowerRightCell = cellAt(point: lowerRight)
+        else { return nil }
+        return (upperLeftCell, lowerRightCell)
     }
     
     override func close() {

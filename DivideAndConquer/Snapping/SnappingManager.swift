@@ -111,10 +111,7 @@ class SnappingManager {
     @objc private func handleLeftMouseDragged() {
         lock.lock()
         if (snapState == .windowSelected || snapState == .secondaryHit) {
-            guard let windowElement = windowElement else {
-                resetState()
-                Logger.log("SnapState was either windowSelected or secondaryHit, but no window element was selected.")
-                print("(.leftMouseDragged) snapState = .idle (Error: Window element isn't set)")
+            guard let windowElement = getWindowElementElseResetState() else {
                 lock.unlock()
                 return
             }
@@ -246,5 +243,15 @@ class SnappingManager {
         mouseUp.post(tap: .cghidEventTap)
         mouseDown.post(tap: .cghidEventTap)
         return true
+    }
+    
+    /// Returns windowElement if it exists, otherwise resets state, logs failure, then returns nil.
+    private func getWindowElementElseResetState() -> AccessibilityElement? {
+        if (windowElement == nil){
+            resetState()
+            Logger.log("Attempted to retrieve window element, but it is no longer set.")
+            print("snapState = .idle (Error: Window element isn't set)")
+        }
+        return windowElement
     }
 }

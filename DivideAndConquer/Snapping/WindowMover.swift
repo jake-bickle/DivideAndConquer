@@ -15,20 +15,21 @@ class WindowMover {
                 // TODO Throw a fit somehow somewhere
             }
             // Find the rectangle that contains the two cells.
-            let higherCell = cell1.frame.origin.y > cell2.frame.origin.y ? cell1 : cell2
-            let rightMostCell = cell1.frame.origin.x > cell2.frame.origin.x ? cell1 : cell2
+            let higherCell = cell1.originRasterY < cell2.originRasterY ? cell1 : cell2
+            let lowerCell = cell1.originRasterY > cell2.originRasterY ? cell1 : cell2
+            let rightMostCell = cell1.originRasterX > cell2.originRasterX ? cell1 : cell2
+            let leftMostCell = cell1.originRasterX < cell2.originRasterX ? cell1 : cell2
             x = Double( min(cell1.originRasterX, cell2.originRasterX) )
             y = Double( min(cell1.originRasterY, cell2.originRasterY) )
-            width = rightMostCell.frame.origin.x + rightMostCell.frame.width - x
-            height = higherCell.frame.origin.y + higherCell.frame.height - y
+            width = Double(rightMostCell.originRasterX + rightMostCell.width - leftMostCell.originRasterX)
+            height = Double(lowerCell.originRasterY + lowerCell.height - higherCell.originRasterY)
         }
         else {
-            width = cell1.frame.width
-            height = cell1.frame.height
             x = Double(cell1.originRasterX)
             y = Double(cell1.originRasterY)
+            width = cell1.frame.width
+            height = cell1.frame.height
         }
-        
         
         let newFrame = CGRect(x: x, y: y, width: width, height: height)
         window.setRectOf(newFrame)

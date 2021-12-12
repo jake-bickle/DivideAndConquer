@@ -148,6 +148,14 @@ class CellView: NSView {
         mouseDragged(with: event)
     }
     
+    override func rightMouseUp(with event: NSEvent) {
+        NotificationCenter.default.post(name: Notification.Name.rightMouseUp, object: nil)
+    }
+    
+    override func rightMouseDown(with event: NSEvent) {
+        NotificationCenter.default.post(name: Notification.Name.rightMouseDown, object: nil)
+    }
+    
     override func mouseDragged(with event: NSEvent) {
         NotificationCenter.default.post(name: Notification.Name.mouseDrag, object: nil)
     }

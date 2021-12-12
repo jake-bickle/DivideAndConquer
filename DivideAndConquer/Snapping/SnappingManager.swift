@@ -126,27 +126,9 @@ class SnappingManager {
                 print("(.leftMouseDragged) Attempting to activate grid.")
                 activateGrid()
             }
-            
         }
-        else if (snapState == .gridActivated ||  snapState == .firstCellPicked) {
-            let location = NSEvent.mouseLocation
-            guard let windowElement = getWindowElementElseResetState(),
-                  let cellAtMouse = GridManager.shared.cellAt(mouseLocation: location)
-            else {
-                lock.unlock()
-                return
-            }
-            var cell1: Cell
-            var cell2: Cell?
-            if let firstPickedCell = firstPickedCell {
-                cell1 = firstPickedCell
-                cell2 = cellAtMouse
-            }
-            else {
-                cell1 = cellAtMouse
-                cell2 = nil
-            }
-            WindowMover.tryToMove(window: windowElement, to: cell1, and: cell2)
+        else if (snapState == .gridActivated || snapState == .firstCellPicked) {
+            updateWindowPosition()
         }
         lock.unlock()
     }
@@ -160,11 +142,13 @@ class SnappingManager {
         else if (snapState == .windowDragged) {
             print("(.rightMouseDown) Attempting to activate grid.")
             activateGrid()
+            updateWindowPosition()
         }
         else if (snapState == .firstCellPicked) {
             snapState = .gridActivated
-            print ("(.rightMouseDown) snapState = .firstCellPicked")
-            // TODO Unsnap the first cell. This helps with the grid feel, especially if the user accidentally snapped on the wrong cell.
+            print ("(.rightMouseDown) snapState = .gridActivated")
+            firstPickedCell = nil
+            updateWindowPosition()
         }
         lock.unlock()
     }
@@ -176,8 +160,11 @@ class SnappingManager {
             print("(.rightMouseUp) snapState = .windowSelected")
         }
         else if (snapState == .gridActivated) {
+            let location = NSEvent.mouseLocation
+            firstPickedCell = GridManager.shared.cellAt(mouseLocation: location)  // It's okay if there is no cell at the mouse.
             snapState = .firstCellPicked
             print("(.rightMouseUp) snapState = .firstCellPicked")
+            updateWindowPosition()
         }
         lock.unlock()
     }
@@ -246,6 +233,24 @@ class SnappingManager {
         mouseUp.post(tap: .cghidEventTap)
         mouseDown.post(tap: .cghidEventTap)
         return true
+    }
+    
+    func updateWindowPosition() {
+        let location = NSEvent.mouseLocation
+        guard let windowElement = getWindowElementElseResetState(),
+              let cellAtMouse = GridManager.shared.cellAt(mouseLocation: location)
+        else { return }
+        var cell1: Cell
+        var cell2: Cell?
+        if let firstPickedCell = firstPickedCell {
+            cell1 = firstPickedCell
+            cell2 = cellAtMouse
+        }
+        else {
+            cell1 = cellAtMouse
+            cell2 = nil
+        }
+        WindowMover.tryToMove(window: windowElement, to: cell1, and: cell2)
     }
     
     /// Returns windowElement if it exists, otherwise resets state, logs failure, then returns nil.

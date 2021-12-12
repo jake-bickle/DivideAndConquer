@@ -64,6 +64,7 @@ class SnappingManager {
         snapState = .idle
         windowElement = nil
         initialWindowRect = nil
+        firstPickedCell = nil
     }
     
     private func subscribeToMouseNotifications() {

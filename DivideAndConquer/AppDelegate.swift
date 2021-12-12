@@ -62,7 +62,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
             self.snappingManager.reloadFromDefaults()
         })
         
-        Logger.showLogging(sender: self)
+//        Logger.showLogging(sender: self)
     }
     
     func checkAutoCheckForUpdates() {

@@ -34,24 +34,13 @@ class GridManager {
         return gridWindow.cellAt(row: row, column: column)
     }
     
-    /// A rectangle may be represented by two cells, both representing opposite corners. Returns (top left, bottom right) cells that best fit rectangle,
-    /// should such cells exist.
-    /// The best fit rectangle doesn't exist if its points don't land in the grid somewhere.
-    func cellsIn(rectangle: CGRect) -> (Cell, Cell)? {
-        for (_, grid) in grids {
-            if let cells = grid.cellsIn(rectangle: rectangle) {
-                return cells
-            }
-        }
-        return nil
-    }
-    
-    /// A rectangle may be represented by two cells, both representing opposite corners. Returns (top left, bottom right) cells that best fit rectangle,
-    /// should such cells exist.
-    /// The best fit rectangle doesn't exist if its points don't land in the grid somewhere, of it the screen doesn't exist.
-    func cellsIn(rectangle: CGRect, foundOn screen: NSScreen) -> (Cell, Cell)? {
+    /// A rectangle may be represented by two cells, both representing opposite corners. Returns (top left, bottom right) cells that define rectangle.
+    /// A rectangle is "defined" by the two cells that *closest* represent its opposite corners. A rectangle may be defined despite whether it's
+    /// contained within the grid, partially contained, or not contained at all. cellsDefining will still pick the opposite corners that are closest to said rectangle.
+    /// The best fit rectangle doesn't if the provided NSScreen doesn't exist.
+    func closestCellRectangle(rectangle: CGRect, foundOn screen: NSScreen) -> (Cell, Cell)? {
         guard let grid = grids[screen] else {return nil}
-        return grid.cellsIn(rectangle: rectangle)
+        return grid.closestCellRectangle(rectangle: rectangle)
     }
     
     /// Generates and displays the grid on all screens.

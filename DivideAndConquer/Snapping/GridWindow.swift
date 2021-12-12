@@ -81,7 +81,7 @@ class GridWindow: NSWindow {
     
     /// Returns the cell located at the specified screen coordinates (origin at bottom left of main screen).
     func cellAt(point: CGPoint) -> Cell? {
-        guard frame.contains(point) else { return nil }
+        guard contains(point: point) else { return nil }
         let screenX = Int(point.x - _screen.frame.origin.x)  // Translate to relative screen coordinates
         let screenY = Int(point.y - _screen.frame.origin.y)
         let boundaries = frame.size
@@ -114,13 +114,33 @@ class GridWindow: NSWindow {
         return cells[column][row]
     }
     
-    func cellsIn(rectangle: CGRect) -> (Cell, Cell)? {
-        let upperLeft = CGPoint(x: rectangle.minX, y: rectangle.maxY)
-        let lowerRight = CGPoint(x: rectangle.maxX, y: rectangle.minY)
-        guard let upperLeftCell = cellAt(point: upperLeft),
-              let lowerRightCell = cellAt(point: lowerRight)
-        else { return nil }
-        return (upperLeftCell, lowerRightCell)
+    func closestCellRectangle(rectangle: CGRect) -> (Cell, Cell) {
+        let screenFrame = _screen.visibleFrame
+        var newFrame = rectangle
+        if rectangle.maxX > screenFrame.maxX {
+            newFrame.origin.x = rectangle.origin.x - (rectangle.maxX - screenFrame.maxX)
+        }
+        else if rectangle.minX < screenFrame.minX {
+            newFrame.origin.x = rectangle.origin.x + (screenFrame.minX - rectangle.minX)
+        }
+        if rectangle.maxY > screenFrame.maxY {
+            newFrame.origin.y = rectangle.origin.y - (rectangle.maxY - screenFrame.maxY)
+        }
+        else if rectangle.minY < screenFrame.minY {
+            newFrame.origin.y = rectangle.origin.y + (screenFrame.minY - rectangle.minY)
+        }
+        let upperLeft = CGPoint(x: newFrame.minX, y: newFrame.maxY)
+        let lowerRight = CGPoint(x: newFrame.maxX, y: newFrame.minY)
+        let upperLeftCell = cellAt(point: upperLeft)
+        let lowerRightCell = cellAt(point: lowerRight)
+        return (upperLeftCell!, lowerRightCell!)
+    }
+    
+    func contains(point: CGPoint) -> Bool {
+        // _screen.frame.contains() doesn't concider points on maxX or maxY to be contained.
+        let screenFrame = _screen.frame
+        return screenFrame.minX <= point.x && point.x <= screenFrame.maxX &&
+               screenFrame.minY <= point.y && point.y <= screenFrame.maxY
     }
     
     override func close() {

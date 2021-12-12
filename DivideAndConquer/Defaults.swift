@@ -18,7 +18,7 @@ class Defaults {
     static let gridYDimension = IntDefault(key: "gridYDimension", defaultValue: 10)
     static let cellPrimaryColor = JSONDefault<CodableColor>(key: "footprintColor")
     static let cellBorderWidth = IntDefault(key: "cellBorderWidth", defaultValue: 1)
-    static let gridWindowAlpha = FloatDefault(key: "gridYDimension", defaultValue: 0.3)
+    static let gridWindowAlpha = FloatDefault(key: "gridWindowAlpha", defaultValue: 0.3)
     static let alternateDefaultShortcuts = BoolDefault(key: "alternateDefaultShortcuts") // switch to magnet defaults
     static let allowAnyShortcut = BoolDefault(key: "allowAnyShortcut")
     static let windowSnapping = OptionalBoolDefault(key: "windowSnapping")

@@ -31,6 +31,7 @@ class GridWindow: NSWindow {
         
         contentView?.addSubview(view)
         alphaValue = CGFloat(Defaults.gridWindowAlpha.value)
+        isOpaque = false
         fillWithCells()
     }
     
@@ -39,7 +40,6 @@ class GridWindow: NSWindow {
     override func makeKeyAndOrderFront(_ sender: Any?) {
         closeWorkItem?.cancel()
         closeWorkItem = nil
-        animator().alphaValue = CGFloat(Defaults.footprintAlpha.value)
         super.makeKeyAndOrderFront(sender)
     }
     

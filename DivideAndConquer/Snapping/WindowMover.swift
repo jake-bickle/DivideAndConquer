@@ -9,6 +9,15 @@
 import Foundation
 class WindowMover {
     static func tryToMove(window: AccessibilityElement, to cell1: Cell, and cell2: Cell?) {
+        standardMove(window, cell1, cell2)
+        guard window.isResizable() else { return }
+        
+        // TODO Ensure best effort of window snapping to grid, probably a while loop here
+//        let windowOnScreen =
+//        let windowOnGrid =
+    }
+    
+    static func standardMove(_ window: AccessibilityElement, _ cell1: Cell, _ cell2: Cell?) {
         var x, y, width, height : Double
         if let cell2 = cell2 {
             if (cell1.screen != cell2.screen) {
@@ -33,9 +42,5 @@ class WindowMover {
         
         let newFrame = CGRect(x: x, y: y, width: width, height: height)
         window.setRectOf(newFrame)
-        
-        // TODO Ensure best effort of window snapping to grid, probably a while loop here
-//        let windowOnScreen =
-//        let windowOnGrid =
     }
 }

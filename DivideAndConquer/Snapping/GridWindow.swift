@@ -82,8 +82,8 @@ class GridWindow: NSWindow {
     // Returns the cell located at the specified screen coordinates.
     func cellAt(location: CGPoint) -> Cell? {
         guard frame.contains(location) else { return nil }
-        let screenX = Int(location.x)
-        let screenY = Int(location.y)
+        let screenX = Int(location.x - _screen.frame.origin.x)  // Translate to relative screen coordinates
+        let screenY = Int(location.y - _screen.frame.origin.y)
         let boundaries = frame.size
         let screenHeight = Int(boundaries.height)
         let screenWidth = Int(boundaries.width)
@@ -178,17 +178,17 @@ class Cell: CellView {
     var column: Int
     var columnMax: Int
     var screen: NSScreen
-    var originX: Int { Int(screen.visibleFrame.origin.x + frame.origin.x) }
-    var originY: Int { Int(screen.visibleFrame.origin.y + frame.origin.y) }
+    var absoluteX: Int { Int(screen.frame.origin.x + frame.origin.x) }  // Translates cell to absolute`
+    var absoluteY: Int { Int(screen.frame.origin.y + frame.origin.y) }
     var height: Int { Int(frame.height) }
     var width: Int { Int(frame.width) }
-    var originRasterX: Int { originX }
-    var originRasterY: Int {
-        let frameOfScreenWithMenuBar = NSScreen.screens[0].frame as CGRect
-        let screenHeight = Int(screen.visibleFrame.size.height)
-        let menuBarHeight = Int(frameOfScreenWithMenuBar.size.height) - screenHeight
-        let topOfCell = originY + height - menuBarHeight
-        return screenHeight - topOfCell
+    var absoluteXRaster: Int { absoluteX }
+    var absoluteYRaster: Int {
+        let frameOfMainScreenWithMenuBar = NSScreen.screens[0].frame as CGRect
+        let frameOfMainScreen = NSScreen.screens[0].visibleFrame as CGRect
+        let menuBarHeight = Int(frameOfMainScreenWithMenuBar.size.height - frameOfMainScreen.height)
+        let topOfCell = Int(frameOfMainScreen.height) - absoluteY - height
+        return topOfCell + menuBarHeight
     }
     
     init(frame: NSRect, screen s: NSScreen, row r: Int, rowMax rm: Int, column c: Int, columnMax cm: Int) {

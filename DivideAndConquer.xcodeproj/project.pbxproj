@@ -42,6 +42,7 @@
 		98D16A492592B460005228CB /* NotificationExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98D16A482592B460005228CB /* NotificationExtension.swift */; };
 		A1EAB8D46AEAFD3D885BFBAD /* Pods_DivideAndConquer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA6B2E765AC65E7A93211660 /* Pods_DivideAndConquer.framework */; };
 		BF821EE12766AF2A0053E6BA /* GridWindowTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF821EE02766AF2A0053E6BA /* GridWindowTests.swift */; };
+		BF821EE32766C55E0053E6BA /* CGRectExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF821EE22766C55E0053E6BA /* CGRectExtension.swift */; };
 		BF8E5A4027641ED100FADD31 /* GridManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8E5A3F27641ED100FADD31 /* GridManager.swift */; };
 		BF8E5A422765344600FADD31 /* WindowMover.swift in Sources */ = {isa = PBXBuildFile; fileRef = BF8E5A412765344600FADD31 /* WindowMover.swift */; };
 		E7AD439665B6BDF2A9A41F5F /* Pods_DivideAndConquerTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D2FE2355E1EB53B25C8D58C /* Pods_DivideAndConquerTests.framework */; };
@@ -149,6 +150,7 @@
 		98FE8976246E79C400871535 /* zh-Hant-HK */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant-HK"; path = "zh-Hant-HK.lproj/Main.strings"; sourceTree = "<group>"; };
 		98FE8977246E79C400871535 /* zh-Hant-HK */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hant-HK"; path = "zh-Hant-HK.lproj/Main.strings"; sourceTree = "<group>"; };
 		BF821EE02766AF2A0053E6BA /* GridWindowTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridWindowTests.swift; sourceTree = "<group>"; };
+		BF821EE22766C55E0053E6BA /* CGRectExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CGRectExtension.swift; sourceTree = "<group>"; };
 		BF8E5A3F27641ED100FADD31 /* GridManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridManager.swift; sourceTree = "<group>"; };
 		BF8E5A412765344600FADD31 /* WindowMover.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WindowMover.swift; sourceTree = "<group>"; };
 		CA6B2E765AC65E7A93211660 /* Pods_DivideAndConquer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_DivideAndConquer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -289,6 +291,7 @@
 				985B9BFA22BE218C00A2E8F0 /* Popover */,
 				982140EB22B7DB1A00ABFB3F /* AccessibilityAuthorization */,
 				982140EC22B7DB5700ABFB3F /* Utilities */,
+				BF821EE22766C55E0053E6BA /* CGRectExtension.swift */,
 			);
 			path = DivideAndConquer;
 			sourceTree = "<group>";
@@ -635,6 +638,7 @@
 				983BBD6F253B609D000D223E /* GridWindow.swift in Sources */,
 				9824700D22AF9B7D0037B409 /* AppDelegate.swift in Sources */,
 				BF8E5A422765344600FADD31 /* WindowMover.swift in Sources */,
+				BF821EE32766C55E0053E6BA /* CGRectExtension.swift in Sources */,
 				98D16A492592B460005228CB /* NotificationExtension.swift in Sources */,
 				98987AA52391890400BE72C4 /* LogViewer.swift in Sources */,
 			);

@@ -69,11 +69,11 @@ class GridWindowTests: XCTestCase {
         let point = CGPoint(x: Int(mainScreen.visibleFrame.maxX / 2), y: Int(mainScreen.visibleFrame.maxY / 2))
         let offScreen = CGPoint(x: mainScreen.visibleFrame.maxX, y: mainScreen.visibleFrame.maxY + 1)
         let veryOffScreen = CGPoint(x: mainScreen.visibleFrame.maxX * -1, y: mainScreen.visibleFrame.maxY)
-        XCTAssertTrue(gridWindow.contains(point: point))
-        XCTAssertTrue(gridWindow.contains(point: topRight))
-        XCTAssertTrue(gridWindow.contains(point: lowerLeft))
-        XCTAssertFalse(gridWindow.contains(point: offScreen))
-        XCTAssertFalse(gridWindow.contains(point: veryOffScreen))
+        XCTAssertTrue(gridWindow.frame.contains(point: point, includeTopAndRightEdge: true))
+        XCTAssertTrue(gridWindow.frame.contains(point: topRight, includeTopAndRightEdge: true))
+        XCTAssertTrue(gridWindow.frame.contains(point: lowerLeft, includeTopAndRightEdge: true))
+        XCTAssertFalse(gridWindow.frame.contains(point: offScreen, includeTopAndRightEdge: true))
+        XCTAssertFalse(gridWindow.frame.contains(point: veryOffScreen, includeTopAndRightEdge: true))
     }
     
     func testClosestCellRectangleWithLargeRectangle() {

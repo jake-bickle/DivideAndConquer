@@ -81,7 +81,7 @@ class GridWindow: NSWindow {
     
     /// Returns the cell located at the specified screen coordinates (origin at bottom left of main screen).
     func cellAt(point: CGPoint) -> Cell? {
-        guard contains(point: point) else { return nil }
+        guard frame.contains(point: point, includeTopAndRightEdge: true) else { return nil }
         let screenX = Int(point.x - _screen.frame.origin.x)  // Translate to relative screen coordinates
         let screenY = Int(point.y - _screen.frame.origin.y)
         let boundaries = frame.size
@@ -98,7 +98,7 @@ class GridWindow: NSWindow {
                                                              // \/ Forbid guessing outside array dimensions.
         let columnGuess = min(Int(screenX / unpaddedCellWidth), gridXDimension - 1)
         var guessedCellFrame = cells[columnGuess][0].frame
-        let columnGuessIsCorrect = guessedCellFrame.contains(CGPoint(x: screenX, y: 0))
+        let columnGuessIsCorrect = guessedCellFrame.contains(point: CGPoint(x: screenX, y: 0), includeTopAndRightEdge: true)
         let cellColumn = columnGuessIsCorrect ? columnGuess : columnGuess - 1
         
         let rowGuess = min(Int(screenY / unpaddedCellHeight), gridYDimension - 1)
@@ -134,13 +134,6 @@ class GridWindow: NSWindow {
         let upperLeftCell = cellAt(point: upperLeft)
         let lowerRightCell = cellAt(point: lowerRight)
         return (upperLeftCell!, lowerRightCell!)
-    }
-    
-    func contains(point: CGPoint) -> Bool {
-        // _screen.frame.contains() doesn't concider points on maxX or maxY to be contained.
-        let screenFrame = _screen.frame
-        return screenFrame.minX <= point.x && point.x <= screenFrame.maxX &&
-               screenFrame.minY <= point.y && point.y <= screenFrame.maxY
     }
     
     override func close() {
@@ -233,3 +226,4 @@ class Cell: CellView {
         fatalError("init(coder:) has not been implemented")
     }
 }
+

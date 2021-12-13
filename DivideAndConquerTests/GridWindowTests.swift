@@ -20,6 +20,21 @@ class GridWindowTests: XCTestCase {
         Defaults.gridYDimension.value = gridYDimension
     }
     
+    func testCellsCoverEntireScreen() {
+        var columnWidth = 0
+        var rowHeight = 0
+        for colIndex in 0 ... gridXDimension - 1 {
+            let cell = gridWindow.cellAt(row: 0, column: colIndex)
+            columnWidth += cell.width
+        }
+        for rowIndex in 0 ... gridYDimension - 1 {
+            let cell = gridWindow.cellAt(row: rowIndex, column: 0)
+            rowHeight += cell.height
+        }
+        XCTAssertEqual(columnWidth, Int(mainScreen.visibleFrame.width))
+        XCTAssertEqual(rowHeight, Int(mainScreen.visibleFrame.height))
+    }
+    
     func testCellAtEdgeOfScreen() {
         let topRight = CGPoint(x: mainScreen.visibleFrame.maxX, y: mainScreen.visibleFrame.maxY)
         let topRightCell = gridWindow.cellAt(point: topRight)
@@ -99,6 +114,22 @@ class GridWindowTests: XCTestCase {
         XCTAssertEqual(upperLeft.column, 0)
         XCTAssertEqual(lowerRight.row, 0)
         XCTAssertEqual(lowerRight.column, 0)
+        subsequentCellValuesAreCorrect(cell: upperLeft)
+        subsequentCellValuesAreCorrect(cell: lowerRight)
+    }
+    
+    func testClosestCellRectangleOffScreen() {
+        let lowerLeftFrame = gridWindow.cellAt(row: 0, column: 0).frame
+        let upperRightFrame = gridWindow.cellAt(row: 1, column: 1).frame
+        let offScreenRect = CGRect(x: lowerLeftFrame.origin.x - lowerLeftFrame.width * 2,
+                                   y: lowerLeftFrame.origin.y - lowerLeftFrame.height * 2,
+                                   width: upperRightFrame.maxX,
+                                   height: upperRightFrame.maxY)
+        let (upperLeft, lowerRight) = gridWindow.closestCellRectangle(rectangle: offScreenRect)
+        XCTAssertEqual(upperLeft.row, 2)
+        XCTAssertEqual(upperLeft.column, 0)
+        XCTAssertEqual(lowerRight.row, 0)
+        XCTAssertEqual(lowerRight.column, 2)
         subsequentCellValuesAreCorrect(cell: upperLeft)
         subsequentCellValuesAreCorrect(cell: lowerRight)
     }

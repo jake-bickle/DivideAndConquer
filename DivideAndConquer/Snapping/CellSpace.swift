@@ -8,6 +8,7 @@
 
 import Cocoa
 
+/// Immitates (does not inherit) CGRect for a rectangular space defined by two cells.
 class CellSpace {
     let upper: Cell
     let lower: Cell
@@ -19,11 +20,26 @@ class CellSpace {
     init(_ cellA: Cell, _ cellB: Cell) {
         cell1 = cellA
         cell2 = cellB
-        upper = cell1.absoluteYRaster > cell2.absoluteYRaster ? cell1 : cell2
-        lower = cell1.absoluteYRaster < cell2.absoluteYRaster ? cell1 : cell2
-        right = cell1.absoluteXRaster > cell2.absoluteXRaster ? cell1 : cell2
-        left = cell1.absoluteXRaster < cell2.absoluteXRaster ? cell1 : cell2
+        if cell1.absoluteY > cell2.absoluteY {
+            upper = cell1
+            lower = cell2
+        }
+        else {
+            upper = cell2
+            lower = cell1
+        }
+        if cell1.absoluteX > cell2.absoluteX {
+            right = cell1
+            left = cell2
+        }
+        else {
+            right = cell2
+            left = cell1
+        }
     }
+    
+    var width: CGFloat { abs(right.frame.maxX) - abs(left.frame.minX) }
+    var height: CGFloat { abs(upper.frame.maxY) - abs(lower.frame.minY) }
     
     var origin: CGPoint {
         let x = Double( left.absoluteX )
@@ -33,21 +49,19 @@ class CellSpace {
     
     var originRaster: CGPoint {
         let x = Double( left.absoluteXRaster )
-        let y = Double( lower.absoluteYRaster )
+        let y = Double( upper.absoluteYRaster )
         return CGPoint(x: x, y: y)
     }
     
-    var rectRaster: CGRect {
-        let origin = originRaster
-        let width = Double(right.absoluteXRaster + right.width - left.absoluteXRaster)
-        let height = Double(lower.absoluteYRaster + lower.height - upper.absoluteYRaster)
+    var cgRect: CGRect {
+        let origin = origin
         return CGRect(x: origin.x, y: origin.y, width: width, height: height)
     }
     
-    var rect: CGRect {
-        let origin = origin
-        let width = Double(right.absoluteX + right.width - left.absoluteX)
-        let height = Double(lower.absoluteY + lower.height - upper.absoluteY)
+    var cgRectRaster: CGRect {
+        let origin = originRaster
+        let width = Double(right.absoluteXRaster + right.width - left.absoluteXRaster)
+        let height = Double(lower.absoluteYRaster + lower.height - upper.absoluteYRaster)
         return CGRect(x: origin.x, y: origin.y, width: width, height: height)
     }
     

@@ -77,7 +77,8 @@ class GridWindowTests: XCTestCase {
     }
     
     func testClosestCellRectangleWithLargeRectangle() {
-        let largeFrame = mainScreen.frame
+        var largeFrame = mainScreen.frame
+        largeFrame.size.width *= 2
         let (upperLeft, lowerRight) = gridWindow.closestCellRectangle(rectangle: largeFrame)
         XCTAssertEqual(upperLeft.row, gridYDimension - 1)
         XCTAssertEqual(upperLeft.column, 0)

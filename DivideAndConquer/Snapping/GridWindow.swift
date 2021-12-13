@@ -82,15 +82,15 @@ class GridWindow: NSWindow {
     /// Returns the cell located at the specified screen coordinates (origin at bottom left of main screen).
     func cellAt(point: CGPoint) -> Cell? {
         guard frame.contains(point: point, includeTopAndRightEdge: true) else { return nil }
-        let screenX = Int(point.x - _screen.frame.origin.x)  // Translate to relative screen coordinates
-        let screenY = Int(point.y - _screen.frame.origin.y)
+        let screenX = point.x - _screen.frame.origin.x  // Translate to relative screen coordinates
+        let screenY = point.y - _screen.frame.origin.y
         let boundaries = frame.size
         let screenHeight = Int(boundaries.height)
         let screenWidth = Int(boundaries.width)
         let gridXDimension = Defaults.gridXDimension.value
         let gridYDimension = Defaults.gridYDimension.value
-        let unpaddedCellWidth = Int( Float(screenWidth) / Float(gridXDimension) )
-        let unpaddedCellHeight = Int( Float(screenHeight) / Float(gridYDimension) )
+        let unpaddedCellWidth = CGFloat( Int( screenWidth / gridXDimension ) )
+        let unpaddedCellHeight = CGFloat( Int( screenHeight / gridYDimension ) )
         
         // This is a guess because it's impossible to mathematically ascertain how much padding the cells to the left have
         // when only given screen coordinates.
@@ -98,13 +98,12 @@ class GridWindow: NSWindow {
                                                              // \/ Forbid guessing outside array dimensions.
         let columnGuess = min(Int(screenX / unpaddedCellWidth), gridXDimension - 1)
         var guessedCellFrame = cells[columnGuess][0].frame
-        let columnGuessIsCorrect = guessedCellFrame.contains(point: CGPoint(x: screenX, y: 0), includeTopAndRightEdge: true)
+        let columnGuessIsCorrect = guessedCellFrame.minX <= screenX && screenX <= guessedCellFrame.maxX
         let cellColumn = columnGuessIsCorrect ? columnGuess : columnGuess - 1
         
         let rowGuess = min(Int(screenY / unpaddedCellHeight), gridYDimension - 1)
         guessedCellFrame = cells[0][rowGuess].frame
-        let rowGuessIsCorrect = Int(guessedCellFrame.origin.y) <= screenY &&
-                                   screenY <= Int((guessedCellFrame.origin.y + guessedCellFrame.height))
+        let rowGuessIsCorrect = guessedCellFrame.minY <= screenY && screenY <= guessedCellFrame.maxY
         let cellRow = rowGuessIsCorrect ? rowGuess : rowGuess - 1
         
         return cells[cellColumn][cellRow]
@@ -118,16 +117,16 @@ class GridWindow: NSWindow {
         let screenFrame = _screen.visibleFrame
         var newFrame = rectangle
         if rectangle.maxX > screenFrame.maxX {
-            newFrame.origin.x = rectangle.origin.x - (rectangle.maxX - screenFrame.maxX)
+            newFrame.size.width -= rectangle.maxX - screenFrame.maxX
         }
-        else if rectangle.minX < screenFrame.minX {
-            newFrame.origin.x = rectangle.origin.x + (screenFrame.minX - rectangle.minX)
+        if rectangle.minX < screenFrame.minX {
+            newFrame.origin.x += screenFrame.minX - rectangle.minX
         }
         if rectangle.maxY > screenFrame.maxY {
-            newFrame.origin.y = rectangle.origin.y - (rectangle.maxY - screenFrame.maxY)
+            newFrame.size.height -= rectangle.maxY - screenFrame.maxY
         }
-        else if rectangle.minY < screenFrame.minY {
-            newFrame.origin.y = rectangle.origin.y + (screenFrame.minY - rectangle.minY)
+        if rectangle.minY < screenFrame.minY {
+            newFrame.origin.y += screenFrame.minY - rectangle.minY
         }
         let upperLeft = CGPoint(x: newFrame.minX, y: newFrame.maxY)
         let lowerRight = CGPoint(x: newFrame.maxX, y: newFrame.minY)

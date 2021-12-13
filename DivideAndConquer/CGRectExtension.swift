@@ -11,10 +11,10 @@ import Cocoa
 extension CGRect {
     
     func contains(point: CGPoint, includeTopAndRightEdge: Bool) -> Bool {
-        var contains = contains(point)
         if includeTopAndRightEdge {
-            contains = contains || point.x <= maxX && point.y <= maxY
+            return point.x >= minX && point.x <= maxX &&
+                   point.y >= minX && point.y <= maxY
         }
-        return contains
+        return contains(point)
     }
 }

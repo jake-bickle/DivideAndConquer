@@ -98,12 +98,13 @@ class GridWindow: NSWindow {
                                                              // \/ Forbid guessing outside array dimensions.
         let columnGuess = min(Int(screenX / unpaddedCellWidth), gridXDimension - 1)
         var guessedCellFrame = cells[columnGuess][0].frame
-        let columnGuessIsCorrect = guessedCellFrame.minX <= screenX && screenX <= guessedCellFrame.maxX
+        let columnGuessIsCorrect = (guessedCellFrame.minX < screenX && screenX <= guessedCellFrame.maxX) || columnGuess == 0
+                                
         let cellColumn = columnGuessIsCorrect ? columnGuess : columnGuess - 1
         
         let rowGuess = min(Int(screenY / unpaddedCellHeight), gridYDimension - 1)
         guessedCellFrame = cells[0][rowGuess].frame
-        let rowGuessIsCorrect = guessedCellFrame.minY <= screenY && screenY <= guessedCellFrame.maxY
+        let rowGuessIsCorrect = guessedCellFrame.minY < screenY && screenY <= guessedCellFrame.maxY || rowGuess == 0
         let cellRow = rowGuessIsCorrect ? rowGuess : rowGuess - 1
         
         return cells[cellColumn][cellRow]

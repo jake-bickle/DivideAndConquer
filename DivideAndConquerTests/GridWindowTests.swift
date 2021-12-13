@@ -125,13 +125,25 @@ class GridWindowTests: XCTestCase {
                                    y: lowerLeftFrame.origin.y - lowerLeftFrame.height * 2,
                                    width: upperRightFrame.maxX,
                                    height: upperRightFrame.maxY)
-        let (upperLeft, lowerRight) = gridWindow.closestCellRectangle(rectangle: offScreenRect)
-        XCTAssertEqual(upperLeft.row, 2)
+        var (upperLeft, lowerRight) = gridWindow.closestCellRectangle(rectangle: offScreenRect)
+        XCTAssertEqual(upperLeft.row, 1)
         XCTAssertEqual(upperLeft.column, 0)
         XCTAssertEqual(lowerRight.row, 0)
-        XCTAssertEqual(lowerRight.column, 2)
+        XCTAssertEqual(lowerRight.column, 1)
         subsequentCellValuesAreCorrect(cell: upperLeft)
         subsequentCellValuesAreCorrect(cell: lowerRight)
+        
+        let newRect = CGRect(x: upperLeft.frame.origin.x, y: lowerRight.frame.origin.y,
+                             width: lowerRight.frame.maxX, height: upperLeft.frame.maxY)
+        
+        (upperLeft, lowerRight) = gridWindow.closestCellRectangle(rectangle: newRect)
+        XCTAssertEqual(upperLeft.row, 1)
+        XCTAssertEqual(upperLeft.column, 0)
+        XCTAssertEqual(lowerRight.row, 0)
+        XCTAssertEqual(lowerRight.column, 1)
+        subsequentCellValuesAreCorrect(cell: upperLeft)
+        subsequentCellValuesAreCorrect(cell: lowerRight)
+        
     }
     
     func testRequiredProperties() {

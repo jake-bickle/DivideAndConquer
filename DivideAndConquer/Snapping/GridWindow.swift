@@ -117,16 +117,25 @@ class GridWindow: NSWindow {
     func closestCellRectangle(rectangle: CGRect) -> (Cell, Cell) {
         let screenFrame = _screen.visibleFrame
         var newFrame = rectangle
-        if rectangle.maxX > screenFrame.maxX {
-            newFrame.size.width -= rectangle.maxX - screenFrame.maxX
+        if rectangle.width > screenFrame.width {
+            newFrame.origin.x = screenFrame.origin.x
+            newFrame.size.width = screenFrame.width
         }
-        if rectangle.minX < screenFrame.minX {
+        else if rectangle.maxX > screenFrame.maxX {
+            newFrame.origin.x -= rectangle.maxX - screenFrame.maxX
+        }
+        else if rectangle.minX < screenFrame.minX {
             newFrame.origin.x += screenFrame.minX - rectangle.minX
         }
-        if rectangle.maxY > screenFrame.maxY {
-            newFrame.size.height -= rectangle.maxY - screenFrame.maxY
+        
+        if rectangle.height > screenFrame.height {
+            newFrame.origin.y = screenFrame.origin.y
+            newFrame.size.height = screenFrame.height
         }
-        if rectangle.minY < screenFrame.minY {
+        else if rectangle.maxY > screenFrame.maxY {
+            newFrame.origin.y -= rectangle.maxY - screenFrame.maxY
+        }
+        else if rectangle.minY < screenFrame.minY {
             newFrame.origin.y += screenFrame.minY - rectangle.minY
         }
         let upperLeft = CGPoint(x: newFrame.minX, y: newFrame.maxY)
@@ -226,4 +235,3 @@ class Cell: CellView {
         fatalError("init(coder:) has not been implemented")
     }
 }
-

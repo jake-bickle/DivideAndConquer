@@ -9,7 +9,6 @@
 import Cocoa
 
 extension CGRect {
-    
     func contains(point: CGPoint, includeTopAndRightEdge: Bool) -> Bool {
         if includeTopAndRightEdge {
             return point.x >= minX && point.x <= maxX &&

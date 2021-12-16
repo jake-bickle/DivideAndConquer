@@ -242,6 +242,7 @@
 		982140EC22B7DB5700ABFB3F /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				BF821EE22766C55E0053E6BA /* CGRectExtension.swift */,
 				9824703A22B139780037B409 /* CUtil.swift */,
 				98D1441224560B1E0090C603 /* AlertUtil.swift */,
 				98D16A482592B460005228CB /* NotificationExtension.swift */,
@@ -295,7 +296,6 @@
 				985B9BFA22BE218C00A2E8F0 /* Popover */,
 				982140EB22B7DB1A00ABFB3F /* AccessibilityAuthorization */,
 				982140EC22B7DB5700ABFB3F /* Utilities */,
-				BF821EE22766C55E0053E6BA /* CGRectExtension.swift */,
 			);
 			path = DivideAndConquer;
 			sourceTree = "<group>";

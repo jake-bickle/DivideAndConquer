@@ -80,6 +80,7 @@ class GridWindow: NSWindow {
     }
     
     /// Returns the cell located at the specified screen coordinates (origin at bottom left of main screen).
+    /// Points that lie on the edge favor towards the bottom left of the screen.
     func cellAt(point: CGPoint) -> Cell? {
         guard frame.contains(point: point, includeTopAndRightEdge: true) else { return nil }
         let screenX = point.x - _screen.frame.origin.x  // Translate to relative screen coordinates
@@ -138,6 +139,13 @@ class GridWindow: NSWindow {
         else if rectangle.minY < screenFrame.minY {
             newFrame.origin.y += screenFrame.minY - rectangle.minY
         }
+        
+        // Points on the edge of a cell bias to the lower left of the screen.
+        // Make the frame smaller by 1 pixel to help eliminate this edge case.
+        newFrame.size.height -= 2
+        newFrame.size.width -= 2
+        newFrame.origin.y += 1
+        newFrame.origin.x += 1
         let upperLeft = CGPoint(x: newFrame.minX, y: newFrame.maxY)
         let lowerRight = CGPoint(x: newFrame.maxX, y: newFrame.minY)
         let upperLeftCell = cellAt(point: upperLeft)

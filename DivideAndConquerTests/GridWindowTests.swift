@@ -11,7 +11,7 @@ import XCTest
 
 class GridWindowTests: XCTestCase {
     let mainScreen = NSScreen.screens[0]
-    let gridWindow = GridWindow(screen: NSScreen.main!)
+    let gridWindow = GridWindow(screen: NSScreen.screens[0])
     let gridXDimension = 12
     let gridYDimension = 10
     
@@ -118,36 +118,120 @@ class GridWindowTests: XCTestCase {
         subsequentCellValuesAreCorrect(cell: lowerRight)
     }
     
-    func testClosestCellRectangleOffScreen() {
-        let lowerLeftFrame = gridWindow.cellAt(row: 0, column: 0).frame
-        let upperRightFrame = gridWindow.cellAt(row: 1, column: 1).frame
+    func testClosestCellRectangleOffTopLeftSideOfScreen() {
+        let lowerLeftFrame = gridWindow.cellAt(row: gridYDimension - 2, column: 0).frame
+        let upperRightFrame = gridWindow.cellAt(row: gridYDimension - 1, column: 1).frame
         let offScreenRect = CGRect(x: lowerLeftFrame.origin.x - lowerLeftFrame.width * 2,
-                                   y: lowerLeftFrame.origin.y - lowerLeftFrame.height * 2,
-                                   width: upperRightFrame.maxX,
-                                   height: upperRightFrame.maxY)
+                                   y: lowerLeftFrame.origin.y + lowerLeftFrame.height * 2,
+                                   width: abs(upperRightFrame.maxX) - abs(lowerLeftFrame.minX),
+                                   height: abs(upperRightFrame.maxY) - abs(lowerLeftFrame.minY))
         var (upperLeft, lowerRight) = gridWindow.closestCellRectangle(rectangle: offScreenRect)
-        XCTAssertEqual(upperLeft.row, 1)
+        XCTAssertEqual(upperLeft.row, gridYDimension - 1)
         XCTAssertEqual(upperLeft.column, 0)
-        XCTAssertEqual(lowerRight.row, 0)
+        XCTAssertEqual(lowerRight.row, gridYDimension - 2)
         XCTAssertEqual(lowerRight.column, 1)
         subsequentCellValuesAreCorrect(cell: upperLeft)
         subsequentCellValuesAreCorrect(cell: lowerRight)
         
-        let newRect = CGRect(x: upperLeft.frame.origin.x, y: lowerRight.frame.origin.y,
-                             width: lowerRight.frame.maxX, height: upperLeft.frame.maxY)
-        
-        (upperLeft, lowerRight) = gridWindow.closestCellRectangle(rectangle: newRect)
-        XCTAssertEqual(upperLeft.row, 1)
-        XCTAssertEqual(upperLeft.column, 0)
-        XCTAssertEqual(lowerRight.row, 0)
-        XCTAssertEqual(lowerRight.column, 1)
+        // Should be able to pass this new rect into the function again and get the same thing.
+        for _ in 1 ... 10 {
+            let newRect = CGRect(x: upperLeft.frame.origin.x, y: lowerRight.frame.origin.y,
+                                 width: abs(lowerRight.frame.maxX) - abs(upperLeft.frame.minX),
+                                 height: abs(upperLeft.frame.maxY) - abs(lowerRight.frame.minY))
+            (upperLeft, lowerRight) = gridWindow.closestCellRectangle(rectangle: newRect)
+            XCTAssertEqual(upperLeft.row, gridYDimension - 1)
+            XCTAssertEqual(upperLeft.column, 0)
+            XCTAssertEqual(lowerRight.row, gridYDimension - 2)
+            XCTAssertEqual(lowerRight.column, 1)
+            subsequentCellValuesAreCorrect(cell: upperLeft)
+            subsequentCellValuesAreCorrect(cell: lowerRight)
+        }
+    }
+    
+    func testClosestCellRectangleOffTopRightSideOfScreen() {
+        let lowerLeftFrame = gridWindow.cellAt(row: gridYDimension - 2, column: gridXDimension - 2).frame
+        let upperRightFrame = gridWindow.cellAt(row: gridYDimension - 1, column: gridXDimension - 1).frame
+        let offScreenRect = CGRect(x: lowerLeftFrame.origin.x + lowerLeftFrame.width * 2,
+                                   y: lowerLeftFrame.origin.y + lowerLeftFrame.height * 2,
+                                   width: upperRightFrame.maxX - lowerLeftFrame.minX,
+                                   height: upperRightFrame.maxY - lowerLeftFrame.minY)
+        let (upperLeft, lowerRight) = gridWindow.closestCellRectangle(rectangle: offScreenRect)
+        XCTAssertEqual(upperLeft.row, gridYDimension - 1)
+        XCTAssertEqual(upperLeft.column, gridXDimension - 2)
+        XCTAssertEqual(lowerRight.row, gridYDimension - 2)
+        XCTAssertEqual(lowerRight.column, gridXDimension - 1)
         subsequentCellValuesAreCorrect(cell: upperLeft)
         subsequentCellValuesAreCorrect(cell: lowerRight)
-        
     }
     
     func testRequiredProperties() {
         XCTAssertFalse(gridWindow.isReleasedWhenClosed)
         XCTAssertTrue(gridWindow.canBecomeKey)
+    }
+    
+    func testCellsAtWithFourCellTie() {
+        let cellFrame = gridWindow.cellAt(row: 0, column: 0).frame
+        let corner = CGPoint(x: cellFrame.maxX, y: cellFrame.maxY)
+        let cells = gridWindow.cellsAt(point: corner)
+        var allowedCoordinates : Set = [[0,0], [0,1], [1,0], [1,1]]
+        XCTAssertEqual(cells.count, 4)
+        for cell in cells {
+            let point = [cell.row, cell.column]
+            if allowedCoordinates.contains(point) {
+                allowedCoordinates.remove(point)
+            }
+            else {
+                XCTFail("The point (\(point[0]), \(point[1])) shouldn't have been located.")
+            }
+        }
+    }
+    
+    func testCellsAtWithTwoCellTie() {
+        let cellFrame = gridWindow.cellAt(row: 0, column: 0).frame
+        let side = CGPoint(x: cellFrame.maxX, y: 0)
+        let cells = gridWindow.cellsAt(point: side)
+        var allowedCoordinates : Set = [[0,0], [0,1]]
+        XCTAssertEqual(cells.count, 2)
+        for cell in cells {
+            let point = [cell.row, cell.column]
+            if allowedCoordinates.contains(point) {
+                allowedCoordinates.remove(point)
+            }
+            else {
+                XCTFail("The point (\(point[0]), \(point[1])) shouldn't have been located.")
+            }
+        }
+    }
+    
+    func testCellsAtWithNoTies() {
+        let corner = CGPoint(x: 0, y: 0)
+        let cells = gridWindow.cellsAt(point: corner)
+        var allowedCoordinates : Set = [[0,0]]
+        XCTAssertEqual(cells.count, 1)
+        for cell in cells {
+            let point = [cell.row, cell.column]
+            if allowedCoordinates.contains(point) {
+                allowedCoordinates.remove(point)
+            }
+            else {
+                XCTFail("The point (\(point[0]), \(point[1])) shouldn't have been located.")
+            }
+        }
+    }
+    
+    func testCellsAtPointNotFound() {
+        let corner = CGPoint(x: mainScreen.frame.origin.x * -1, y: mainScreen.frame.origin.y * -1)
+        let cells = gridWindow.cellsAt(point: corner)
+        XCTAssertEqual(cells.count, 0)
+    }
+    
+    func testGreatestIntersection() {
+        let correctChoice = gridWindow.cellAt(row: 0, column: 0)
+        let someRectangle = CGRect(x: correctChoice.frame.origin.x, y: correctChoice.frame.origin.y,
+                           width: correctChoice.frame.width, height: correctChoice.frame.height)
+        let topRightCorner = CGPoint(x: correctChoice.frame.maxX, y: correctChoice.frame.maxY)
+        let cells = gridWindow.cellsAt(point: topRightCorner)
+        let testChoice = gridWindow.greatestIntersection(of: cells, in: someRectangle)
+        XCTAssertEqual(testChoice, correctChoice)
     }
 }

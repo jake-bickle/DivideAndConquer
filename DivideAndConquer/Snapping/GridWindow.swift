@@ -115,6 +115,27 @@ class GridWindow: NSWindow {
         return cells[column][row]
     }
     
+    /// Similar to cellAt(point:), but if point lies on a border, returns (in no order) all cells that touch that border rather then the lower-leftmost.
+    func cellsAt(point: CGPoint) -> [Cell] {
+        var cells: [Cell] = []
+        let lowerLeftCell = cellAt(point: point)
+        guard let lowerLeftCell = lowerLeftCell else { return cells }
+        cells.append(lowerLeftCell)
+        let tiesOnRightCell = point.x == lowerLeftCell.frame.maxX && lowerLeftCell.column != lowerLeftCell.columnMax
+        let tiesOnTopCell = point.y == lowerLeftCell.frame.maxY && lowerLeftCell.row != lowerLeftCell.rowMax
+        let tiesOnTopRightCell = tiesOnTopCell && tiesOnRightCell
+        if tiesOnTopCell {
+            cells.append( cellAt(row: lowerLeftCell.row + 1, column: lowerLeftCell.column) )
+        }
+        if tiesOnRightCell {
+            cells.append( cellAt(row: lowerLeftCell.row, column: lowerLeftCell.column + 1) )
+        }
+        if tiesOnTopRightCell {
+            cells.append( cellAt(row: lowerLeftCell.row + 1, column: lowerLeftCell.column + 1) )
+        }
+        return cells
+    }
+    
     func closestCellRectangle(rectangle: CGRect) -> (Cell, Cell) {
         let screenFrame = _screen.visibleFrame
         var newFrame = rectangle
@@ -140,17 +161,35 @@ class GridWindow: NSWindow {
             newFrame.origin.y += screenFrame.minY - rectangle.minY
         }
         
-        // Points on the edge of a cell bias to the lower left of the screen.
-        // Make the frame smaller by 1 pixel to help eliminate this edge case.
-        newFrame.size.height -= 2
-        newFrame.size.width -= 2
-        newFrame.origin.y += 1
-        newFrame.origin.x += 1
         let upperLeft = CGPoint(x: newFrame.minX, y: newFrame.maxY)
         let lowerRight = CGPoint(x: newFrame.maxX, y: newFrame.minY)
-        let upperLeftCell = cellAt(point: upperLeft)
-        let lowerRightCell = cellAt(point: lowerRight)
-        return (upperLeftCell!, lowerRightCell!)
+        
+        let competeingUpperLeftCells = cellsAt(point: upperLeft)
+        let upperLeftCell = greatestIntersection(of: competeingUpperLeftCells, in: newFrame)
+        
+        let competeingLowerRightCells = cellsAt(point: lowerRight)
+        let lowerRightCell = greatestIntersection(of: competeingLowerRightCells, in: newFrame)
+        return (upperLeftCell, lowerRightCell)
+    }
+    
+    /// Given a list of cells, returns the cell with the largest intersection of the provided CGRect. If there is a tie, the first cell with the largest intersection is returned.
+    func greatestIntersection(of cells: [Cell], in rect: CGRect) -> Cell {
+        if cells.isEmpty {
+            Logger.log("Error: Attempted to find greatest intersection on an empty list of cells.")
+            return cellAt(row: 0, column: 0)
+        }
+        var greatestIntersection = cells[0]
+        var greatestArea: CGFloat = cells[0].frame.width * cells[0].frame.height
+        for cell in cells.dropFirst() {
+            let cellFrame = cell.frame
+            let intersection = rect.intersection(cellFrame)
+            let area = intersection.width * intersection.height
+            if area > greatestArea {
+                greatestIntersection = cell
+                greatestArea = area
+            }
+        }
+        return greatestIntersection
     }
     
     override func close() {

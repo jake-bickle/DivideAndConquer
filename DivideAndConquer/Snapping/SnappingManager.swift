@@ -19,6 +19,7 @@ enum SnapState {
 class SnappingManager {
     var snapState : SnapState = .idle
     var mouseEventNotifier = MouseMonitor()
+    var windowMover = WindowMover()
     var lock = NSLock()
     var firstPickedCell: Cell? = nil
     var windowElement: AccessibilityElement? = nil
@@ -251,7 +252,7 @@ class SnappingManager {
             cell1 = cellAtMouse
             cell2 = nil
         }
-        WindowMover.tryToMove(window: windowElement, to: cell1, and: cell2)
+        windowMover.tryToMove(window: windowElement, to: cell1, and: cell2)
     }
     
     /// Returns windowElement if it exists, otherwise resets state, logs failure, then returns nil.

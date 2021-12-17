@@ -115,22 +115,21 @@ class GridWindow: NSWindow {
         return cells[column][row]
     }
     
-    /// Similar to cellAt(point:), but if point lies on a border, returns (in no order) all cells that touch that border rather then the lower-leftmost.
-    func cellsAt(point: CGPoint) -> [Cell] {
+    /// Returns cells at and near point.
+    func cellsNear(point: CGPoint) -> [Cell] {
         var cells: [Cell] = []
         let lowerLeftCell = cellAt(point: point)
         guard let lowerLeftCell = lowerLeftCell else { return cells }
         cells.append(lowerLeftCell)
-        let tiesOnRightCell = point.x == lowerLeftCell.frame.maxX && lowerLeftCell.column != lowerLeftCell.columnMax
-        let tiesOnTopCell = point.y == lowerLeftCell.frame.maxY && lowerLeftCell.row != lowerLeftCell.rowMax
-        let tiesOnTopRightCell = tiesOnTopCell && tiesOnRightCell
-        if tiesOnTopCell {
+        let cellsToTheRight = lowerLeftCell.column != lowerLeftCell.columnMax
+        let cellsAbove = lowerLeftCell.row != lowerLeftCell.rowMax
+        if cellsAbove {
             cells.append( cellAt(row: lowerLeftCell.row + 1, column: lowerLeftCell.column) )
         }
-        if tiesOnRightCell {
+        if cellsToTheRight {
             cells.append( cellAt(row: lowerLeftCell.row, column: lowerLeftCell.column + 1) )
         }
-        if tiesOnTopRightCell {
+        if cellsAbove && cellsToTheRight {
             cells.append( cellAt(row: lowerLeftCell.row + 1, column: lowerLeftCell.column + 1) )
         }
         return cells
@@ -164,10 +163,12 @@ class GridWindow: NSWindow {
         let upperLeft = CGPoint(x: newFrame.minX, y: newFrame.maxY)
         let lowerRight = CGPoint(x: newFrame.maxX, y: newFrame.minY)
         
-        let competeingUpperLeftCells = cellsAt(point: upperLeft)
+        // Replafce cellsAtt with cellsNear
+        let competeingUpperLeftCells = cellsNear(point: upperLeft)
         guard let upperLeftCell = greatestIntersection(of: competeingUpperLeftCells, in: newFrame) else { return nil }
         
-        let competeingLowerRightCells = cellsAt(point: lowerRight)
+        // TODO Hm, this doesn't look right
+        let competeingLowerRightCells = cellsNear(point: lowerRight)
         guard let lowerRightCell = greatestIntersection(of: competeingLowerRightCells, in: newFrame) else { return nil }
         return (upperLeftCell, lowerRightCell)
     }

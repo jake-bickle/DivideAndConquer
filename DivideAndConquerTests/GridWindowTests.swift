@@ -184,10 +184,10 @@ class GridWindowTests: XCTestCase {
         XCTAssertTrue(gridWindow.canBecomeKey)
     }
     
-    func testCellsAtWithFourCellTie() {
+    func testCellsNear() {
         let cellFrame = gridWindow.cellAt(row: 0, column: 0).frame
         let corner = CGPoint(x: cellFrame.maxX, y: cellFrame.maxY)
-        let cells = gridWindow.cellsAt(point: corner)
+        let cells = gridWindow.cellsNear(point: corner)
         var allowedCoordinates : Set = [[0,0], [0,1], [1,0], [1,1]]
         XCTAssertEqual(cells.count, 4)
         for cell in cells {
@@ -201,42 +201,9 @@ class GridWindowTests: XCTestCase {
         }
     }
     
-    func testCellsAtWithTwoCellTie() {
-        let cellFrame = gridWindow.cellAt(row: 0, column: 0).frame
-        let side = CGPoint(x: cellFrame.maxX, y: 0)
-        let cells = gridWindow.cellsAt(point: side)
-        var allowedCoordinates : Set = [[0,0], [0,1]]
-        XCTAssertEqual(cells.count, 2)
-        for cell in cells {
-            let point = [cell.row, cell.column]
-            if allowedCoordinates.contains(point) {
-                allowedCoordinates.remove(point)
-            }
-            else {
-                XCTFail("The point (\(point[0]), \(point[1])) shouldn't have been located.")
-            }
-        }
-    }
-    
-    func testCellsAtWithNoTies() {
-        let corner = CGPoint(x: 0, y: 0)
-        let cells = gridWindow.cellsAt(point: corner)
-        var allowedCoordinates : Set = [[0,0]]
-        XCTAssertEqual(cells.count, 1)
-        for cell in cells {
-            let point = [cell.row, cell.column]
-            if allowedCoordinates.contains(point) {
-                allowedCoordinates.remove(point)
-            }
-            else {
-                XCTFail("The point (\(point[0]), \(point[1])) shouldn't have been located.")
-            }
-        }
-    }
-    
-    func testCellsAtPointNotFound() {
+    func testCellsNearPointNotFound() {
         let corner = CGPoint(x: mainScreen.frame.origin.x - 1, y: mainScreen.frame.origin.y - 1)
-        let cells = gridWindow.cellsAt(point: corner)
+        let cells = gridWindow.cellsNear(point: corner)
         XCTAssertEqual(cells.count, 0)
     }
     
@@ -245,7 +212,7 @@ class GridWindowTests: XCTestCase {
         let someRectangle = CGRect(x: correctChoice.frame.origin.x, y: correctChoice.frame.origin.y,
                            width: correctChoice.frame.width, height: correctChoice.frame.height)
         let topRightCorner = CGPoint(x: correctChoice.frame.maxX, y: correctChoice.frame.maxY)
-        let cells = gridWindow.cellsAt(point: topRightCorner)
+        let cells = gridWindow.cellsNear(point: topRightCorner)
         let testChoice = gridWindow.greatestIntersection(of: cells, in: someRectangle)
         XCTAssertEqual(testChoice, correctChoice)
     }

@@ -94,7 +94,10 @@ class GridWindowTests: XCTestCase {
     func testClosestCellRectangleWithLargeRectangle() {
         var largeFrame = mainScreen.frame
         largeFrame.size.width *= 2
-        let (upperLeft, lowerRight) = gridWindow.closestCellRectangle(rectangle: largeFrame)
+        guard let (upperLeft, lowerRight) = gridWindow.closestCellRectangle(rectangle: largeFrame) else {
+            XCTFail("Unable to retrieve closest cell rectangle, but should have been able to.")
+            return
+        }
         XCTAssertEqual(upperLeft.row, gridYDimension - 1)
         XCTAssertEqual(upperLeft.column, 0)
         XCTAssertEqual(lowerRight.row, 0)
@@ -109,7 +112,10 @@ class GridWindowTests: XCTestCase {
         smallFrame.origin.y += 1
         smallFrame.size.width -= 2
         smallFrame.size.height -= 2
-        let (upperLeft, lowerRight) = gridWindow.closestCellRectangle(rectangle: smallFrame)
+        guard let (upperLeft, lowerRight) = gridWindow.closestCellRectangle(rectangle: smallFrame) else {
+            XCTFail("Unable to retrieve closest cell rectangle, but should have been able to.")
+            return
+        }
         XCTAssertEqual(upperLeft.row, 0)
         XCTAssertEqual(upperLeft.column, 0)
         XCTAssertEqual(lowerRight.row, 0)
@@ -125,7 +131,10 @@ class GridWindowTests: XCTestCase {
                                    y: lowerLeftFrame.origin.y + lowerLeftFrame.height * 2,
                                    width: abs(upperRightFrame.maxX) - abs(lowerLeftFrame.minX),
                                    height: abs(upperRightFrame.maxY) - abs(lowerLeftFrame.minY))
-        var (upperLeft, lowerRight) = gridWindow.closestCellRectangle(rectangle: offScreenRect)
+        guard let (upperLeft, lowerRight) = gridWindow.closestCellRectangle(rectangle: offScreenRect) else {
+            XCTFail("Unable to retrieve closest cell rectangle, but should have been able to.")
+            return
+        }
         XCTAssertEqual(upperLeft.row, gridYDimension - 1)
         XCTAssertEqual(upperLeft.column, 0)
         XCTAssertEqual(lowerRight.row, gridYDimension - 2)
@@ -138,7 +147,10 @@ class GridWindowTests: XCTestCase {
             let newRect = CGRect(x: upperLeft.frame.origin.x, y: lowerRight.frame.origin.y,
                                  width: abs(lowerRight.frame.maxX) - abs(upperLeft.frame.minX),
                                  height: abs(upperLeft.frame.maxY) - abs(lowerRight.frame.minY))
-            (upperLeft, lowerRight) = gridWindow.closestCellRectangle(rectangle: newRect)
+            guard let (upperLeft, lowerRight) = gridWindow.closestCellRectangle(rectangle: newRect) else {
+                XCTFail("Unable to retrieve closest cell rectangle, but should have been able to.")
+                return
+            }
             XCTAssertEqual(upperLeft.row, gridYDimension - 1)
             XCTAssertEqual(upperLeft.column, 0)
             XCTAssertEqual(lowerRight.row, gridYDimension - 2)
@@ -155,7 +167,10 @@ class GridWindowTests: XCTestCase {
                                    y: lowerLeftFrame.origin.y + lowerLeftFrame.height * 2,
                                    width: upperRightFrame.maxX - lowerLeftFrame.minX,
                                    height: upperRightFrame.maxY - lowerLeftFrame.minY)
-        let (upperLeft, lowerRight) = gridWindow.closestCellRectangle(rectangle: offScreenRect)
+        guard let (upperLeft, lowerRight) = gridWindow.closestCellRectangle(rectangle: offScreenRect) else {
+            XCTFail("Unable to retrieve closest cell rectangle, but should have been able to.")
+            return
+        }
         XCTAssertEqual(upperLeft.row, gridYDimension - 1)
         XCTAssertEqual(upperLeft.column, gridXDimension - 2)
         XCTAssertEqual(lowerRight.row, gridYDimension - 2)
@@ -220,7 +235,7 @@ class GridWindowTests: XCTestCase {
     }
     
     func testCellsAtPointNotFound() {
-        let corner = CGPoint(x: mainScreen.frame.origin.x * -1, y: mainScreen.frame.origin.y * -1)
+        let corner = CGPoint(x: mainScreen.frame.origin.x - 1, y: mainScreen.frame.origin.y - 1)
         let cells = gridWindow.cellsAt(point: corner)
         XCTAssertEqual(cells.count, 0)
     }

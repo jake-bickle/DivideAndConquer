@@ -136,7 +136,7 @@ class GridWindow: NSWindow {
         return cells
     }
     
-    func closestCellRectangle(rectangle: CGRect) -> (Cell, Cell) {
+    func closestCellRectangle(rectangle: CGRect) -> (Cell, Cell)? {
         let screenFrame = _screen.visibleFrame
         var newFrame = rectangle
         if rectangle.width > screenFrame.width {
@@ -165,22 +165,19 @@ class GridWindow: NSWindow {
         let lowerRight = CGPoint(x: newFrame.maxX, y: newFrame.minY)
         
         let competeingUpperLeftCells = cellsAt(point: upperLeft)
-        let upperLeftCell = greatestIntersection(of: competeingUpperLeftCells, in: newFrame)
+        guard let upperLeftCell = greatestIntersection(of: competeingUpperLeftCells, in: newFrame) else { return nil }
         
         let competeingLowerRightCells = cellsAt(point: lowerRight)
-        let lowerRightCell = greatestIntersection(of: competeingLowerRightCells, in: newFrame)
+        guard let lowerRightCell = greatestIntersection(of: competeingLowerRightCells, in: newFrame) else { return nil }
         return (upperLeftCell, lowerRightCell)
     }
     
     /// Given a list of cells, returns the cell with the largest intersection of the provided CGRect. If there is a tie, the first cell with the largest intersection is returned.
-    func greatestIntersection(of cells: [Cell], in rect: CGRect) -> Cell {
-        if cells.isEmpty {
-            Logger.log("Error: Attempted to find greatest intersection on an empty list of cells.")
-            return cellAt(row: 0, column: 0)
-        }
-        var greatestIntersection = cells[0]
-        var greatestArea: CGFloat = cells[0].frame.width * cells[0].frame.height
-        for cell in cells.dropFirst() {
+    func greatestIntersection(of cells: [Cell], in rect: CGRect) -> Cell? {
+        var greatestIntersection: Cell?
+        var greatestArea = CGFloat.infinity
+        greatestArea.negate()
+        for cell in cells {
             let cellFrame = cell.frame
             let intersection = rect.intersection(cellFrame)
             let area = intersection.width * intersection.height

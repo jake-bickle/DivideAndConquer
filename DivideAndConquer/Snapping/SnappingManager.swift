@@ -245,8 +245,14 @@ class SnappingManager {
         var cell1: Cell
         var cell2: Cell?
         if let firstPickedCell = firstPickedCell {
-            cell1 = firstPickedCell
-            cell2 = cellAtMouse
+            if firstPickedCell.screen == cellAtMouse.screen {
+                cell1 = firstPickedCell
+                cell2 = cellAtMouse
+            }
+            else {
+                cell1 = firstPickedCell
+                cell2 = nil
+            }
         }
         else {
             cell1 = cellAtMouse

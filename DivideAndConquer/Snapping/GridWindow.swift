@@ -138,7 +138,7 @@ class GridWindow: NSWindow {
     
     /// Returns tuple of cells (topLeft, bottomRight) that represent the rectangle that best fits the given rectangle.
     /// This works even if the given rectangle is off the screen.
-    func closestCellRectangle(rectangle: CGRect) -> (Cell, Cell)? {
+    func closestCellSpace(rectangle: CGRect) -> CellSpace {
         let screenFrame = _screen.visibleFrame
         var newFrame = rectangle
         if rectangle.width > screenFrame.width {
@@ -168,7 +168,8 @@ class GridWindow: NSWindow {
         
         let upperLeftCell = cellAt(point: upperLeft)
         let lowerRightCell = cellAt(point: lowerRight)
-        return (upperLeftCell!, lowerRightCell!)
+        return CellSpace(upperLeftCell!, lowerRightCell!)
+    }
     }
     
     override func close() {

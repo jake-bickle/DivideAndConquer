@@ -41,7 +41,7 @@ class WindowMover {
                                          height: windowFrame.height - 4)
         
         // Given that, find the nearest cell rectangle that is on screen.
-        guard let (newCell1, newCell2) = GridManager.shared.closestCellRectangle(rectangle: approximateSnapLocation, foundOn: screen)
+        guard let newSnapLocation = GridManager.shared.closestCellSpace(rectangle: approximateSnapLocation, foundOn: screen)
         else {
             Logger.log("Failed to find cells defining the translated window, because the specified screen was not found in GridManager.")
             return

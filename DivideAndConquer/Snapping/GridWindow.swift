@@ -166,33 +166,9 @@ class GridWindow: NSWindow {
         let upperLeft = CGPoint(x: newFrame.minX, y: newFrame.maxY)
         let lowerRight = CGPoint(x: newFrame.maxX, y: newFrame.minY)
         
-//        let competeingUpperLeftCells = cellsNear(point: upperLeft)
-//        guard let upperLeftCell = greatestIntersection(of: competeingUpperLeftCells, inScreenPosition: newFrame) else { return nil }
-//
-//        let competeingLowerRightCells = cellsNear(point: lowerRight)
-//        guard let lowerRightCell = greatestIntersection(of: competeingLowerRightCells, inScreenPosition: newFrame) else { return nil }
         let upperLeftCell = cellAt(point: upperLeft)
         let lowerRightCell = cellAt(point: lowerRight)
         return (upperLeftCell!, lowerRightCell!)
-    }
-    
-    /// Given a list of cells, returns the cell with the largest intersection of the provided CGRect. If there is a tie, the first cell with the largest intersection is returned.
-    /// The provided CGRect must represent a position on the screen.
-    func greatestIntersection(of cells: [Cell], inScreenPosition rect: CGRect) -> Cell? {
-        var greatestIntersection: Cell?
-        var greatestArea = CGFloat.infinity
-        greatestArea.negate()
-        for cell in cells {
-            // Cellsells have a frame, but they aren't absolute. That's why all of these were area 0
-            let absoluteCellFrame = CGRect(x: cell.absoluteX, y: cell.absoluteY, width: cell.width, height: cell.height)
-            let intersection = rect.intersection(absoluteCellFrame)
-            let area = intersection.width * intersection.height
-            if area > greatestArea {
-                greatestIntersection = cell
-                greatestArea = area
-            }
-        }
-        return greatestIntersection
     }
     
     override func close() {

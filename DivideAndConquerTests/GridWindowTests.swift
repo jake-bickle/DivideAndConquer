@@ -91,94 +91,6 @@ class GridWindowTests: XCTestCase {
         XCTAssertFalse(gridWindow.frame.contains(point: veryOffScreen, includeTopAndRightEdge: true))
     }
     
-    func testClosestCellRectangleWithLargeRectangle() {
-        var largeFrame = mainScreen.frame
-        largeFrame.size.width *= 2
-        guard let (upperLeft, lowerRight) = gridWindow.closestCellRectangle(rectangle: largeFrame) else {
-            XCTFail("Unable to retrieve closest cell rectangle, but should have been able to.")
-            return
-        }
-        XCTAssertEqual(upperLeft.row, gridYDimension - 1)
-        XCTAssertEqual(upperLeft.column, 0)
-        XCTAssertEqual(lowerRight.row, 0)
-        XCTAssertEqual(lowerRight.column, gridXDimension - 1)
-        subsequentCellValuesAreCorrect(cell: upperLeft)
-        subsequentCellValuesAreCorrect(cell: lowerRight)
-    }
-    
-    func testClosestCellRectangleWithSmallRectangle() {
-        var smallFrame = gridWindow.cellAt(row: 0, column: 0).frame
-        smallFrame.origin.x += 1
-        smallFrame.origin.y += 1
-        smallFrame.size.width -= 2
-        smallFrame.size.height -= 2
-        guard let (upperLeft, lowerRight) = gridWindow.closestCellRectangle(rectangle: smallFrame) else {
-            XCTFail("Unable to retrieve closest cell rectangle, but should have been able to.")
-            return
-        }
-        XCTAssertEqual(upperLeft.row, 0)
-        XCTAssertEqual(upperLeft.column, 0)
-        XCTAssertEqual(lowerRight.row, 0)
-        XCTAssertEqual(lowerRight.column, 0)
-        subsequentCellValuesAreCorrect(cell: upperLeft)
-        subsequentCellValuesAreCorrect(cell: lowerRight)
-    }
-    
-    func testClosestCellRectangleOffTopLeftSideOfScreen() {
-        let lowerLeftFrame = gridWindow.cellAt(row: gridYDimension - 2, column: 0).frame
-        let upperRightFrame = gridWindow.cellAt(row: gridYDimension - 1, column: 1).frame
-        let offScreenRect = CGRect(x: lowerLeftFrame.origin.x - lowerLeftFrame.width * 2,
-                                   y: lowerLeftFrame.origin.y + lowerLeftFrame.height * 2,
-                                   width: abs(upperRightFrame.maxX) - abs(lowerLeftFrame.minX),
-                                   height: abs(upperRightFrame.maxY) - abs(lowerLeftFrame.minY))
-        guard let (upperLeft, lowerRight) = gridWindow.closestCellRectangle(rectangle: offScreenRect) else {
-            XCTFail("Unable to retrieve closest cell rectangle, but should have been able to.")
-            return
-        }
-        XCTAssertEqual(upperLeft.row, gridYDimension - 1)
-        XCTAssertEqual(upperLeft.column, 0)
-        XCTAssertEqual(lowerRight.row, gridYDimension - 2)
-        XCTAssertEqual(lowerRight.column, 1)
-        subsequentCellValuesAreCorrect(cell: upperLeft)
-        subsequentCellValuesAreCorrect(cell: lowerRight)
-        
-        // Should be able to pass this new rect into the function again and get the same thing.
-        for _ in 1 ... 10 {
-            let newRect = CGRect(x: upperLeft.frame.origin.x, y: lowerRight.frame.origin.y,
-                                 width: abs(lowerRight.frame.maxX) - abs(upperLeft.frame.minX),
-                                 height: abs(upperLeft.frame.maxY) - abs(lowerRight.frame.minY))
-            guard let (upperLeft, lowerRight) = gridWindow.closestCellRectangle(rectangle: newRect) else {
-                XCTFail("Unable to retrieve closest cell rectangle, but should have been able to.")
-                return
-            }
-            XCTAssertEqual(upperLeft.row, gridYDimension - 1)
-            XCTAssertEqual(upperLeft.column, 0)
-            XCTAssertEqual(lowerRight.row, gridYDimension - 2)
-            XCTAssertEqual(lowerRight.column, 1)
-            subsequentCellValuesAreCorrect(cell: upperLeft)
-            subsequentCellValuesAreCorrect(cell: lowerRight)
-        }
-    }
-    
-    func testClosestCellRectangleOffTopRightSideOfScreen() {
-        let lowerLeftFrame = gridWindow.cellAt(row: gridYDimension - 2, column: gridXDimension - 2).frame
-        let upperRightFrame = gridWindow.cellAt(row: gridYDimension - 1, column: gridXDimension - 1).frame
-        let offScreenRect = CGRect(x: lowerLeftFrame.origin.x + lowerLeftFrame.width * 2,
-                                   y: lowerLeftFrame.origin.y + lowerLeftFrame.height * 2,
-                                   width: upperRightFrame.maxX - lowerLeftFrame.minX,
-                                   height: upperRightFrame.maxY - lowerLeftFrame.minY)
-        guard let (upperLeft, lowerRight) = gridWindow.closestCellRectangle(rectangle: offScreenRect) else {
-            XCTFail("Unable to retrieve closest cell rectangle, but should have been able to.")
-            return
-        }
-        XCTAssertEqual(upperLeft.row, gridYDimension - 1)
-        XCTAssertEqual(upperLeft.column, gridXDimension - 2)
-        XCTAssertEqual(lowerRight.row, gridYDimension - 2)
-        XCTAssertEqual(lowerRight.column, gridXDimension - 1)
-        subsequentCellValuesAreCorrect(cell: upperLeft)
-        subsequentCellValuesAreCorrect(cell: lowerRight)
-    }
-    
     func testRequiredProperties() {
         XCTAssertFalse(gridWindow.isReleasedWhenClosed)
         XCTAssertTrue(gridWindow.canBecomeKey)
@@ -205,15 +117,5 @@ class GridWindowTests: XCTestCase {
         let corner = CGPoint(x: mainScreen.frame.origin.x - 1, y: mainScreen.frame.origin.y - 1)
         let cells = gridWindow.cellsNear(point: corner)
         XCTAssertEqual(cells.count, 0)
-    }
-    
-    func testGreatestIntersection() {
-        let correctChoice = gridWindow.cellAt(row: 0, column: 0)
-        let someRectangle = CGRect(x: correctChoice.frame.origin.x, y: correctChoice.frame.origin.y,
-                           width: correctChoice.frame.width, height: correctChoice.frame.height)
-        let topRightCorner = CGPoint(x: correctChoice.frame.maxX, y: correctChoice.frame.maxY)
-        let cells = gridWindow.cellsNear(point: topRightCorner)
-        let testChoice = gridWindow.greatestIntersection(of: cells, in: someRectangle)
-        XCTAssertEqual(testChoice, correctChoice)
     }
 }

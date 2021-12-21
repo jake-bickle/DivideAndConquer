@@ -18,10 +18,6 @@ class WindowMover {
         previousCell1 = cell1
         previousCell2 = cell2
         
-        var cell2 = cell2
-        if cell2 == nil {
-            cell2 = cell1
-        }
         /* The goal for the this method is to
              1. Keep the window on screen.
              2. Keep the window snapped to the grid, even if it expands outside of cell1 and cell2
@@ -32,7 +28,7 @@ class WindowMover {
         let screenFrame = screen.visibleFrame
         
         let windowFrame = AccessibilityElement.normalizeCoordinatesOf(window.rectOfElement(), frameOfScreen: screenFrame)
-        let initialCellSpace = CellSpace(cell1, cell2!).cgRect
+        let initialCellSpace = CellSpace(cell1, cell2).cgRect
         // The window is shrunken inwards by two pixels on all sides. This guarantees that the border of the
         // snap location does not lie on the border of a cell, which settles ties unfavorably.
         let approximateSnapLocation = CGRect(x: initialCellSpace.origin.x + 2,

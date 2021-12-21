@@ -17,24 +17,33 @@ class CellSpace {
     let cell1: Cell
     let cell2: Cell
     
-    init(_ cellA: Cell, _ cellB: Cell) {
-        cell1 = cellA
-        cell2 = cellB
-        if cell1.absoluteY > cell2.absoluteY {
+    init(_ requiredCell: Cell, _ optionalCell: Cell?) {
+        cell1 = requiredCell
+        if let optionalCell = optionalCell {
+            cell2 = optionalCell
+            if cell1.absoluteY > cell2.absoluteY {
+                upper = cell1
+                lower = cell2
+            }
+            else {
+                upper = cell2
+                lower = cell1
+            }
+            if cell1.absoluteX > cell2.absoluteX {
+                right = cell1
+                left = cell2
+            }
+            else {
+                right = cell2
+                left = cell1
+            }
+        }
+        else {
+            cell2 = cell1
             upper = cell1
-            lower = cell2
-        }
-        else {
-            upper = cell2
             lower = cell1
-        }
-        if cell1.absoluteX > cell2.absoluteX {
-            right = cell1
-            left = cell2
-        }
-        else {
-            right = cell2
             left = cell1
+            right = cell1
         }
     }
     

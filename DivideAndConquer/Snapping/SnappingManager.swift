@@ -258,6 +258,11 @@ class SnappingManager {
             cell1 = cellAtMouse
             cell2 = nil
         }
+        DispatchQueue.main.async {
+            let cs = CellSpace(cell1, cell2)
+            GridManager.shared.dehighlight(screen: cell1.screen)
+            GridManager.shared.highlight(cellSpace: cs)
+        }
         windowMover.tryToMove(window: windowElement, to: cell1, and: cell2)
     }
     

@@ -40,11 +40,17 @@ class GridManager {
         guard let grid = grids[screen] else {return nil}
         return grid.closestCellSpace(rectangle: rectangle)
     }
+    
+    /// Highlight all cells in a given CellSpace.
+    func highlight(cellSpace: CellSpace) {
+        guard let grid = grids[cellSpace.cell1.screen] else {return}
+        grid.highlight(cellSpace: cellSpace)
     }
     
-    func dehighlight(cellSpace: CellSpace) {
-        guard let grid = grids[cellSpace.cell1.screen] else {return}
-        grid.dehighlight(cellSpace: cellSpace)
+    /// Dehighlight all cells on a given screen.
+    func dehighlight(screen: NSScreen) {
+        guard let grid = grids[screen] else {return}
+        grid.dehighlight()
     }
     
     /// Generates and displays the grid on all screens.

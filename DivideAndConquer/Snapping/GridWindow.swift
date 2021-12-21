@@ -170,6 +170,23 @@ class GridWindow: NSWindow {
         let lowerRightCell = cellAt(point: lowerRight)
         return CellSpace(upperLeftCell!, lowerRightCell!)
     }
+    
+    /// Highlights the cells within the given CellSpace.
+    func highlight(cellSpace: CellSpace) {
+        for row in cellSpace.lower.row ... cellSpace.upper.row {
+            for col in cellSpace.left.column ... cellSpace.right.column {
+                cells[col][row].highlight()
+            }
+        }
+    }
+    
+    /// Dehighlights all cells in the GridWindow.
+    func dehighlight() {
+        for row in 0 ... (Defaults.gridYDimension.value - 1) {
+            for col in 0 ... (Defaults.gridXDimension.value - 1) {
+                cells[col][row].dehighlight()
+            }
+        }
     }
     
     override func close() {
@@ -196,6 +213,14 @@ class CellView: NSView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func highlight() {
+        layer!.backgroundColor = Defaults.cellPrimaryColor.typedValue?.cgColor ?? NSColor.systemBlue.cgColor
+    }
+    
+    func dehighlight() {
+        layer!.backgroundColor = NSColor.clear.cgColor
+    }
+    
     override func mouseUp(with event: NSEvent) {
         NotificationCenter.default.post(name: Notification.Name.leftMouseUp, object: nil)
     }
@@ -220,12 +245,10 @@ class CellView: NSView {
     
     override func mouseEntered(with event: NSEvent){
         super.mouseEntered(with: event)
-        layer!.backgroundColor = Defaults.cellPrimaryColor.typedValue?.cgColor ?? NSColor.systemBlue.cgColor
     }
     
     override func mouseExited(with event: NSEvent){
         super.mouseExited(with: event)
-        layer!.backgroundColor = NSColor.clear.cgColor
     }
 }
 

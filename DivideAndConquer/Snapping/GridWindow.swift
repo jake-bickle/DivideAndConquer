@@ -8,6 +8,7 @@
 
 import Cocoa
 
+/// An NSWindow that consumes the entirety of the screen (except the menu bar). It is made up of a grid of Cells.
 class GridWindow: NSWindow {
     
     var closeWorkItem: DispatchWorkItem?
@@ -80,7 +81,7 @@ class GridWindow: NSWindow {
     }
     
     /// Returns the cell located at the specified screen coordinates (origin at bottom left of main screen).
-    /// Points that lie on the edge favor towards the bottom left of the screen.
+    /// Points that lie on the edge favor the bottom left of the screen.
     func cellAt(point: CGPoint) -> Cell? {
         guard frame.contains(point: point, includeTopAndRightEdge: true) else { return nil }
         let screenX = point.x - _screen.frame.origin.x  // Translate to relative screen coordinates
@@ -115,7 +116,7 @@ class GridWindow: NSWindow {
         return cells[column][row]
     }
     
-    /// Returns cells at and near point.
+    /// Returns cells at the point as well as the cells surrounding it, should they exist.
     func cellsNear(point: CGPoint) -> [Cell] {
         var cells: [Cell] = []
         let lowerLeftCell = cellAt(point: point)
@@ -135,6 +136,8 @@ class GridWindow: NSWindow {
         return cells
     }
     
+    /// Returns tuple of cells (topLeft, bottomRight) that represent the rectangle that best fits the given rectangle.
+    /// This works even if the given rectangle is off the screen.
     func closestCellRectangle(rectangle: CGRect) -> (Cell, Cell)? {
         let screenFrame = _screen.visibleFrame
         var newFrame = rectangle
@@ -163,24 +166,26 @@ class GridWindow: NSWindow {
         let upperLeft = CGPoint(x: newFrame.minX, y: newFrame.maxY)
         let lowerRight = CGPoint(x: newFrame.maxX, y: newFrame.minY)
         
-        // Replafce cellsAtt with cellsNear
-        let competeingUpperLeftCells = cellsNear(point: upperLeft)
-        guard let upperLeftCell = greatestIntersection(of: competeingUpperLeftCells, in: newFrame) else { return nil }
-        
-        // TODO Hm, this doesn't look right
-        let competeingLowerRightCells = cellsNear(point: lowerRight)
-        guard let lowerRightCell = greatestIntersection(of: competeingLowerRightCells, in: newFrame) else { return nil }
-        return (upperLeftCell, lowerRightCell)
+//        let competeingUpperLeftCells = cellsNear(point: upperLeft)
+//        guard let upperLeftCell = greatestIntersection(of: competeingUpperLeftCells, inScreenPosition: newFrame) else { return nil }
+//
+//        let competeingLowerRightCells = cellsNear(point: lowerRight)
+//        guard let lowerRightCell = greatestIntersection(of: competeingLowerRightCells, inScreenPosition: newFrame) else { return nil }
+        let upperLeftCell = cellAt(point: upperLeft)
+        let lowerRightCell = cellAt(point: lowerRight)
+        return (upperLeftCell!, lowerRightCell!)
     }
     
     /// Given a list of cells, returns the cell with the largest intersection of the provided CGRect. If there is a tie, the first cell with the largest intersection is returned.
-    func greatestIntersection(of cells: [Cell], in rect: CGRect) -> Cell? {
+    /// The provided CGRect must represent a position on the screen.
+    func greatestIntersection(of cells: [Cell], inScreenPosition rect: CGRect) -> Cell? {
         var greatestIntersection: Cell?
         var greatestArea = CGFloat.infinity
         greatestArea.negate()
         for cell in cells {
-            let cellFrame = cell.frame
-            let intersection = rect.intersection(cellFrame)
+            // Cellsells have a frame, but they aren't absolute. That's why all of these were area 0
+            let absoluteCellFrame = CGRect(x: cell.absoluteX, y: cell.absoluteY, width: cell.width, height: cell.height)
+            let intersection = rect.intersection(absoluteCellFrame)
             let area = intersection.width * intersection.height
             if area > greatestArea {
                 greatestIntersection = cell
@@ -245,9 +250,10 @@ class CellView: NSView {
         super.mouseExited(with: event)
         layer!.backgroundColor = NSColor.clear.cgColor
     }
-    
 }
 
+/// A Cell makes up a portion of a GridWindow. Cells represent physical space on a screen and thus their absolute
+/// screen positions may be retrieved.
 class Cell: CellView {
     var row: Int
     var rowMax: Int

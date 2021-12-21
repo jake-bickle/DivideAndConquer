@@ -33,22 +33,21 @@ class WindowMover {
         
         let windowFrame = AccessibilityElement.normalizeCoordinatesOf(window.rectOfElement(), frameOfScreen: screenFrame)
         let initialCellSpace = CellSpace(cell1, cell2!).cgRect
-        // If we translated the window, where would its frame end up?
-        let initialSnapLocation = CGRect(x: initialCellSpace.origin.x,
-                                         // TODO This isn't taking into account the fact that cells dont have the same height
-                                         y: initialCellSpace.maxY - windowFrame.height,
-                                         width: windowFrame.width,
-                                         height: windowFrame.height)
+        // The window is shrunken inwards by two pixels on all sides. This guarantees that the border of the
+        // snap location does not lie on the border of a cell, which settles ties unfavorably.
+        let approximateSnapLocation = CGRect(x: initialCellSpace.origin.x + 2,
+                                         y: (initialCellSpace.maxY - windowFrame.height) + 2,
+                                         width: windowFrame.width - 4,
+                                         height: windowFrame.height - 4)
         
         // Given that, find the nearest cell rectangle that is on screen.
-        guard let (newCell1, newCell2) = GridManager.shared.closestCellRectangle(rectangle: initialSnapLocation, foundOn: screen)
+        guard let (newCell1, newCell2) = GridManager.shared.closestCellRectangle(rectangle: approximateSnapLocation, foundOn: screen)
         else {
             Logger.log("Failed to find cells defining the translated window, because the specified screen was not found in GridManager.")
             return
         }
         let newSnapLocation = CellSpace(newCell1, newCell2)
         
-        // TODO Not necessary, just used for debugging
         window.setRectOf(newSnapLocation.cgRectRaster)
         
         
